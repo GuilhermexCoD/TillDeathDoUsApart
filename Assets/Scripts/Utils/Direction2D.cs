@@ -14,9 +14,17 @@ public static class Direction2D
         {EOrientation.Left, Vector2Int.left },
     };
 
+    public static Dictionary<EOrientation, Vector2Int> allDirections = new Dictionary<EOrientation, Vector2Int>
+    {
+        {EOrientation.Up, Vector2Int.up },
+        {EOrientation.Right, Vector2Int.right },
+        {EOrientation.Down, Vector2Int.down},
+        {EOrientation.Left, Vector2Int.left },
+    };
+
     public static EOrientation GetRandomOrientation()
     {
-        int max = Enum.GetValues(typeof(EOrientation)).Length;
+        int max = directions.Count;
         return (EOrientation)Random.Range(0, max);
     }
 

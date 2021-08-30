@@ -39,16 +39,7 @@ public class Tile : MonoBehaviour
 
     public void GenerateRandomTile()
     {
-        print($"Tile theme: {theme}");
-        Clean();
-        //TODO change hardcoded path
-        List<GameObject> floors = ScenaryManager.current.GetAssets($"{ScenaryManager.FLOOR_PATH}{theme.ToString()}");
-        int max = (floors?.Count).Value;
-        int randomFloor = Random.Range(0, max);
-        print($"Floor = {randomFloor} ");
-        Floor = Instantiate<GameObject>(floors?[randomFloor], this.transform);
-
-        ScenaryEvents.current.TileCreated(this);
+        //TODO remove this class
     }
 
     private void Clean()

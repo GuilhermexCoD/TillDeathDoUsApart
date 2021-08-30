@@ -21,6 +21,7 @@ public class Level : MonoBehaviour
 
     public int Width;
     public int Height;
+
     public HashSet<Vector2Int> Map = new HashSet<Vector2Int>();
     public List<Room<GeneratorRule>> Rooms = new List<Room<GeneratorRule>>();
     public List<Color> RoomColors = new List<Color>();
@@ -46,11 +47,16 @@ public class Level : MonoBehaviour
 
         Generate();
 
-        tilemapVisualizer.PaintTiles(Map,ETileType.Floor);
+        tilemapVisualizer.Setup();
+
+        tilemapVisualizer.PaintTiles(Map, ETileType.Floor, EOrientation.Center);
 
         var walls = WallGenerator.CreateWalls(Map);
-
-        tilemapVisualizer.PaintTiles(walls, ETileType.Wall);
+        
+        foreach (var wall in walls)
+        {
+            tilemapVisualizer.PaintTiles(wall.Value, ETileType.Wall, wall.Key);
+        }
     }
 
     public void Clean()
@@ -239,7 +245,7 @@ public class Level : MonoBehaviour
     private void DrawCoord(Vector2Int coord, Color color)
     {
         Gizmos.color = color;
-        Gizmos.DrawCube(CalculatePosition(coord, this.transform.position), new Vector3(1, 1, 0.1f) * ScenaryManager.FLOOR_SIZE);
+        Gizmos.DrawCube(CalculatePosition(coord, this.transform.position), new Vector3(1, 1, 0.1f));
     }
 
     private void DrawCorridors()
@@ -281,7 +287,7 @@ public class Level : MonoBehaviour
     {
         Vector3 position = startPosition;
 
-        position += new Vector3(coord.x * ScenaryManager.FLOOR_SIZE, coord.y * ScenaryManager.FLOOR_SIZE, 0);
+        position += new Vector3(coord.x, coord.y, 0);
 
         return position;
     }

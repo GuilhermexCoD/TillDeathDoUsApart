@@ -10,48 +10,50 @@ public class TilemapVisualizer : MonoBehaviour
     private Tilemap LevelTilemap;
 
     [SerializeField]
-    private TileBase FloorTile;
-
-    [SerializeField]
-    private TileBase WallTile;
-
+    private ETheme theme;
 
     public TilemapVisualizer(Tilemap tilemap)
     {
         this.LevelTilemap = tilemap;
     }
 
-    public void PaintTiles(IEnumerable<Vector2Int> positions, ETileType type)
+    public void Setup()
+    {
+        ScenaryManager.ClearAssets();
+
+        ScenaryManager.LoadAssets();
+    }
+
+    public void PaintTiles(IEnumerable<Vector2Int> positions, ETileType type, EOrientation orientation)
     {
         foreach (var position in positions)
         {
-            var tileBase = GetTileBase(type);
+            var tileBase = ScenaryManager.GetRandomAsset(theme, type, orientation);
             PaintSingleTile(LevelTilemap, tileBase, position);
         }
     }
 
-    private TileBase GetTileBase(ETileType type)
+    public void PaintTiles(IEnumerable<Vector2Int> positions, TileBase tileBase)
     {
-        var tileBase = FloorTile;
-        switch (type)
+        foreach (var position in positions)
         {
-            case ETileType.Floor:
-                tileBase = FloorTile;
-                break;
-            case ETileType.Wall:
-                tileBase = WallTile;
-                break;
-            default:
-                break;
+            PaintSingleTile(LevelTilemap, tileBase, position);
         }
-        return tileBase;
     }
 
     private void PaintSingleTile(Tilemap tilemap, TileBase tile, Vector2Int position)
     {
-        var tilePosition = tilemap.WorldToCell((Vector3Int)position);
+        if (tilemap)
+        {
+            var tilePosition = tilemap.WorldToCell((Vector3Int)position);
 
-        tilemap.SetTile(tilePosition, tile);
+            tilemap.SetTile(tilePosition, tile);
+        }
+        else
+        {
+            Debug.LogWarning("Nenhum asset encontrado");
+        }
+
     }
 
     public void Clear()

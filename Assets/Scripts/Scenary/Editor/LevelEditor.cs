@@ -17,10 +17,9 @@ public class LevelEditor : Editor
     {
         base.OnInspectorGUI();
 
-        if (GUILayout.Button("Generate"))
+        if (GUILayout.Button("Create Dungeon"))
         {
             level.Setup();
         }
     }
-
 }
