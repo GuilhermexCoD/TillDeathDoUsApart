@@ -31,11 +31,11 @@ public class RandomWalkGenerator : GeneratorRule
         {
             int currentWalkQuantity = UnityEngine.Random.Range(1, size);
             EWalkType currentWalk = walkTypes[UnityEngine.Random.Range(0, walkTypes.Count)];
-            Vector2Int coord = new Vector2Int(0, 0);
+            Vector2Int coord = Vector2Int.zero;
             switch (currentWalk)
             {
                 case EWalkType.Random:
-                    coord = GetRandomDirection();
+                    coord = Direction2D.GetRandomDirection();
 
                     currentCoord = currentCoord + coord;
 
@@ -50,31 +50,5 @@ public class RandomWalkGenerator : GeneratorRule
                     break;
             }
         }
-    }
-
-    private Vector2Int GetRandomDirection()
-    {
-        EOrientation orientation = (EOrientation)UnityEngine.Random.Range(0, Enum.GetNames(typeof(EOrientation)).Length);
-
-        Vector2Int direction = new Vector2Int(0,0);
-        switch (orientation)
-        {
-            case EOrientation.Up:
-                direction = new Vector2Int(0, 1);
-                break;
-            case EOrientation.Right:
-                direction = new Vector2Int(1, 0);
-                break;
-            case EOrientation.Down:
-                direction = new Vector2Int(0, -1);
-                break;
-            case EOrientation.Left:
-                direction = new Vector2Int(-1, 0);
-                break;
-            default:
-                break;
-        }
-
-        return direction;
     }
 }

@@ -3,7 +3,9 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using UnityEngine.Tilemaps;
 
+[RequireComponent(typeof(TilemapVisualizer))]
 public class Level : MonoBehaviour
 {
     public static Level Current;
@@ -24,12 +26,31 @@ public class Level : MonoBehaviour
     public List<Color> RoomColors = new List<Color>();
     public HashSet<Vector2Int> Corridors = new HashSet<Vector2Int>();
 
+    [SerializeField]
+    private TilemapVisualizer tilemapVisualizer;
 
     // Start is called before the first frame update
     void Awake()
     {
+        Setup();
+    }
+
+    public void Setup()
+    {
+        if (!tilemapVisualizer)
+        {
+            tilemapVisualizer = this.GetComponent<TilemapVisualizer>();
+        }
+
         Current = Singleton<Level>.Instance;
+
         Generate();
+
+        tilemapVisualizer.PaintTiles(Map,ETileType.Floor);
+
+        var walls = WallGenerator.CreateWalls(Map);
+
+        tilemapVisualizer.PaintTiles(walls, ETileType.Wall);
     }
 
     public void Clean()
@@ -40,6 +61,7 @@ public class Level : MonoBehaviour
             Rooms = new List<Room<GeneratorRule>>();
             RoomColors = new List<Color>();
             Corridors = new HashSet<Vector2Int>();
+            tilemapVisualizer.Clear();
         }
     }
 

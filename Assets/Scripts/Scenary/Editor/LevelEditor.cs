@@ -19,7 +19,7 @@ public class LevelEditor : Editor
 
         if (GUILayout.Button("Generate"))
         {
-            level.Generate();
+            level.Setup();
         }
     }
 
