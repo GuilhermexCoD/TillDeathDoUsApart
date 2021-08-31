@@ -12,5 +12,11 @@ public enum EWallTileType
     DiagonalCornerDownLeft,
     Full,
     FullEightDirections,
-    BottomEightDirections
+    BottomEightDirections,
+    UpDown,
+    RightLeft,
+    UUp,
+    URight,
+    UDown,
+    ULeft
 }

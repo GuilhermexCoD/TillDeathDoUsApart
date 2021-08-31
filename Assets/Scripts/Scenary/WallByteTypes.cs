@@ -143,8 +143,21 @@ public static class WallByteTypes
         0b01010110,
         0b11010101,
         0b11010100,
-        0b10010101
-
+        0b10010101,
+        0b00110111,
+        0b01110111,
+        0b01110011,
+        0b01100111,
+        0b01110110,
+        0b00110010,
+        0b00110110,
+        0b00110011,
+        0b01110010,
+        0b00100111,
+        0b01100110,
+        0b01100011,
+        0b00100011,
+        0b00100110,
     };
 
     private static HashSet<int> wallBottmEightDirections = new HashSet<int>
@@ -159,18 +172,18 @@ public static class WallByteTypes
         { EWallTileType.Right, wallSideRight },
         { EWallTileType.Down, wallBottom },
 
-        { EWallTileType.InnerCornerDownRight, wallInnerCornerDownRight },
-        { EWallTileType.InnerCornerDownLeft, wallInnerCornerDownLeft },
+        //{ EWallTileType.InnerCornerDownRight, wallInnerCornerDownRight },
+        //{ EWallTileType.InnerCornerDownLeft, wallInnerCornerDownLeft },
 
-        { EWallTileType.DiagonalCornerDownRight, wallDiagonalCornerDownRight },
-        { EWallTileType.DiagonalCornerDownLeft, wallDiagonalCornerDownLeft },
+        //{ EWallTileType.DiagonalCornerDownRight, wallDiagonalCornerDownRight },
+        //{ EWallTileType.DiagonalCornerDownLeft, wallDiagonalCornerDownLeft },
 
-        { EWallTileType.DiagonalCornerUpRight, wallDiagonalCornerUpRight },
-        { EWallTileType.DiagonalCornerUpLeft, wallDiagonalCornerUpLeft },
+        //{ EWallTileType.DiagonalCornerUpRight, wallDiagonalCornerUpRight },
+        //{ EWallTileType.DiagonalCornerUpLeft, wallDiagonalCornerUpLeft },
 
         { EWallTileType.Full, wallFull },
-        { EWallTileType.FullEightDirections, wallFullEightDirections },
-        { EWallTileType.BottomEightDirections, wallBottmEightDirections }
+        //{ EWallTileType.FullEightDirections, wallFullEightDirections },
+        //{ EWallTileType.BottomEightDirections, wallBottmEightDirections }
     };
 
     public static Dictionary<EWallTileType, HashSet<int>> WallTypesDiagonals = new Dictionary<EWallTileType, HashSet<int>>

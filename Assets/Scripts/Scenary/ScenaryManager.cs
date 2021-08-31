@@ -25,7 +25,13 @@ public class ScenaryManager : MonoBehaviour
         "Full",
         "FullEightDirections",
         "BottomEightDirections",
-        "Center"
+        "Center",
+        "UpDown",
+        "RightLeft",
+        "UUp",
+        "URight",
+        "UDown",
+        "ULeft",
     };
 
     public static Dictionary<ETileType, string> Tilepath = new Dictionary<ETileType, string>

@@ -49,14 +49,9 @@ public class Level : MonoBehaviour
 
         tilemapVisualizer.Setup();
 
-        tilemapVisualizer.PaintTiles(Map, ETileType.Floor, "Center");
+        tilemapVisualizer.PaintFloors(Map);
+        tilemapVisualizer.PaintWalls(Map);
 
-        var walls = WallGenerator.CreateWalls(Map);
-        
-        foreach (var wall in walls)
-        {
-            tilemapVisualizer.PaintTiles(wall.Value, ETileType.Wall, wall.Key.ToString());
-        }
     }
 
     public void Clean()

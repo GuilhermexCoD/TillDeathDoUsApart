@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Dungeon_Tileset_Right_0
   m_EditorClassIdentifier: 
   m_Sprite: {fileID: 4023018930920339469, guid: 8433b2991753165418dced4783114890, type: 3}
-  m_Color: {r: 0.04096198, g: 1, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Transform:
     e00: 1
     e01: 0
