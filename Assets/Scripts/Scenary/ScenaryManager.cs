@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -11,23 +10,28 @@ public class ScenaryManager : MonoBehaviour
 
     public string Seed;
 
+    public static List<string> DirectionPath = new List<string>()
+    {
+        "Up",
+        "Right",
+        "Down",
+        "Left",
+        "InnerCornerDownRight",
+        "InnerCornerDownLeft",
+        "DiagonalCornerUpRight",
+        "DiagonalCornerUpLeft",
+        "DiagonalCornerDownRight",
+        "DiagonalCornerDownLeft",
+        "Full",
+        "FullEightDirections",
+        "BottomEightDirections",
+        "Center"
+    };
+
     public static Dictionary<ETileType, string> Tilepath = new Dictionary<ETileType, string>
     {
         { ETileType.Floor, "Floors" },
         { ETileType.Wall, "Walls" }
-    };
-
-    public static Dictionary<EOrientation, string> DirectionPath = new Dictionary<EOrientation, string>
-    {
-        { EOrientation.Up, "Top" },
-        { EOrientation.Right, "Right" },
-        { EOrientation.Down, "Bottom" },
-        { EOrientation.Left, "Left" },
-        { EOrientation.DownRight, "BottomRight" },
-        { EOrientation.DownLeft, "BottomLeft" },
-        { EOrientation.UpRight, "TopRight" },
-        { EOrientation.UpLeft, "TopLeft" },
-        { EOrientation.Center, "Center" }
     };
 
     public static Dictionary<string, List<TileBase>> Assets = new Dictionary<string, List<TileBase>>();
@@ -40,7 +44,7 @@ public class ScenaryManager : MonoBehaviour
             {
                 foreach (var direction in DirectionPath)
                 {
-                    string path = GetPath((ETheme)theme, tile.Key, direction.Key);
+                    string path = GetPath((ETheme)theme, tile.Key, direction);
 
                     List<TileBase> tileAssets = GetResources(path);
 
@@ -53,31 +57,29 @@ public class ScenaryManager : MonoBehaviour
         }
     }
 
-    public static string GetPath(ETheme theme, ETileType tileType, EOrientation orientation)
+    public static string GetPath(ETheme theme, ETileType tileType, string orientationPath)
     {
         string themePath = theme.ToString();
 
         Tilepath.TryGetValue(tileType, out string tile);
 
-        DirectionPath.TryGetValue(orientation, out string direction);
-
-        return $"{tile}/{themePath}/{direction}";
+        return $"{tile}/{themePath}/{orientationPath}";
     }
 
-    public static List<TileBase> GetAssets(ETheme theme, ETileType tileType, EOrientation orientation)
+    public static List<TileBase> GetAssets(ETheme theme, ETileType tileType, string orientationPath)
     {
         List<TileBase> objects = new List<TileBase>();
 
-        string path = GetPath(theme, tileType, orientation);
+        string path = GetPath(theme, tileType, orientationPath);
 
         var success = Assets.TryGetValue(path, out objects);
 
         return (success) ? objects : null;
     }
 
-    public static TileBase GetRandomAsset(ETheme theme, ETileType tileType, EOrientation orientation)
+    public static TileBase GetRandomAsset(ETheme theme, ETileType tileType, string orientationPath)
     {
-        List<TileBase> objects = GetAssets(theme, tileType, orientation);
+        List<TileBase> objects = GetAssets(theme, tileType, orientationPath);
 
         if (objects != null)
         {

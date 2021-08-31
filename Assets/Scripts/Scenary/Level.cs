@@ -49,13 +49,13 @@ public class Level : MonoBehaviour
 
         tilemapVisualizer.Setup();
 
-        tilemapVisualizer.PaintTiles(Map, ETileType.Floor, EOrientation.Center);
+        tilemapVisualizer.PaintTiles(Map, ETileType.Floor, "Center");
 
         var walls = WallGenerator.CreateWalls(Map);
         
         foreach (var wall in walls)
         {
-            tilemapVisualizer.PaintTiles(wall.Value, ETileType.Wall, wall.Key);
+            tilemapVisualizer.PaintTiles(wall.Value, ETileType.Wall, wall.Key.ToString());
         }
     }
 

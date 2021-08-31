@@ -241,7 +241,7 @@ TextureImporter:
     second: Dungeon_Tileset_78
   - first:
       213: -8269629686364622043
-    second: Dungeon_Tileset_79
+    second: Dungeon_Tileset_Full
   - first:
       213: 6801152492180024973
     second: Dungeon_Tileset_80
@@ -2062,7 +2062,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Dungeon_Tileset_79
+      name: Dungeon_Tileset_Full
       rect:
         serializedVersion: 2
         x: 144

@@ -7,15 +7,10 @@ using UnityEngine.Tilemaps;
 public class TilemapVisualizer : MonoBehaviour
 {
     [SerializeField]
-    private Tilemap LevelTilemap;
+    private List<Tilemap> Tilemaps;
 
     [SerializeField]
-    private ETheme theme;
-
-    public TilemapVisualizer(Tilemap tilemap)
-    {
-        this.LevelTilemap = tilemap;
-    }
+    private ETheme Theme;
 
     public void Setup()
     {
@@ -24,21 +19,33 @@ public class TilemapVisualizer : MonoBehaviour
         ScenaryManager.LoadAssets();
     }
 
-    public void PaintTiles(IEnumerable<Vector2Int> positions, ETileType type, EOrientation orientation)
+    public void PaintTiles(IEnumerable<Vector2Int> positions, ETileType tileType, string orientation)
     {
         foreach (var position in positions)
         {
-            var tileBase = ScenaryManager.GetRandomAsset(theme, type, orientation);
-            PaintSingleTile(LevelTilemap, tileBase, position);
+            var tileBase = ScenaryManager.GetRandomAsset(Theme, tileType, orientation);
+            PaintSingleTile(GetTilemap(tileType), tileBase, position);
         }
     }
 
-    public void PaintTiles(IEnumerable<Vector2Int> positions, TileBase tileBase)
+    public void PaintTiles(IEnumerable<Vector2Int> positions, Tilemap tilemap, TileBase tileBase)
     {
         foreach (var position in positions)
         {
-            PaintSingleTile(LevelTilemap, tileBase, position);
+            PaintSingleTile(tilemap, tileBase, position);
         }
+    }
+
+    public Tilemap GetTilemap(ETileType tileType)
+    {
+        Tilemap tilemap = null;
+
+        if (Tilemaps.Count > 0)
+        {
+            tilemap = Tilemaps[(int)tileType];
+        }
+
+        return tilemap;
     }
 
     private void PaintSingleTile(Tilemap tilemap, TileBase tile, Vector2Int position)
@@ -58,9 +65,6 @@ public class TilemapVisualizer : MonoBehaviour
 
     public void Clear()
     {
-        if (LevelTilemap)
-        {
-            LevelTilemap.ClearAllTiles();
-        }
+        Tilemaps.ForEach(t => t.ClearAllTiles());
     }
 }
