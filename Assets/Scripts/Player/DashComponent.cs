@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -28,7 +29,17 @@ public class DashComponent : MonoBehaviour
 
     private Vector2 Direction = Vector2.zero;
 
-    // Start is called before the first frame update
+    public event Action<Vector2> onDash;
+
+    public void Subscribe(Action<Vector2> func)
+    {
+        onDash += func;
+    }
+
+    public void Unsubscribe(Action<Vector2> func)
+    {
+        onDash -= func;
+    }
     void Awake()
     {
         if (!MovementComponent)
@@ -71,11 +82,26 @@ public class DashComponent : MonoBehaviour
             IsDashing = true;
             Direction = MovementComponent.GetMoveDirection();
             LastDashTime = Time.time;
+
+            Vector2 start = this.transform.position;
+            Vector2 direction = Direction * Force * DashTime;
+
+            Debug.DrawRay(start, direction, Color.white, 1);
+
+            CallOnDash(direction);
         }
     }
 
     private bool CanDash()
     {
         return !IsDashing && Time.time >= LastDashTime + Cooldown ;
+    }
+
+    private void CallOnDash(Vector2 direction)
+    {
+        if (onDash != null)
+        {
+            onDash(direction);
+        }
     }
 }
