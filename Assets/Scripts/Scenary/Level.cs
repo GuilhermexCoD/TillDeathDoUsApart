@@ -274,8 +274,8 @@ public class Level : MonoBehaviour
 
     private void DrawMap()
     {
-        DrawCorridors();
-        DrawRooms();
+        //DrawCorridors();
+        //DrawRooms();
     }
 
     public static Vector3 CalculatePosition(Vector2Int coord, Vector3 startPosition)

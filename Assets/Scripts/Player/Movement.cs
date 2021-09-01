@@ -56,7 +56,13 @@ public class Movement : MonoBehaviour
 
     public void SetVelocity(Vector2 velocity)
     {
-        GoRigidbody.velocity = velocity;
+        Vector2 start = this.transform.position;
+        RaycastHit2D hit = Physics2D.Raycast(start, velocity);
+
+        if (hit.collider != null)
+        {
+            GoRigidbody.velocity = velocity;
+        }
     }
 
     public Vector2 GetMoveDirection()
