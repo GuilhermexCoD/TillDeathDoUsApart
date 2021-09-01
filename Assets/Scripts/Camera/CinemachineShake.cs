@@ -35,7 +35,6 @@ public class CinemachineShake : MonoBehaviour
             Smooth = smooth;
             ShakeTimerTotal = time;
             ShakeTimer = ShakeTimerTotal;
-
             cinemachineBasicMultiChannelPerlin.m_AmplitudeGain = Intensity;
         }
     }
