@@ -10,6 +10,9 @@ public class PlayerController : MonoBehaviour
     public float DashCameraShakeTime = 0.2f;
     private DashComponent dash;
 
+    [SerializeField]
+    private IInteractable interactableObject;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -29,6 +32,22 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetButtonDown("PickUp") && interactableObject != null)
+        {
+            var pickedUp = interactableObject.PickUp(this);
+            Debug.Log($"Picked up an item : {pickedUp}");
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        interactableObject = collision.gameObject.GetComponent<IInteractable>();
+
+        Debug.Log($"Interactable = {interactableObject.GetInfo()}");
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        interactableObject = null;
     }
 }
