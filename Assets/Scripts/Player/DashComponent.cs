@@ -26,6 +26,7 @@ public class DashComponent : MonoBehaviour
 
     [SerializeField]
     private bool IsDashing;
+    private bool PressedDash;
 
     private Vector2 Direction = Vector2.zero;
 
@@ -77,7 +78,9 @@ public class DashComponent : MonoBehaviour
 
     private void ProcessInputs()
     {
-        if (CanDash() && Input.GetButtonDown(ActionName))
+        PressedDash = Input.GetButtonDown(ActionName);
+
+        if (CanDash() && PressedDash)
         {
             IsDashing = true;
             Direction = MovementComponent.GetMoveDirection();
@@ -89,6 +92,8 @@ public class DashComponent : MonoBehaviour
             Debug.DrawRay(start, direction, Color.white, 1);
 
             CallOnDash(direction);
+
+            PressedDash = false;
         }
     }
 

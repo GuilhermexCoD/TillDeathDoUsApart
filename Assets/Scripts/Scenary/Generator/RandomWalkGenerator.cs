@@ -37,14 +37,16 @@ public class RandomWalkGenerator : GeneratorRule
                 case EWalkType.Random:
                     coord = Direction2D.GetRandomDirection();
 
-                    currentCoord = currentCoord + coord;
+                    currentCoord += coord;
 
                     CoordinateGenerated(currentCoord);
 
                     break;
                 case EWalkType.Soldier:
+
                     break;
                 case EWalkType.Snake:
+
                     break;
                 default:
                     break;

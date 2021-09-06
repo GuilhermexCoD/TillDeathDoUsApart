@@ -16,6 +16,11 @@ public class Level : MonoBehaviour
     public int MaxQuantityOfEnemies = 20;
 
     public bool UseBSP = true;
+    public Tilemap BSP_Visualizer;
+    public TileBase DebugTile;
+    public int iteration = 0;
+    public List<BoundsInt> bounds = new List<BoundsInt>();
+
     public Vector2Int RoomMaxSize;
     public RangeInteger QuantityRangeBonusRooms;
 
@@ -66,13 +71,31 @@ public class Level : MonoBehaviour
         }
     }
 
+    public void CleanDebug()
+    {
+        BSP_Visualizer.ClearAllTiles();
+        bounds.Clear();
+    }
+
+    public void Subscribe()
+    {
+        BinarySpacePartitioningGenerator.Subscribe(OnBinary);
+    }
+    public void UnSubscribe()
+    {
+        BinarySpacePartitioningGenerator.Unsubscribe(OnBinary);
+    }
+
     public void Generate()
     {
         Clean();
 
         if (UseBSP)
         {
+
             var roomsCoordinates = BinarySpacePartitioningGenerator.BinarySpacePartitioning(new BoundsInt((Vector3Int)Start, new Vector3Int(Width, Height, 0)), RoomMaxSize.x, RoomMaxSize.y);
+
+            //PrintDebugBoundsInt(roomsCoordinates);
 
             foreach (var coord in roomsCoordinates)
             {
@@ -88,6 +111,56 @@ public class Level : MonoBehaviour
         }
 
         GenerateCorridors();
+    }
+
+    private void OnBinary(BoundsInt bound)
+    {
+        print("BINARY");
+        bounds.Add(bound);
+    }
+
+    public void IncreaseIteration()
+    {
+        iteration = Mathf.Clamp(iteration + 1, 0, bounds.Count());
+    }
+
+    public void DecreaseIteration()
+    {
+        iteration = Mathf.Clamp(iteration - 1, 0, bounds.Count());
+    }
+
+    public void PrintIteration()
+    {
+        BSP_Visualizer.ClearAllTiles();
+        if (iteration >= 0 && iteration < bounds.Count())
+        {
+            PrintDebugBound(bounds[iteration]);
+        }
+    }
+
+    private void PrintDebugBoundsInt(List<BoundsInt> bounds)
+    {
+        foreach (var bound in bounds)
+        {
+            PrintDebugBound(bound);
+        }
+    }
+
+    private void PrintDebugBound(BoundsInt bound)
+    {
+        for (int x = bound.min.x; x < bound.max.x; x++)
+        {
+            for (int y = bound.min.y; y < bound.max.y; y++)
+            {
+                var pos = new Vector2Int(x, y);
+                PrintDebugTile((Vector2Int)pos);
+            }
+        }
+    }
+
+    private void PrintDebugTile(Vector2Int coordinate)
+    {
+        TilemapVisualizer.PaintSingleTile(BSP_Visualizer, DebugTile, coordinate);
     }
 
     private void GenerateCorridors()

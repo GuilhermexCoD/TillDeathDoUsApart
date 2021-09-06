@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField]
     private IInteractable interactableObject;
+    public List<IInteractable> inventory = new List<IInteractable>();
 
     // Start is called before the first frame update
     void Awake()
@@ -36,6 +37,7 @@ public class PlayerController : MonoBehaviour
         {
             var pickedUp = interactableObject.PickUp(this);
             Debug.Log($"Picked up an item : {pickedUp}");
+            inventory.Add(pickedUp);
         }
     }
 

@@ -67,7 +67,7 @@ public class TilemapVisualizer : MonoBehaviour
         return tilemap;
     }
 
-    private void PaintSingleTile(Tilemap tilemap, TileBase tile, Vector2Int position)
+    public static void PaintSingleTile(Tilemap tilemap, TileBase tile, Vector2Int position)
     {
         if (tilemap)
         {
