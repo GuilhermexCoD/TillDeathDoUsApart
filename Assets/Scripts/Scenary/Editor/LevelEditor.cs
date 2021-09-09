@@ -19,7 +19,31 @@ public class LevelEditor : Editor
 
         if (GUILayout.Button("Create Dungeon"))
         {
+            level.Subscribe();
+            level.CleanDebug();
             level.Setup();
+            level.UnSubscribe();
         }
+
+        GUILayout.BeginHorizontal();
+        if (GUILayout.Button("<-"))
+        {
+            level.DecreaseIteration();
+            level.PrintIteration();
+        }
+
+        if (GUILayout.Button("PrintIteration"))
+        {
+            Debug.Log("Print Iteration");
+            level.PrintIteration();
+        }
+
+        if (GUILayout.Button("->"))
+        {
+            level.IncreaseIteration();
+            level.PrintIteration();
+        }
+        GUILayout.EndHorizontal();
+
     }
 }

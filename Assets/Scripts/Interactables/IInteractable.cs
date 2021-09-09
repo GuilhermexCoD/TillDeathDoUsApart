@@ -4,7 +4,7 @@ using UnityEngine;
 
 public interface IInteractable
 {
-    object PickUp(object actor);
+    IInteractable PickUp(object actor);
     void Interact(object actor);
     string GetInfo();
 }

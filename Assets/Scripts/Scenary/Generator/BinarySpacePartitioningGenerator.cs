@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class BinarySpacePartitioningGenerator : GeneratorRule
 {
@@ -13,6 +15,25 @@ public class BinarySpacePartitioningGenerator : GeneratorRule
         base.Generate();
     }
 
+    public static event Action<BoundsInt> onDequeue;
+
+    public static void Subscribe(Action<BoundsInt> func)
+    {
+        onDequeue += func;
+    }
+
+    public static void Unsubscribe(Action<BoundsInt> func)
+    {
+        onDequeue -= func;
+    }
+
+    private static void CallOnDequeue(BoundsInt bound)
+    {
+        if (onDequeue != null)
+        {
+            onDequeue(bound);
+        }
+    }
     public static List<BoundsInt> BinarySpacePartitioning(BoundsInt spaceToSplit, int minWidth, int minHeight)
     {
         Queue<BoundsInt> roomsQueue = new Queue<BoundsInt>();
@@ -24,6 +45,9 @@ public class BinarySpacePartitioningGenerator : GeneratorRule
         while (roomsQueue.Count > 0)
         {
             var room = roomsQueue.Dequeue();
+
+            CallOnDequeue(room);
+
             if (room.size.y >= minHeight && room.size.x >= minWidth)
             {
                 bool horizontally = Random.value < 0.5f;
@@ -41,6 +65,7 @@ public class BinarySpacePartitioningGenerator : GeneratorRule
                 }
                 else if (room.size.x >= minWidth && room.size.y >= minHeight)
                 {
+
                     roomsList.Add(room);
                 }
             }

@@ -4,8 +4,14 @@ using UnityEngine;
 
 public class Potion : MonoBehaviour, IInteractable
 {
-    public float HealAmount = 10;
-    public float Price = 5;
+    public EStatusType effectType;
+
+    public DrinkablesData data;
+
+    private void Awake()
+    {
+        
+    }
 
     public void Interact(object actor)
     {
@@ -19,7 +25,7 @@ public class Potion : MonoBehaviour, IInteractable
 
     public override string ToString()
     {
-        return $"Potion : Heal amount = {HealAmount} / Price = {Price}";
+        return $"Potion : {effectType} - {data}";
     }
 
     public string GetInfo()
@@ -27,7 +33,7 @@ public class Potion : MonoBehaviour, IInteractable
         return this.ToString();
     }
 
-    public object PickUp(object actor)
+    public IInteractable PickUp(object actor)
     {
         Destroy(this.gameObject);
 

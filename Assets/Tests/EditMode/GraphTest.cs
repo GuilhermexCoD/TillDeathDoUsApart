@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
@@ -191,7 +192,7 @@ public class GraphTest
         graph.AddEdge(vertexB, vertexA);
 
         //Act
-        graph.RemoveEdge(vertexA,vertexB);
+        graph.RemoveEdge(vertexA, vertexB);
 
         //Assert
         Assert.IsTrue(!graph.IsVertexLinkedTo(vertexA, vertexB));
@@ -238,5 +239,82 @@ public class GraphTest
         Assert.IsTrue(graph.IsVertexLinkedTo(vertexB, vertexC));
         Assert.IsTrue(graph.GetAmountVertexConnections(vertexB) == 1);
 
+    }
+
+    [Test]
+    public void IfGraphConstructorWhenLoopConnectionThenConnect()
+    {
+        //Arrange
+        string a = "1";
+
+        var vertexA = new Vertex<string>(a);
+
+        var vertices = new List<Vertex<string>>();
+
+        vertices.Add(vertexA);
+
+        var graph = new Graph<string, Weight>(vertices);
+
+        //Act
+        graph.AddEdge(vertexA, vertexA);
+
+        //Assert
+        Assert.IsTrue(graph.IsVertexLinkedTo(vertexA, vertexA));
+        Assert.IsTrue(graph.GetAmountVertexConnections(vertexA) == 1);
+    }
+
+    [Test]
+    public void IfCompleteGraphHowMuchEdges()
+    {
+        //Arrange
+        int vertexCount = 3;
+
+        //Act
+        int edgeCount = Graph.GetEdgeCountForCompleteGraph(vertexCount);
+
+        //Assert
+        Assert.IsTrue(edgeCount == 3);
+    }
+
+    [Test]
+    public void IfDepthFirstSearchThenVisitAllVertex()
+    {
+        //Arrange
+        string a = "1";
+        string b = "2";
+        string c = "3";
+        string d = "4";
+        string e = "5";
+
+        var vertexA = new Vertex<string>(a);
+        var vertexB = new Vertex<string>(b);
+        var vertexC = new Vertex<string>(c);
+        var vertexD = new Vertex<string>(d);
+        var vertexE = new Vertex<string>(e);
+
+        var vertices = new List<Vertex<string>>();
+
+        vertices.Add(vertexA);
+        vertices.Add(vertexB);
+        vertices.Add(vertexC);
+        vertices.Add(vertexD);
+        vertices.Add(vertexE);
+
+        var graph = new Graph<string, Weight>(vertices);
+
+        graph.AddEdge(vertexA, vertexB);
+
+        graph.AddEdge(vertexB, vertexC);
+        graph.AddEdge(vertexB, vertexD);
+
+        graph.AddEdge(vertexC, vertexD);
+        graph.AddEdge(vertexC, vertexE);
+
+        //Act
+        var visited = graph.DepthFirstSearch().ToList();
+
+        //Assert
+        Assert.IsTrue(visited.Count == vertices.Count);
+        Assert.IsTrue(visited.TrueForAll(c => c == true));
     }
 }
