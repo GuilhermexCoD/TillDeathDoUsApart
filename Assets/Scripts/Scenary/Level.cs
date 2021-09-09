@@ -153,7 +153,7 @@ public class Level : MonoBehaviour
             for (int y = bound.min.y; y < bound.max.y; y++)
             {
                 var pos = new Vector2Int(x, y);
-                PrintDebugTile((Vector2Int)pos);
+                PrintDebugTile(pos);
             }
         }
     }

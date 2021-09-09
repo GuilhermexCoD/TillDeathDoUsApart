@@ -4,33 +4,34 @@ using System;
 
 public class Edge<W> where W : class
 {
-    private int vertexIndex;
+    private int StartIndex;
+    private int TargetIndex;
 
-    private W weight;
+    private W Weight;
 
-    public static bool operator ==(Edge<W> a, Edge<W> b) => (a.weight == b.weight && a.vertexIndex == b.vertexIndex);
-    public static bool operator !=(Edge<W> a, Edge<W> b) => (a.weight != b.weight || a.vertexIndex != b.vertexIndex);
-
-    public Edge(int vertexIndex)
+    public static bool operator ==(Edge<W> a, Edge<W> b) => (a.Weight == b.Weight && a.TargetIndex == b.TargetIndex && a.StartIndex == b.StartIndex);
+    public static bool operator !=(Edge<W> a, Edge<W> b) => (a.Weight != b.Weight || a.TargetIndex != b.TargetIndex || a.StartIndex != b.StartIndex);
+    
+    public Edge(int startIndex, int targetIndex, W weight) : this(startIndex, targetIndex)
     {
-        this.vertexIndex = vertexIndex;
-        this.weight = null;
+        this.Weight = weight;
     }
+
+    public Edge(int startIndex, int targetIndex)
+    {
+        this.StartIndex = startIndex;
+        this.TargetIndex = targetIndex;
+    }
+
 
     public int GetVertexIndex()
     {
-        return vertexIndex;
+        return TargetIndex;
     }
 
     public bool IsConnectingVertex(int index)
     {
-        return this.vertexIndex == index;
-    }
-
-    public Edge(int vertexIndex,W weight)
-    {
-        this.vertexIndex = vertexIndex;
-        this.weight = weight;
+        return this.TargetIndex == index;
     }
 
     public override bool Equals(object obj)
@@ -47,6 +48,6 @@ public class Edge<W> where W : class
 
     public override int GetHashCode()
     {
-        return  vertexIndex.GetHashCode() + weight.GetHashCode();
+        return TargetIndex.GetHashCode() + Weight.GetHashCode();
     }
 }

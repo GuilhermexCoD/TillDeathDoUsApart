@@ -2,6 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+public class Graph
+{
+    public static int GetEdgeCountForCompleteGraph(int vertexCount)
+    {
+        return (vertexCount - 1) * vertexCount / 2;
+    }
+}
+
 public class Graph<V, E> where E : class
 {
     private List<Vertex<V>> vertices;
@@ -81,11 +89,37 @@ public class Graph<V, E> where E : class
         edges.RemoveAll(e => e.IsConnectingVertex(indexB));
     }
 
-    public void AddEdge(int indexA, int indexB, E weight = null)
+    public void AddEdge(int indexA, int indexB, bool directed = true, E weight = null)
+    {
+        if (directed)
+        {
+            AddEdgeConnection(indexA, indexB, weight);
+        }
+        else
+        {
+            AddEdgeConnection(indexA, indexB, weight);
+            AddEdgeConnection(indexB, indexA, weight);
+        }
+    }
+
+    public void AddEdge(Vertex<V> a, Vertex<V> b, bool directed = true, E weight = null)
+    {
+        if (directed)
+        {
+            AddEdgeConnection(a, b, weight);
+        }
+        else
+        {
+            AddEdgeConnection(a, b, weight);
+            AddEdgeConnection(b, a, weight);
+        }
+    }
+
+    public void AddEdgeConnection(int indexA, int indexB, E weight = null)
     {
         var edgeIndexes = new List<Edge<E>>();
 
-        var edgeAB = new Edge<E>(indexB, weight);
+        var edgeAB = new Edge<E>(indexA, indexB, weight);
 
         if (edgesList.ContainsKey(indexA))
         {
@@ -103,9 +137,9 @@ public class Graph<V, E> where E : class
         }
     }
 
-    public void AddEdge(Vertex<V> a, Vertex<V> b, E weight = null)
+    public void AddEdgeConnection(Vertex<V> a, Vertex<V> b, E weight = null)
     {
-        AddEdge(GetVertexIndex(a), GetVertexIndex(b), weight);
+        AddEdgeConnection(GetVertexIndex(a), GetVertexIndex(b), weight);
     }
 
     public int GetVertexIndex(Vertex<V> vertex)
@@ -179,14 +213,14 @@ public class Graph<V, E> where E : class
 
         for (int i = 0; i < count; i++)
         {
-            for (int j = i+1; j < count; j++)
+            for (int j = i + 1; j < count; j++)
             {
                 AddEdge(i, j);
             }
         }
     }
 
-    public static Graph<V,E> ListToGraph(List<V> list)
+    public static Graph<V, E> ListToGraph(List<V> list)
     {
         Graph<V, E> graph = new Graph<V, E>();
 
@@ -196,5 +230,42 @@ public class Graph<V, E> where E : class
         }
 
         return graph;
+    }
+
+    public int GetSize()
+    {
+        return vertices.Count;
+    }
+
+    public bool[] DepthFirstSearch()
+    {
+        int size = GetSize();
+
+        bool[] visited = new bool[size];
+
+        int currentVertex = 0;
+
+        while (currentVertex < size &&  !visited[currentVertex])
+        {
+            DepthFirstSearch(currentVertex, ref visited);
+            currentVertex++;
+        }
+
+        return visited;
+    }
+
+    public void DepthFirstSearch(int vertexIndex, ref bool[] visited)
+    {
+        if (visited[vertexIndex])
+            return;
+
+        visited[vertexIndex] = true;
+
+        var neightbours = GetVertexEdges(vertexIndex);
+
+        foreach (var next in neightbours)
+        {
+            DepthFirstSearch(next.GetVertexIndex(), ref visited);
+        }
     }
 }

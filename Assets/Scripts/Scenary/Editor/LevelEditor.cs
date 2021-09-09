@@ -34,6 +34,7 @@ public class LevelEditor : Editor
 
         if (GUILayout.Button("PrintIteration"))
         {
+            Debug.Log("Print Iteration");
             level.PrintIteration();
         }
 
