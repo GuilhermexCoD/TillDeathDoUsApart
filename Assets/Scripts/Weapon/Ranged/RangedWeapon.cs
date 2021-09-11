@@ -1,29 +1,39 @@
 using UnityEngine;
 
+[RequireComponent(typeof(ShootComponent))]
 public class RangedWeapon : Weapon
 {
-    public Transform MuzzleTransform;
-
     [SerializeField]
-    private GameObject projectilePrefab;
+    private ShootComponent shootComponent;
 
     public override void Attack()
     {
         base.Attack();
 
-        var projectileGo = Instantiate<GameObject>(projectilePrefab, MuzzleTransform.position,transform.rotation);
-
-        var projectile = projectileGo.GetComponent<Projectile>();
-
-        projectile.SetVelocity(MuzzleTransform.right, Data.Projectile.StartSpeed);
-        projectile.SetLifeSpan(Data.Projectile.LifeSpan);
-        projectile.SetAsset(Data.Projectile.VisualProjectile,Data.Projectile.Color);
+        shootComponent.Shoot();
     }
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        
+        var data = GetData<RangedWeaponData>();
+
+        GetShootComponent().SetProjectileData(data.projectile);
+    }
+
+    public ShootComponent GetShootComponent()
+    {
+        if (shootComponent == null)
+        {
+            shootComponent = GetComponent<ShootComponent>();
+        }
+
+        return shootComponent;
+    }
+
+    public Vector3 GetFireWorldPosition()
+    {
+        return GetShootComponent().GetShotWorldPosition();
     }
 
     // Update is called once per frame

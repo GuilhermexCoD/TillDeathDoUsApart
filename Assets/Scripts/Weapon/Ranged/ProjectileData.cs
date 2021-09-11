@@ -6,16 +6,16 @@ using UnityEngine;
 
 public class ProjectileData : ScriptableObject
 {
-    public ItemData Item;
+    public ItemData item;
 
-    public float StartSpeed;
-    public float Damage;
-    public DamageType Type;
+    public float startSpeed;
+    public float damage;
+    public DamageType type;
 
-    public float LifeSpan;
-    public ParticleSystem HitEffect;
+    public float lifeSpan;
+    public ParticleSystem hitEffect;
 
-    public Sprite VisualProjectile;
-    public Color Color = Color.white;
-    public Sprite Round;
+    public Sprite visualProjectile;
+    public Color color = Color.white;
+    public Sprite round;
 }

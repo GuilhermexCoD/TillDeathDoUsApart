@@ -90,6 +90,7 @@ public class Level : MonoBehaviour
     {
         Clean();
 
+        //BinarySpacePartitioning
         if (UseBSP)
         {
 

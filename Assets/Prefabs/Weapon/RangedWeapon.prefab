@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1288627177224448054}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.253, y: 0.034, z: 0}
+  m_LocalPosition: {x: 0.226, y: 0.029, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7989696716880601505}
@@ -40,6 +40,8 @@ GameObject:
   m_Component:
   - component: {fileID: 7989696716880601505}
   - component: {fileID: 9069118370550356989}
+  - component: {fileID: 5390628698828264288}
+  - component: {fileID: 7904725444322179072}
   m_Layer: 0
   m_Name: RangedWeapon
   m_TagString: Untagged
@@ -75,10 +77,40 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb9c8a8f63c19d240b839166cd28ac2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Data: {fileID: 11400000, guid: 520b0361718b0fe4985dc4e1de17678f, type: 2}
-  WeaponVisual: {fileID: 2863963931206598169}
-  MuzzleTransform: {fileID: 9070832529959077309}
+  data: {fileID: 11400000, guid: a8e2b4112e9c38c4db3014d8bbdbcda1, type: 2}
+  weaponVisual: {fileID: 2863963931206598169}
+  shootComponent: {fileID: 5390628698828264288}
+--- !u!114 &5390628698828264288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3200977337016068253}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1c6f0bbd933e6248a4bdfbe5339f8ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   projectilePrefab: {fileID: 3856647281964492796, guid: 405a5a8b56d9aba4485c228591abfc37, type: 3}
+  shotTransform: {fileID: 9070832529959077309}
+  projectileData: {fileID: 11400000, guid: 26505c101db9dc44eb3773a28efca7f1, type: 2}
+--- !u!58 &7904725444322179072
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3200977337016068253}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.5
 --- !u!1 &8128447889133875992
 GameObject:
   m_ObjectHideFlags: 0
@@ -149,7 +181,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: b6f4a24feed80894aacc1aea6858f07a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

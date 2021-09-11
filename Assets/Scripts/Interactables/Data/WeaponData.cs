@@ -5,7 +5,11 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Weapon", menuName = "Items/Weapons")]
 public class WeaponData : ItemData
 {
-    public ProjectileData Projectile;
+    public Vector3 handR_Transform;
+    public Vector3 handR_Rotation;
 
-    public Color Color;
+    public Vector3 handL_Transform;
+    public Vector3 handL_Rotation;
+
+    public Color color = Color.white;
 }

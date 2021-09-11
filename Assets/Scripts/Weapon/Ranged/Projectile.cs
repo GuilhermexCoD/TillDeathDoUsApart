@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -7,26 +5,27 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     [SerializeField]
-    private Rigidbody2D Rigidbody;
+    private Rigidbody2D goRigidbody;
     [SerializeField]
-    private SpriteRenderer SpriteRenderer;
+    private SpriteRenderer spriteRenderer;
 
-    private Vector2 Direction;
-    private float Speed;
+    private Vector2 direction;
+    private float speed;
 
-    private float LifeSpan = 10;
+    private float lifeSpan = 10;
 
-    private Sprite VisualAsset;
-    private Color ColorAsset;
+    private Sprite visualAsset;
+    private Color colorAsset;
 
     private void Awake()
     {
-        if (Rigidbody == null)
+
+        if (goRigidbody == null)
         {
             SetRigidbody2D(GetComponent<Rigidbody2D>());
         }
 
-        if (SpriteRenderer == null)
+        if (spriteRenderer == null)
         {
             SetSpriteRenderer(GetComponent<SpriteRenderer>());
         }
@@ -36,17 +35,17 @@ public class Projectile : MonoBehaviour
 
     public void UpdateVisuals()
     {
-        if (SpriteRenderer != null)
+        if (spriteRenderer != null)
         {
-            SpriteRenderer.sprite = VisualAsset;
-            SpriteRenderer.color = ColorAsset;
+            spriteRenderer.sprite = visualAsset;
+            spriteRenderer.color = colorAsset;
         }
     }
 
     public void SetAsset(Sprite visual, Color color)
     {
-        VisualAsset = visual;
-        ColorAsset = color;
+        visualAsset = visual;
+        colorAsset = color;
 
         UpdateVisuals();
     }
@@ -56,40 +55,40 @@ public class Projectile : MonoBehaviour
         SetStartSpeed(speed);
         SetDirection(direction);
 
-        if (Rigidbody != null)
+        if (goRigidbody != null)
         {
-            Rigidbody.velocity = direction.normalized * speed;
+            goRigidbody.velocity = direction.normalized * speed;
         }
     }
 
     public void SetSpriteRenderer(SpriteRenderer spriteRenderer)
     {
-        SpriteRenderer = spriteRenderer;
+        this.spriteRenderer = spriteRenderer;
     }
 
     public void SetRigidbody2D(Rigidbody2D rigidbody)
     {
-        Rigidbody = rigidbody;
+        this.goRigidbody = rigidbody;
 
-        Rigidbody.gravityScale = 0;
+        this.goRigidbody.gravityScale = 0;
 
-        rigidbody.velocity = Direction.normalized * Speed;
+        rigidbody.velocity = direction.normalized * speed;
     }
 
     public void SetDirection(Vector2 direction)
     {
-        Direction = direction;
+        this.direction = direction;
     }
 
     public void SetStartSpeed(float speed)
     {
-        Speed = speed;
+        this.speed = speed;
     }
 
     public void SetLifeSpan(float lifeSpan)
     {
-        LifeSpan = lifeSpan;
-        Destroy(this.gameObject, LifeSpan);
+        this.lifeSpan = lifeSpan;
+        Destroy(this.gameObject, this.lifeSpan);
     }
 
     // Update is called once per frame
