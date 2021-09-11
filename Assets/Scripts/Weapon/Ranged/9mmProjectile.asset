@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5328bbe7dd8b784091a552e72d6d724, type: 3}
   m_Name: 9mmProjectile
   m_EditorClassIdentifier: 
-  Item: {fileID: 11400000, guid: 4d47ce3648bf6dd4689425fa80e29af0, type: 2}
-  StartSpeed: 5
-  Damage: 30
-  Type:
+  item: {fileID: 11400000, guid: 4d47ce3648bf6dd4689425fa80e29af0, type: 2}
+  startSpeed: 10
+  damage: 30
+  type:
     DamageImpulse: 10
     CausedByWorld: 0
-  LifeSpan: 10
-  HitEffect: {fileID: 0}
-  VisualProjectile: {fileID: 21300000, guid: ff46c9621d92cc140840c29234fba31b, type: 3}
-  Color: {r: 1, g: 1, b: 1, a: 1}
-  Round: {fileID: 21300000, guid: 9a000c97b6cd34b449e59665baf61c4c, type: 3}
+  lifeSpan: 10
+  hitEffect: {fileID: 0}
+  visualProjectile: {fileID: 21300000, guid: ff46c9621d92cc140840c29234fba31b, type: 3}
+  color: {r: 1, g: 1, b: 1, a: 1}
+  round: {fileID: 21300000, guid: 61c297393d004eb4aa1de29e37c3e011, type: 3}

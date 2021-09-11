@@ -6,26 +6,28 @@ using UnityEngine;
 public class Movement : MonoBehaviour
 {
     [SerializeField]
-    private float Speed = 5;
+    private float speed = 5;
 
     [SerializeField]
-    private Vector2 MoveDirection = Vector2.zero;
+    private Vector2 moveDirection = Vector2.zero;
 
     [SerializeField]
-    private Rigidbody2D GoRigidbody;
+    private Rigidbody2D goRigidbody;
 
     [SerializeField]
-    private bool BlockMovement;
+    private bool blockMovement;
 
+    //Chamado uma unica vez e antes do Start
     private void Awake()
     {
-        if (!GoRigidbody)
+        if (!goRigidbody)
         {
-            GoRigidbody = this.GetComponent<Rigidbody2D>();
+            goRigidbody = this.GetComponent<Rigidbody2D>();
         }
     }
 
-    void Start()
+    //Chamado uma unica vez e antes do Start
+    private void Start()
     {
         
     }
@@ -46,12 +48,12 @@ public class Movement : MonoBehaviour
         float moveX = Input.GetAxisRaw("Horizontal");
         float moveY = Input.GetAxisRaw("Vertical");
 
-        MoveDirection = new Vector2(moveX, moveY).normalized;
+        moveDirection = new Vector2(moveX, moveY).normalized;
     }
 
     public void AddForce(Vector2 force)
     {
-        GoRigidbody.AddForce(force);
+        goRigidbody.AddForce(force);
     }
 
     public void SetVelocity(Vector2 velocity)
@@ -61,25 +63,25 @@ public class Movement : MonoBehaviour
 
         if (hit.collider != null)
         {
-            GoRigidbody.velocity = velocity;
+            goRigidbody.velocity = velocity;
         }
     }
 
     public Vector2 GetMoveDirection()
     {
-        return MoveDirection;
+        return moveDirection;
     }
 
     void Move()
     {
-        if (!BlockMovement)
+        if (!blockMovement)
         {
-            GoRigidbody.velocity = (MoveDirection * Speed);
+            goRigidbody.velocity = (moveDirection * speed);
         }
     }
 
     public void SetBlockMovement(bool block){
-        BlockMovement = block;
+        blockMovement = block;
     }
 
     private void OnAnimatorMove()

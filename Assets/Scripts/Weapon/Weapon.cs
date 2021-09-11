@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Weapon : MonoBehaviour
+public class Weapon : MonoBehaviour, IInteractable
 {
     [SerializeField]
-    protected WeaponData Data;
+    protected WeaponData data;
 
     [SerializeField]
-    protected SpriteRenderer WeaponVisual;
+    protected SpriteRenderer weaponVisual;
 
     private void Awake()
     {
@@ -17,10 +17,10 @@ public class Weapon : MonoBehaviour
 
     public void UpdateVisuals()
     {
-        if (WeaponVisual != null)
+        if (weaponVisual != null)
         {
-            WeaponVisual.sprite = Data.Asset;
-            WeaponVisual.color = Data.Color;
+            weaponVisual.sprite = data.spriteAsset;
+            weaponVisual.color = data.color;
         }
     }
 
@@ -29,15 +29,36 @@ public class Weapon : MonoBehaviour
 
     }
 
+    public virtual D GetData<D>() where D : WeaponData
+    {
+        return (D)data;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
+
+    }
+
+    public IInteractable PickUp(object actor)
+    {
         
+        return this;
+    }
+
+    public void Interact(object actor)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public string GetInfo()
+    {
+        return data.ToString();
     }
 }

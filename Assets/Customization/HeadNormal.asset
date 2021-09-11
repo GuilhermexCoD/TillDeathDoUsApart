@@ -9,12 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 89786fe8e1d82974c97fe1a2901945df, type: 3}
-  m_Name: ShotgunData
+  m_Script: {fileID: 11500000, guid: b05f437f6649708429348557e498653f, type: 3}
+  m_Name: HeadNormal
   m_EditorClassIdentifier: 
   id: 0
-  name: Constantine Shotgun
-  icon: {fileID: 2800000, guid: b6f4a24feed80894aacc1aea6858f07a, type: 3}
-  spriteAsset: {fileID: 21300000, guid: b6f4a24feed80894aacc1aea6858f07a, type: 3}
-  value: 100
+  name: Head Normal
+  visual: {fileID: 21300000, guid: e86bc7354b107d54e8e458bcf7423382, type: 3}
   color: {r: 1, g: 1, b: 1, a: 1}
+  bodyPartType: 0
