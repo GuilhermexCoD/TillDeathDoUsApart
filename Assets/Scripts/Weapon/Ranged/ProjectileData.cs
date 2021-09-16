@@ -10,6 +10,7 @@ public class ProjectileData : ScriptableObject
 
     public float startSpeed;
     public float damage;
+    public float range;
     public DamageType type;
 
     public float lifeSpan;
@@ -18,4 +19,9 @@ public class ProjectileData : ScriptableObject
     public Sprite visualProjectile;
     public Color color = Color.white;
     public Sprite round;
+
+    public MeshParticleData shellParticleData;
+    public GameObject muzzleFlashParticle;
+    public Material tracerMaterial;
+
 }

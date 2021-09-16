@@ -15,11 +15,15 @@ MonoBehaviour:
   item: {fileID: 11400000, guid: 4d47ce3648bf6dd4689425fa80e29af0, type: 2}
   startSpeed: 10
   damage: 30
+  range: 5
   type:
     DamageImpulse: 10
     CausedByWorld: 0
   lifeSpan: 10
   hitEffect: {fileID: 0}
   visualProjectile: {fileID: 21300000, guid: ff46c9621d92cc140840c29234fba31b, type: 3}
-  color: {r: 1, g: 1, b: 1, a: 1}
+  color: {r: 1, g: 0.21226418, b: 0.21226418, a: 1}
   round: {fileID: 21300000, guid: 61c297393d004eb4aa1de29e37c3e011, type: 3}
+  shellParticleData: {fileID: 11400000, guid: b4892fa90862e6646b320bcaeb31f3f5, type: 2}
+  muzzleFlashParticle: {fileID: 6335153301942870110, guid: 52500f00fc7fdba4db076dacdfc95008, type: 3}
+  tracerMaterial: {fileID: 2100000, guid: f121e772a32cc8647b71b58aef0099c0, type: 2}

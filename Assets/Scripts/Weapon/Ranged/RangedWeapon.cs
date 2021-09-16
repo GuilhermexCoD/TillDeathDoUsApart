@@ -35,10 +35,4 @@ public class RangedWeapon : Weapon
     {
         return GetShootComponent().GetShotWorldPosition();
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

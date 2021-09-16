@@ -42,11 +42,12 @@ public class PlayerController : MonoBehaviour
         dash.Subscribe(OnPlayerDashed);
     }
 
-    public void OnPlayerDashed(Vector2 direction)
+    public void OnPlayerDashed(object sender, OnDashEventArgs args)
     {
         Debug.Log("Player Dashed");
-        CinemachineShake.Current.ShakeCamera(direction.magnitude * DashCameraShakeMultiplier, 0.2f);
+        CinemachineShake.Current.ShakeCamera(args.direction.magnitude * DashCameraShakeMultiplier, 0.2f);
     }
+
     // Update is called once per frame
     void Update()
     {
@@ -93,9 +94,16 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        interactableObject = collision.gameObject.GetComponent<IInteractable>();
+        if (collision.gameObject != null)
+        {
+            interactableObject = collision.gameObject.GetComponent<IInteractable>();
 
-        Debug.Log($"Interactable = {interactableObject.GetInfo()}");
+            if (interactableObject != null)
+            {
+                Debug.Log($"Interactable = {interactableObject.GetInfo()}");
+            }
+        }
+
     }
 
     private void OnTriggerExit2D(Collider2D collision)
