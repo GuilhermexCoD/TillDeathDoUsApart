@@ -35,9 +35,6 @@ public class FunctionUpdater
         }
     }
 
-
-
-
     public static FunctionUpdater Create(Action updateFunc)
     {
         return Create(() => { updateFunc(); return false; }, "", true, false);

@@ -12,9 +12,15 @@ public class ShootComponent : MonoBehaviour
     private Transform shotTransform;
 
     [SerializeField]
+    private Transform shellEjection;
+
+    [SerializeField]
     private ProjectileData projectileData;
 
     public event EventHandler<OnShootEventArgs> onShoot;
+
+    private ParticleSystem muzzleParticle;
+    private ParticleSystem flashParticle;
 
     private void Awake()
     {
@@ -39,11 +45,15 @@ public class ShootComponent : MonoBehaviour
         float eulerZ = Util.GetAngleFromVectorFloat(direction);
 
         CreateShootTracer(shotTransform.position, targetPosition, eulerZ - 90);
-        CreateMuzzleFlash(shotTransform.position, Quaternion.Euler(0, 0, eulerZ));
 
-        CallOnShoot(new OnShootEventArgs 
-        { 
+        PlayParticle(projectileData.muzzleFlashParticle,ref muzzleParticle);
+
+        PlayParticle(projectileData.flashParticle,ref flashParticle);
+
+        CallOnShoot(new OnShootEventArgs
+        {
             damage = projectileData.damage,
+            shellPosition = shellEjection,
             position = shotTransform.position,
             direction = direction,
             range = projectileData.range,
@@ -51,11 +61,35 @@ public class ShootComponent : MonoBehaviour
         });
     }
 
-    private void CreateMuzzleFlash(Vector3 position, Quaternion rotation)
+    private ParticleSystem CreateParticle(GameObject prefab)
     {
-        var goMuzzle = Instantiate(projectileData.muzzleFlashParticle, position, rotation, shotTransform);
+        float eulerZ = Util.GetAngleFromVectorFloat(shotTransform.right);
+        var go = Instantiate(prefab, shotTransform.position, Quaternion.Euler(0, 0, eulerZ), shotTransform);
+        return go.GetComponent<ParticleSystem>();
+    }
 
-        Destroy(goMuzzle.gameObject, 1f);
+    private void PlayParticle(GameObject prefab, ref ParticleSystem particle)
+    {
+        if (prefab != null)
+        {
+            if (particle == null)
+            {
+                particle = CreateParticle(prefab);
+                UpdateParticleColor(ref particle);
+            }
+            else
+            {
+                particle.Stop();
+                particle.Clear();
+                particle.Play();
+            }
+        }
+    }
+
+    private void UpdateParticleColor(ref ParticleSystem particle)
+    {
+        var colorGradient = particle.colorOverLifetime;
+        colorGradient.color = projectileData.tracerGradient;
     }
 
     private void CreateShootTracer(Vector3 fromPosition, Vector3 targetPosition, float eulerZ)
@@ -70,8 +104,10 @@ public class ShootComponent : MonoBehaviour
         tmpTracerMaterial.SetTextureScale("_MainTex", new Vector2(1f, distance / projectileData.range));
         WorldMesh worldMesh = WorldMesh.Create(tracerStartPosition, eulerZ, 3f, distance, tmpTracerMaterial, null, 10000);
 
-        float timer = 0.1f;
-
+        var materialCurve = worldMesh.gameObject.AddComponent<MaterialAlphaOverCurve>();
+        materialCurve.SetTime(projectileData.tracerTime);
+        materialCurve.SetGradientColor(projectileData.tracerGradient.gradient);
+        materialCurve.SetMaterial(tmpTracerMaterial);
     }
 
     public void SetProjectileData(ProjectileData data)

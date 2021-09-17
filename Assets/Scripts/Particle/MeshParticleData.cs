@@ -8,4 +8,6 @@ public class MeshParticleData : ScriptableObject
 {
     public Material material;
     public ParticleUV_Pixels[] uV_PixelsArray;
+    public float speed;
+    public float slowDown;
 }

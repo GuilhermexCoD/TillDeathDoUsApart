@@ -49,6 +49,8 @@ public class MeshParticleSystem : MonoBehaviour
 
         UpdateMesh();
 
+        mesh.bounds = new Bounds(Vector3.zero, Vector3.one * Level.Current.GetLevelSize().x * 2);
+
         GetComponent<MeshFilter>().mesh = mesh;
     }
 
@@ -155,6 +157,23 @@ public class MeshParticleSystem : MonoBehaviour
         triangles[tIndex + 3] = vIndex0;
         triangles[tIndex + 4] = vIndex2;
         triangles[tIndex + 5] = vIndex3;
+
+        needUpdateMesh = true;
+    }
+
+    public void DestroyQuad(int quadIndex)
+    {
+        int vIndex = quadIndex * 4;
+
+        int vIndex0 = vIndex;
+        int vIndex1 = vIndex + 1;
+        int vIndex2 = vIndex + 2;
+        int vIndex3 = vIndex + 3;
+
+        vertices[vIndex0] = Vector3.zero;
+        vertices[vIndex1] = Vector3.zero;
+        vertices[vIndex2] = Vector3.zero;
+        vertices[vIndex3] = Vector3.zero;
 
         needUpdateMesh = true;
     }

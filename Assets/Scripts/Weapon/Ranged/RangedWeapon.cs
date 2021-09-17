@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 [RequireComponent(typeof(ShootComponent))]
@@ -5,6 +6,8 @@ public class RangedWeapon : Weapon
 {
     [SerializeField]
     private ShootComponent shootComponent;
+
+    public event EventHandler<OnShootEventArgs> onShoot;
 
     public override void Attack()
     {
@@ -19,6 +22,13 @@ public class RangedWeapon : Weapon
         var data = GetData<RangedWeaponData>();
 
         GetShootComponent().SetProjectileData(data.projectile);
+
+        shootComponent.onShoot += OnShootEvent;
+    }
+
+    private void OnShootEvent(object sender, OnShootEventArgs e)
+    {
+        onShoot?.Invoke(sender, e);
     }
 
     public ShootComponent GetShootComponent()

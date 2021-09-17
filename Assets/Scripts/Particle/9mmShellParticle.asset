@@ -16,3 +16,5 @@ MonoBehaviour:
   uV_PixelsArray:
   - uv00Pixel: {x: 0, y: 0}
     uv11Pixel: {x: 32, y: 32}
+  speed: 4
+  slowDown: 3

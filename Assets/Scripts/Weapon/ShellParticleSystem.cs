@@ -19,9 +19,9 @@ public class ShellParticleSystem : MonoBehaviour
         }
     }
 
-    public void SpawnShell(Vector3 position, Vector3 direction, float rotation, Vector3 size, int uvIndex)
+    public void SpawnShell(Vector3 position, Vector3 direction, float rotation, float speed, float slowDownFactor, Vector3 size, int uvIndex)
     {
-        shells.Add(new Shell(position, direction, rotation, size, uvIndex, meshParticle));
+        shells.Add(new Shell(position, direction, rotation, speed, slowDownFactor, size, uvIndex, meshParticle));
     }
 
     // Update is called once per frame
@@ -32,12 +32,22 @@ public class ShellParticleSystem : MonoBehaviour
             Shell shell = shells[i];
 
             shell.Update();
+
+            if (shell.HasFinishedMovement())
+            {
+                shells.RemoveAt(i);
+                i--;
+            }
         }
     }
 
     public static ShellParticleSystem Instantiate(string name, MeshParticleData meshData)
     {
         GameObject shellSystemGo = new GameObject(name, typeof(ShellParticleSystem));
+
+        Vector3 pos = new Vector3(0, 0, -5);
+
+        shellSystemGo.transform.position = pos;
 
         var shellSystem = shellSystemGo.GetComponent<ShellParticleSystem>();
 
@@ -60,18 +70,24 @@ public class ShellParticleSystem : MonoBehaviour
     private class Shell
     {
         private MeshParticleSystem meshParticleSystem;
+
         private Vector3 position;
         private Vector3 direction;
         private float rotation;
+        private float speed;
         private int quadIndex;
         private Vector3 size;
         private int uvIndex;
 
-        public Shell(Vector3 position, Vector3 direction, float rotation, Vector3 size, int uvIndex, MeshParticleSystem meshParticleSystem)
+        private float slowDownFactor;
+
+        public Shell(Vector3 position, Vector3 direction, float rotation, float speed, float slowDownFactor, Vector3 size, int uvIndex, MeshParticleSystem meshParticleSystem)
         {
             this.position = position;
             this.direction = direction;
             this.rotation = rotation;
+            this.speed = speed;
+            this.slowDownFactor = slowDownFactor;
             this.size = size;
             this.meshParticleSystem = meshParticleSystem;
             this.uvIndex = uvIndex;
@@ -85,11 +101,17 @@ public class ShellParticleSystem : MonoBehaviour
 
         public void Update()
         {
-            position += direction * Time.deltaTime;
-            rotation += 360f * Time.deltaTime;
+            position += direction * Time.deltaTime * speed;
+            rotation += 360f * Time.deltaTime * speed;
+
+            speed -= speed * slowDownFactor * Time.deltaTime;
 
             meshParticleSystem.UpdateQuad(quadIndex, position, rotation, size, uvIndex);
         }
-    }
 
+        public bool HasFinishedMovement()
+        {
+            return speed < 0.1f;
+        }
+    }
 }

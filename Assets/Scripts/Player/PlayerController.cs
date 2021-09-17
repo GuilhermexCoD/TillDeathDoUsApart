@@ -6,9 +6,12 @@ public class PlayerController : MonoBehaviour
 {
 
     [InspectorName("Dash")]
-    public float DashCameraShakeMultiplier = 2;
-    public float DashCameraShakeTime = 0.2f;
+    public float dashCameraShakeMultiplier = 2;
+    public float dashCameraShakeTime = 0.2f;
     private DashComponent dash;
+
+    public float shootCameraShakeTime = 0.1f;
+    public float shootShakeMultiplier = 2;
 
     [SerializeField]
     private string pickUpActionName = "PickUp";
@@ -44,8 +47,11 @@ public class PlayerController : MonoBehaviour
 
     public void OnPlayerDashed(object sender, OnDashEventArgs args)
     {
-        Debug.Log("Player Dashed");
-        CinemachineShake.Current.ShakeCamera(args.direction.magnitude * DashCameraShakeMultiplier, 0.2f);
+        CinemachineShake.Current.ShakeCamera(args.direction.magnitude * dashCameraShakeMultiplier, dashCameraShakeTime);
+    }
+    private void OnPlayerShooted(object sender, OnShootEventArgs e)
+    {
+        CinemachineShake.Current.ShakeCamera(e.damage * shootShakeMultiplier, shootCameraShakeTime);
     }
 
     // Update is called once per frame
@@ -69,6 +75,10 @@ public class PlayerController : MonoBehaviour
                 handLTransform.localPosition = equipedWeapon.GetData<RangedWeaponData>().handL_Transform;
                 handLTransform.localEulerAngles = equipedWeapon.GetData<RangedWeaponData>().handL_Rotation;
 
+                if (weapon.GetType() == typeof(RangedWeapon))
+                {
+                    (weapon as RangedWeapon).onShoot += OnPlayerShooted;
+                }
             }
 
             Debug.Log($"Picked up an item : {pickedUp}");
@@ -91,6 +101,8 @@ public class PlayerController : MonoBehaviour
             weaponTransform.eulerAngles = new Vector3(0, 0, angle);
         }
     }
+
+
 
     private void OnTriggerEnter2D(Collider2D collision)
     {

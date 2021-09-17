@@ -124,8 +124,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9d61e27372b25b4e98682dc6b786cda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DashCameraShakeMultiplier: 2
-  DashCameraShakeTime: 0.2
+  dashCameraShakeMultiplier: 2
+  dashCameraShakeTime: 0.2
+  shootCameraShakeTime: 0.2
+  shootShakeMultiplier: 0.05
   pickUpActionName: PickUp
   attackActionName: Attack
   flipWeapon: {fileID: 1381324537}
