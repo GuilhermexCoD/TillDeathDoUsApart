@@ -169,6 +169,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &56690352 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 459392859516632206, guid: ce0af79053ca9ea47a3367d65ad11e1a, type: 3}
+  m_PrefabInstance: {fileID: 3536541286962536623}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &73122283
 GameObject:
   m_ObjectHideFlags: 0
@@ -198,7 +203,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e8a1bebd1e600743ba09f195235a1a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Seed: Cosso
+  seed: Gui
 --- !u!4 &73122285
 Transform:
   m_ObjectHideFlags: 0
@@ -1051,8 +1056,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 427ac92eedf077e4db84c04d35b1cc12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bspVisualizer: {fileID: 0}
-  debugTile: {fileID: 0}
+  bspVisualizer: {fileID: 648907354}
+  debugTile: {fileID: 11400000, guid: 7353c0340e4280d49ac547423ff33f81, type: 2}
   iteration: 0
   data: {fileID: 11400000, guid: b5486def5a3682c46a6b360558d7a123, type: 2}
   bounds:
@@ -16839,6 +16844,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e42c8f570a07664c8e817cd52989a72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerGo: {fileID: 56690352}
 --- !u!4 &1229683183
 Transform:
   m_ObjectHideFlags: 0

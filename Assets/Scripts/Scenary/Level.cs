@@ -16,7 +16,7 @@ public class Level : MonoBehaviour
 
     #endregion
 
-    public static Level Current;
+    public static Level current;
 
     [SerializeField]
     private LevelData data;
@@ -31,6 +31,10 @@ public class Level : MonoBehaviour
     [SerializeField]
     private TilemapVisualizer tilemapVisualizer;
 
+    public event EventHandler<EventArgs> onGenerated;
+
+    private bool isLevelGenerated = false;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -44,7 +48,7 @@ public class Level : MonoBehaviour
             tilemapVisualizer = this.GetComponent<TilemapVisualizer>();
         }
 
-        Current = Singleton<Level>.Instance;
+        current = Singleton<Level>.Instance;
 
         Generate();
 
@@ -53,6 +57,7 @@ public class Level : MonoBehaviour
         tilemapVisualizer.PaintFloors(map);
         tilemapVisualizer.PaintWalls(map);
 
+        CallOnGenerated();
     }
 
     public void Clean()
@@ -261,6 +266,22 @@ public class Level : MonoBehaviour
     public Vector2Int GetLevelSize()
     {
         return data.size;
+    }
+
+    public Vector2Int GetRandomPositionInsideRoom()
+    {
+        return rooms[0].GetRandomCoord();
+    }
+
+    public void CallOnGenerated()
+    {
+        isLevelGenerated = true;
+        onGenerated?.Invoke(this, new EventArgs());
+    }
+
+    public bool IsGenerated()
+    {
+        return isLevelGenerated;
     }
 
     #region Debug

@@ -1,6 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -77,6 +77,7 @@ public class Room<TGenerator> where TGenerator : GeneratorRule
     }
 
     public event Action<HashSet<Vector2Int>> onRoomGeneration;
+
     public void RoomGenerated(HashSet<Vector2Int> coords)
     {
         if (onRoomGeneration != null)
@@ -117,6 +118,12 @@ public class Room<TGenerator> where TGenerator : GeneratorRule
         }
 
         return closestCoord;
+    }
+
+    public Vector2Int GetRandomCoord()
+    {
+        int randomCoordIndex = Random.Range(0, map.Count);
+        return map.ToArray()[randomCoordIndex];
     }
 
     private void OnDestroy()

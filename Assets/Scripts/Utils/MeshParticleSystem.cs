@@ -49,7 +49,7 @@ public class MeshParticleSystem : MonoBehaviour
 
         UpdateMesh();
 
-        mesh.bounds = new Bounds(Vector3.zero, Vector3.one * Level.Current.GetLevelSize().x * 2);
+        mesh.bounds = new Bounds(Vector3.zero, Vector3.one * Level.current.GetLevelSize().x * 2);
 
         GetComponent<MeshFilter>().mesh = mesh;
     }
