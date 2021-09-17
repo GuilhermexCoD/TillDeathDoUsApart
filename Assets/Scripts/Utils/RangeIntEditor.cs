@@ -18,11 +18,6 @@ public class RangeIntEditor : Editor
 
         serializedObject.Update();
 
-        if (GUILayout.Button("Generate Value"))
-        {
-            level.QuantityRangeBonusRooms.GenerateValue();
-        }
-
         serializedObject.ApplyModifiedProperties();
     }
 }

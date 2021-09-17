@@ -8,29 +8,25 @@ using UnityEngine.Tilemaps;
 [RequireComponent(typeof(TilemapVisualizer))]
 public class Level : MonoBehaviour
 {
+    #region Debug Vars
+
+    public Tilemap bspVisualizer;
+    public TileBase debugTile;
+    public int iteration = 0;
+
+    #endregion
+
     public static Level Current;
 
-    public Vector2Int Start;
-    public int MaxQuantityOfRooms = 10;
-    public EDifficulty Difficulty = EDifficulty.Easy;
-    public int MaxQuantityOfEnemies = 20;
+    [SerializeField]
+    private LevelData data;
 
-    public bool UseBSP = true;
-    public Tilemap BSP_Visualizer;
-    public TileBase DebugTile;
-    public int iteration = 0;
     public List<BoundsInt> bounds = new List<BoundsInt>();
 
-    public Vector2Int RoomMaxSize;
-    public RangeInteger QuantityRangeBonusRooms;
-
-    public int Width;
-    public int Height;
-
-    public HashSet<Vector2Int> Map = new HashSet<Vector2Int>();
-    public List<Room<GeneratorRule>> Rooms = new List<Room<GeneratorRule>>();
-    public List<Color> RoomColors = new List<Color>();
-    public HashSet<Vector2Int> Corridors = new HashSet<Vector2Int>();
+    public HashSet<Vector2Int> map = new HashSet<Vector2Int>();
+    public List<Room<GeneratorRule>> rooms = new List<Room<GeneratorRule>>();
+    public List<Color> roomColors = new List<Color>();
+    public HashSet<Vector2Int> corridors = new HashSet<Vector2Int>();
 
     [SerializeField]
     private TilemapVisualizer tilemapVisualizer;
@@ -54,33 +50,28 @@ public class Level : MonoBehaviour
 
         tilemapVisualizer.Setup();
 
-        tilemapVisualizer.PaintFloors(Map);
-        tilemapVisualizer.PaintWalls(Map);
+        tilemapVisualizer.PaintFloors(map);
+        tilemapVisualizer.PaintWalls(map);
 
     }
 
     public void Clean()
     {
-        if (Map != null)
+        if (map != null)
         {
-            Map = new HashSet<Vector2Int>();
-            Rooms = new List<Room<GeneratorRule>>();
-            RoomColors = new List<Color>();
-            Corridors = new HashSet<Vector2Int>();
+            map = new HashSet<Vector2Int>();
+            rooms = new List<Room<GeneratorRule>>();
+            roomColors = new List<Color>();
+            corridors = new HashSet<Vector2Int>();
             tilemapVisualizer.Clear();
         }
-    }
-
-    public void CleanDebug()
-    {
-        BSP_Visualizer.ClearAllTiles();
-        bounds.Clear();
     }
 
     public void Subscribe()
     {
         BinarySpacePartitioningGenerator.Subscribe(OnBinary);
     }
+
     public void UnSubscribe()
     {
         BinarySpacePartitioningGenerator.Unsubscribe(OnBinary);
@@ -91,23 +82,24 @@ public class Level : MonoBehaviour
         Clean();
 
         //BinarySpacePartitioning
-        if (UseBSP)
+        if (data.useBSP)
         {
 
-            var roomsCoordinates = BinarySpacePartitioningGenerator.BinarySpacePartitioning(new BoundsInt((Vector3Int)Start, new Vector3Int(Width, Height, 0)), RoomMaxSize.x, RoomMaxSize.y);
-
-            //PrintDebugBoundsInt(roomsCoordinates);
+            var roomsCoordinates = BinarySpacePartitioningGenerator.BinarySpacePartitioning(new BoundsInt((Vector3Int)data.Start, (Vector3Int)data.size), data.roomMaxSize.x, data.roomMaxSize.y);
 
             foreach (var coord in roomsCoordinates)
             {
-                RoomGeneration((Vector2Int)coord.min, ETheme.Castle, coord.size.x, coord.size.y);
+                if (rooms.Count() < data.maxQuantityOfRooms)
+                {
+                    RoomGeneration((Vector2Int)coord.min, ETheme.Castle, coord.size.x, coord.size.y);
+                }
             }
         }
         else
         {
-            for (int i = 0; i < MaxQuantityOfRooms; i++)
+            for (int i = 0; i < data.maxQuantityOfRooms; i++)
             {
-                RoomGeneration(GetRandomCoordinate(), ETheme.Castle, RoomMaxSize.x, RoomMaxSize.y);
+                RoomGeneration(GetRandomCoordinate(), ETheme.Castle, data.roomMaxSize.x, data.roomMaxSize.y);
             }
         }
 
@@ -120,75 +112,31 @@ public class Level : MonoBehaviour
         bounds.Add(bound);
     }
 
-    public void IncreaseIteration()
-    {
-        iteration = Mathf.Clamp(iteration + 1, 0, bounds.Count());
-    }
-
-    public void DecreaseIteration()
-    {
-        iteration = Mathf.Clamp(iteration - 1, 0, bounds.Count());
-    }
-
-    public void PrintIteration()
-    {
-        BSP_Visualizer.ClearAllTiles();
-        if (iteration >= 0 && iteration < bounds.Count())
-        {
-            PrintDebugBound(bounds[iteration]);
-        }
-    }
-
-    private void PrintDebugBoundsInt(List<BoundsInt> bounds)
-    {
-        foreach (var bound in bounds)
-        {
-            PrintDebugBound(bound);
-        }
-    }
-
-    private void PrintDebugBound(BoundsInt bound)
-    {
-        for (int x = bound.min.x; x < bound.max.x; x++)
-        {
-            for (int y = bound.min.y; y < bound.max.y; y++)
-            {
-                var pos = new Vector2Int(x, y);
-                PrintDebugTile(pos);
-            }
-        }
-    }
-
-    private void PrintDebugTile(Vector2Int coordinate)
-    {
-        TilemapVisualizer.PaintSingleTile(BSP_Visualizer, DebugTile, coordinate);
-    }
-
     private void GenerateCorridors()
     {
         var indexes = new List<int>();
 
-        for (int i = 0; i < Rooms.Count; i++)
+        for (int i = 0; i < rooms.Count; i++)
         {
             indexes.Add(i);
         }
 
-        Room<GeneratorRule>[] auxRooms = new Room<GeneratorRule>[Rooms.Count];
+        Room<GeneratorRule>[] auxRooms = new Room<GeneratorRule>[rooms.Count];
 
-        Rooms.CopyTo(auxRooms);
+        rooms.CopyTo(auxRooms);
 
         var auxList = auxRooms.ToList();
 
-        for (int i = 0; i < Rooms.Count; i++)
+        for (int i = 0; i < rooms.Count; i++)
         {
-            var room = Rooms[i];
+            var room = rooms[i];
 
             var roomOther = GetClosestRooms(room, auxList);
 
             var coords = CorridorsGenerator.ConnectCoordinates(room.GetCenterCoord(), roomOther.GetCenterCoord(), Random.value > 0.5f);
 
-            Corridors.UnionWith(coords);
-            Map.UnionWith(coords);
+            corridors.UnionWith(coords);
+            map.UnionWith(coords);
 
             auxList.Remove(room);
         }
@@ -227,7 +175,7 @@ public class Level : MonoBehaviour
             case 0:
                 generator = new TraditionalRoomGenerator(start, theme, size, roomWidth, roomHeight);
 
-                RoomColors.Add(Random.ColorHSV());
+                roomColors.Add(Random.ColorHSV());
 
                 break;
             case 1:
@@ -235,7 +183,7 @@ public class Level : MonoBehaviour
                 walkTypes.Add(EWalkType.Random);
                 generator = new RandomWalkGenerator(start, theme, size, walkTypes);
 
-                RoomColors.Add(Color.cyan);
+                roomColors.Add(Color.cyan);
 
                 break;
             default:
@@ -244,7 +192,7 @@ public class Level : MonoBehaviour
 
         var createdRoom = CreateRoom(start, theme, size, generator);
 
-        Rooms.Add(createdRoom);
+        rooms.Add(createdRoom);
     }
 
     public Room<TGenerator> GetClosestRooms<TGenerator>(Room<TGenerator> targetRoom, List<Room<TGenerator>> rooms) where TGenerator : GeneratorRule
@@ -287,69 +235,13 @@ public class Level : MonoBehaviour
     {
         if (roomMap != null && roomMap.Count > 0)
         {
-            Map.UnionWith(roomMap);
+            map.UnionWith(roomMap);
         }
     }
 
     public Vector2Int GetRandomCoordinate()
     {
-        return new Vector2Int(Random.Range(0, Width), Random.Range(0, Height));
-    }
-
-    public bool IsValidTileCoordinate(Vector2Int coord)
-    {
-        bool isInsideMap = coord.x >= 0 && coord.x < Width && (coord.y >= 0 && coord.y < Height);
-
-        return isInsideMap;
-    }
-
-    private void DrawCoords(HashSet<Vector2Int> coords, Color color)
-    {
-        foreach (var coord in coords)
-        {
-            DrawCoord(coord, color);
-        }
-    }
-
-    private void DrawCoord(Vector2Int coord, Color color)
-    {
-        Gizmos.color = color;
-        Gizmos.DrawCube(CalculatePosition(coord, this.transform.position), new Vector3(1, 1, 0.1f));
-    }
-
-    private void DrawCorridors()
-    {
-        if (Corridors != null)
-        {
-            foreach (var coord in Corridors)
-            {
-                if (coord != null)
-                {
-                    DrawCoord(coord, Color.white);
-                }
-            }
-        }
-    }
-
-    private void DrawRooms()
-    {
-        if (Rooms != null)
-        {
-            foreach (var room in Rooms)
-            {
-                int index = Rooms.IndexOf(room);
-                if (room != null)
-                {
-                    DrawCoords(room.map, RoomColors[index]);
-                }
-            }
-        }
-    }
-
-    private void DrawMap()
-    {
-        //DrawCorridors();
-        //DrawRooms();
+        return new Vector2Int(Random.Range(0, data.size.x), Random.Range(0, data.size.y));
     }
 
     public static Vector3 CalculatePosition(Vector2Int coord, Vector3 startPosition)
@@ -361,13 +253,60 @@ public class Level : MonoBehaviour
         return position;
     }
 
-    private void OnDrawGizmos()
-    {
-        DrawMap();
-    }
-
     private void OnDestroy()
     {
         //TODO unsubscribe from Rooms 
     }
+
+    public Vector2Int GetLevelSize()
+    {
+        return data.size;
+    }
+
+    #region Debug
+
+    public void IncreaseIteration()
+    {
+        iteration = Mathf.Clamp(iteration + 1, 0, bounds.Count());
+    }
+
+    public void DecreaseIteration()
+    {
+        iteration = Mathf.Clamp(iteration - 1, 0, bounds.Count());
+    }
+
+    public void PrintIteration()
+    {
+        bspVisualizer.ClearAllTiles();
+        if (iteration >= 0 && iteration < bounds.Count())
+        {
+            PrintDebugBound(bounds[iteration]);
+        }
+    }
+
+    private void PrintDebugBound(BoundsInt bound)
+    {
+        for (int x = bound.min.x; x < bound.max.x; x++)
+        {
+            for (int y = bound.min.y; y < bound.max.y; y++)
+            {
+                var pos = new Vector2Int(x, y);
+                PrintDebugTile(pos);
+            }
+        }
+    }
+
+    private void PrintDebugTile(Vector2Int coordinate)
+    {
+        TilemapVisualizer.PaintSingleTile(bspVisualizer, debugTile, coordinate);
+    }
+
+    public void CleanDebug()
+    {
+        bspVisualizer.ClearAllTiles();
+        bounds.Clear();
+    }
+
+    #endregion
+
 }

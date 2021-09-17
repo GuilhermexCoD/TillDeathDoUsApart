@@ -30,14 +30,14 @@ public class DashComponent : MonoBehaviour
 
     private Vector2 Direction = Vector2.zero;
 
-    public event Action<Vector2> onDash;
+    public event EventHandler<OnDashEventArgs> onDash;
 
-    public void Subscribe(Action<Vector2> func)
+    public void Subscribe(EventHandler<OnDashEventArgs> func)
     {
         onDash += func;
     }
 
-    public void Unsubscribe(Action<Vector2> func)
+    public void Unsubscribe(EventHandler<OnDashEventArgs> func)
     {
         onDash -= func;
     }
@@ -104,9 +104,6 @@ public class DashComponent : MonoBehaviour
 
     private void CallOnDash(Vector2 direction)
     {
-        if (onDash != null)
-        {
-            onDash(direction);
-        }
+        onDash?.Invoke(this,new OnDashEventArgs { direction = direction});
     }
 }

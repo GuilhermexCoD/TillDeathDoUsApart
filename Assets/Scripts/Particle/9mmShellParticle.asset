@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0012ca9875b6646439f3da26e2b970ca, type: 3}
+  m_Name: 9mmShellParticle
+  m_EditorClassIdentifier: 
+  material: {fileID: 2100000, guid: 664a9eec82c999f49b58c4772fe2906b, type: 2}
+  uV_PixelsArray:
+  - uv00Pixel: {x: 0, y: 0}
+    uv11Pixel: {x: 32, y: 32}
+  speed: 4
+  slowDown: 3

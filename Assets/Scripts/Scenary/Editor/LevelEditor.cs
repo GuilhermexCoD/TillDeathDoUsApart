@@ -44,6 +44,5 @@ public class LevelEditor : Editor
             level.PrintIteration();
         }
         GUILayout.EndHorizontal();
-
     }
 }
