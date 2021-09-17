@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class GameEventsHandler : MonoBehaviour
 {
@@ -9,11 +11,28 @@ public class GameEventsHandler : MonoBehaviour
 
     public const string PROJECTILE_DATA_PATH = "ProjectileData";
 
+    public GameObject playerGo;
+
     public Dictionary<int, ShellParticleSystem> shellParticleDictionary = new Dictionary<int, ShellParticleSystem>();
 
-    private void Awake()
+    private void Start()
     {
         current = Singleton<GameEventsHandler>.Instance;
+
+        Level.current.onGenerated += OnLevelGenerated;
+
+        if (Level.current.IsGenerated())
+        {
+            OnLevelGenerated(this, new EventArgs());
+        }
+    }
+
+    private void OnLevelGenerated(object sender, System.EventArgs e)
+    {
+        //TODO Instantiate player
+        var coord = Level.current.GetRandomPositionInsideRoom();
+        var pos = new Vector3(coord.x, coord.y);
+        playerGo.transform.position = pos;
     }
 
     public void SubcribeToShoot(ShootComponent shootComponent)

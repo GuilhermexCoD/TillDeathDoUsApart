@@ -1,16 +1,34 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 using Random = UnityEngine.Random;
 
 public class ScenaryManager : MonoBehaviour
 {
-    public static ScenaryManager Current;
+    public static ScenaryManager current;
 
-    public string Seed;
+    private LevelData levelData;
 
-    public static List<string> DirectionPath = new List<string>()
+    [SerializeField]
+    private string seed;
+
+    #region Setters
+
+    public void SetSeed(string seed)
+    {
+        this.seed = seed;
+    }
+
+    public void SetLevelData(LevelData data)
+    {
+        this.levelData = data;
+    }
+
+    #endregion
+
+    public static List<string> directionPath = new List<string>()
     {
         "Up",
         "Right",
@@ -34,21 +52,21 @@ public class ScenaryManager : MonoBehaviour
         "ULeft",
     };
 
-    public static Dictionary<ETileType, string> Tilepath = new Dictionary<ETileType, string>
+    public static Dictionary<ETileType, string> tilepath = new Dictionary<ETileType, string>
     {
         { ETileType.Floor, "Floors" },
         { ETileType.Wall, "Walls" }
     };
 
-    public static Dictionary<string, List<TileBase>> Assets = new Dictionary<string, List<TileBase>>();
+    public static Dictionary<string, List<TileBase>> assets = new Dictionary<string, List<TileBase>>();
 
     public static void LoadAssets()
     {
         foreach (var theme in Enum.GetValues(typeof(ETheme)))
         {
-            foreach (var tile in Tilepath)
+            foreach (var tile in tilepath)
             {
-                foreach (var direction in DirectionPath)
+                foreach (var direction in directionPath)
                 {
                     string path = GetPath((ETheme)theme, tile.Key, direction);
 
@@ -56,7 +74,7 @@ public class ScenaryManager : MonoBehaviour
 
                     if (tileAssets.Count > 0)
                     {
-                        Assets.Add(path, tileAssets);
+                        assets.Add(path, tileAssets);
                     }
                 }
             }
@@ -67,7 +85,7 @@ public class ScenaryManager : MonoBehaviour
     {
         string themePath = theme.ToString();
 
-        Tilepath.TryGetValue(tileType, out string tile);
+        tilepath.TryGetValue(tileType, out string tile);
 
         return $"{tile}/{themePath}/{orientationPath}";
     }
@@ -78,7 +96,7 @@ public class ScenaryManager : MonoBehaviour
 
         string path = GetPath(theme, tileType, orientationPath);
 
-        var success = Assets.TryGetValue(path, out objects);
+        var success = assets.TryGetValue(path, out objects);
 
         return (success) ? objects : null;
     }
@@ -108,21 +126,35 @@ public class ScenaryManager : MonoBehaviour
 
     public static bool HasLoadedAssets()
     {
-        return Assets.Count > 0;
+        return assets.Count > 0;
     }
 
     public static void ClearAssets()
     {
-        Assets.Clear();
+        assets.Clear();
     }
 
     // Start is called before the first frame update
     void Awake()
     {
-        Current = Singleton<ScenaryManager>.Instance;
-        print(Seed.GetHashCode());
-        Random.InitState(Seed.GetHashCode());
-        print($"Testing Random: {Random.Range(0, 11)}");
+        if (current != null)
+        {
+            Destroy(this.gameObject);
+            return;
+        }
+
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        current = Singleton<ScenaryManager>.Instance;
         LoadAssets();
+        DontDestroyOnLoad(this.gameObject);
+    }
+
+    private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
+    {
+        if (arg0.buildIndex > 0)
+        {
+            Debug.LogWarning(seed.GetHashCode());
+            Random.InitState(seed.GetHashCode());
+        }
     }
 }

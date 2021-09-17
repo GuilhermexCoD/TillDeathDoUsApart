@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using UnityEngine;
 
 public static class Util
@@ -32,6 +33,12 @@ public static class Util
     {
         return (value % mod + mod) % mod;
     }
+
+    public static string RemoveSpecialCharacters(string str)
+    {
+        return Regex.Replace(str, "[^a-zA-Z0-9_.]+", "", RegexOptions.Compiled);
+    }
+
     public static float GetAngleFromVectorFloat(Vector3 direction)
     {
         direction = direction.normalized;
