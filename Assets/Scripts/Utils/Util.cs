@@ -36,6 +36,9 @@ public static class Util
 
     public static string RemoveSpecialCharacters(string str)
     {
+        if (string.IsNullOrEmpty(str))
+            return string.Empty;
+
         return Regex.Replace(str, "[^a-zA-Z0-9_.]+", "", RegexOptions.Compiled);
     }
 

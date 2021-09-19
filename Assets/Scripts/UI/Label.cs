@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class BaseUI_Label : BaseUI
+public class Label : BaseUI
 {
     [SerializeField]
     protected string label;
