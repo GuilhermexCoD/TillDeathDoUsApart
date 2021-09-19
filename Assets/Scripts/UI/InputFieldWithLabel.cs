@@ -7,7 +7,7 @@ using UnityEngine.Events;
 using System;
 using System.Text.RegularExpressions;
 
-public class InputFieldWithLabel : BaseUI_Label 
+public class InputFieldWithLabel : Label
 {
     [SerializeField]
     private string placeHolder = "Enter text...";
@@ -18,11 +18,17 @@ public class InputFieldWithLabel : BaseUI_Label
     [SerializeField]
     private TMP_InputField inputField;
 
+    [SerializeField]
+    private TMP_InputField.CharacterValidation characterValidation;
+
     public event EventHandler<TextArgs> onValueChanged;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         inputField?.onValueChanged.AddListener(OnValueChanged);
+
+        SetCharacterValidation(characterValidation);
     }
 
     public override void UpdateVisual()
@@ -31,11 +37,20 @@ public class InputFieldWithLabel : BaseUI_Label
         placeHolderText.text = placeHolder;
     }
 
-    private void OnValueChanged(string value){
-        onValueChanged?.Invoke(this, new TextArgs() 
-        { 
-            value = value 
+    private void OnValueChanged(string value)
+    {
+        onValueChanged?.Invoke(this, new TextArgs()
+        {
+            value = value
         });
+    }
+
+    private void SetCharacterValidation(TMP_InputField.CharacterValidation characterValidation)
+    {
+        this.characterValidation = characterValidation;
+
+        if (inputField != null)
+            inputField.characterValidation = characterValidation;
     }
 
     public string GetInputFieldValue()

@@ -732,3 +732,4 @@ MonoBehaviour:
   placeHolder: Enter seed here...
   placeHolderText: {fileID: 8171997977738659649}
   inputField: {fileID: 8171997977541740911}
+  characterValidation: 0

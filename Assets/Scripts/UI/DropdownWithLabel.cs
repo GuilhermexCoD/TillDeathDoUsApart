@@ -5,7 +5,7 @@ using UnityEngine;
 using TMPro;
 using System.Linq;
 
-public class DropdownWithLabel : BaseUI_Label
+public class DropdownWithLabel : Label
 {
     [SerializeField]
     private Enumerator options;
