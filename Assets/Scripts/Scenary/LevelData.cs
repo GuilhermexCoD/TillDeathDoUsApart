@@ -6,8 +6,10 @@ using UnityEngine;
 public class LevelData : ScriptableObject
 {
     public Vector2Int Start;
-    public int maxQuantityOfRooms = 10;
+
     public EDifficulty difficulty = EDifficulty.Easy;
+
+    public int maxQuantityOfRooms = 10;
 
     public List<ETheme> themes = new List<ETheme>();
 

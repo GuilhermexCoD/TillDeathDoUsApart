@@ -187,7 +187,7 @@ GameObject:
   - component: {fileID: 8171997977587699335}
   - component: {fileID: 8171997977587699328}
   m_Layer: 5
-  m_Name: Text_Labe
+  m_Name: Text_Label
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

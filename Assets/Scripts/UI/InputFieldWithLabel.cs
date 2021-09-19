@@ -7,14 +7,8 @@ using UnityEngine.Events;
 using System;
 using System.Text.RegularExpressions;
 
-public class InputFieldWithLabel : BaseUI 
+public class InputFieldWithLabel : BaseUI_Label 
 {
-    [SerializeField]
-    private string label = "Label";
-
-    [SerializeField]
-    private TMP_Text labelText;
-
     [SerializeField]
     private string placeHolder = "Enter text...";
 
@@ -33,8 +27,7 @@ public class InputFieldWithLabel : BaseUI
 
     public override void UpdateVisual()
     {
-        this.gameObject.name = $"{Util.RemoveSpecialCharacters(label)}_{this.GetType().Name}";
-        labelText.text = label;
+        base.UpdateVisual();
         placeHolderText.text = placeHolder;
     }
 

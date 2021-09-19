@@ -14,23 +14,48 @@ public class LevelInputMenu : MonoBehaviour
     private InputFieldWithLabel seedInputField;
     private string seed;
 
-
-    public void SetSeed(string seed)
-    {
-        this.seed = seed;
-        ScenaryManager.current?.SetSeed(seed);
-    }
-
-    public void LoadDungeon()
-    {
-        SceneManager.LoadSceneAsync(levelName, LoadSceneMode.Single);
-    }
+    [SerializeField]
+    private DropdownWithLabel difficultyDropdown;
 
     // Start is called before the first frame update
     void Awake()
     {
         data = ScriptableObject.CreateInstance<LevelData>();
+
         seedInputField.onValueChanged += OnSeedChanged;
+
+        difficultyDropdown.onValueChanged += OnDifficultyChanged;
+    }
+
+
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+
+    #region Difficulty
+
+    private void SetDifficulty(EDifficulty difficulty)
+    {
+        data.difficulty = difficulty;
+        ScenaryManager.current?.SetLevelData(data);
+    }
+
+    private void OnDifficultyChanged(object sender, EnumArgs e)
+    {
+        SetDifficulty((EDifficulty)e.value);
+    }
+
+    #endregion
+
+    #region Seed
+
+    private void SetSeed(string seed)
+    {
+        this.seed = seed;
+        ScenaryManager.current?.SetSeed(seed);
     }
 
     private void OnSeedChanged(object sender, TextArgs e)
@@ -38,9 +63,10 @@ public class LevelInputMenu : MonoBehaviour
         SetSeed(e.value);
     }
 
-    // Update is called once per frame
-    void Update()
+    #endregion
+
+    public void LoadDungeon()
     {
-        
+        SceneManager.LoadSceneAsync(levelName, LoadSceneMode.Single);
     }
 }
