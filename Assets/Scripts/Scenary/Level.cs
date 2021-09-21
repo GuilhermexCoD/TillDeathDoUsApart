@@ -38,17 +38,26 @@ public class Level : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        Setup();
-    }
-
-    public void Setup()
-    {
         if (!tilemapVisualizer)
         {
             tilemapVisualizer = this.GetComponent<TilemapVisualizer>();
         }
 
         current = Singleton<Level>.Instance;
+
+        ScenaryManager.current?.Subscribe(OnLevelLoaded);
+
+    }
+
+    private void OnLevelLoaded(object sender, LevelArgs e)
+    {
+        data = e.data;
+        Setup();
+    }
+
+    public void Setup()
+    {
+        Clean();
 
         Generate();
 
@@ -84,7 +93,6 @@ public class Level : MonoBehaviour
 
     public void Generate()
     {
-        Clean();
 
         //BinarySpacePartitioning
         if (data.useBSP)

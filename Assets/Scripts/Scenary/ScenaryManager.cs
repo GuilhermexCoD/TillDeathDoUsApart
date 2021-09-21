@@ -9,10 +9,18 @@ public class ScenaryManager : MonoBehaviour
 {
     public static ScenaryManager current;
 
+    private int dungeonLevel = 1;
     private LevelData levelData;
 
     [SerializeField]
     private string seed;
+
+    public event EventHandler<LevelArgs> onLevelLoaded;
+
+    public void Subscribe(EventHandler<LevelArgs> handler)
+    {
+        onLevelLoaded += handler;
+    }
 
     #region Setters
 
@@ -27,6 +35,16 @@ public class ScenaryManager : MonoBehaviour
     }
 
     #endregion
+
+    public void ResetDungeonLevel()
+    {
+        dungeonLevel = 1;
+    }
+
+    public void IncreaseDugeonLevel()
+    {
+        dungeonLevel++;
+    }
 
     public static List<string> directionPath = new List<string>()
     {
@@ -156,5 +174,11 @@ public class ScenaryManager : MonoBehaviour
             Debug.LogWarning(seed.GetHashCode());
             Random.InitState(seed.GetHashCode());
         }
+
+        onLevelLoaded?.Invoke(this, new LevelArgs()
+        {
+            levelCount = dungeonLevel,
+            data = levelData
+        });
     }
 }
