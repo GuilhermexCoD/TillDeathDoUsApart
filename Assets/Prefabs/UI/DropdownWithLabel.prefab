@@ -326,7 +326,13 @@ MonoBehaviour:
   m_ItemImage: {fileID: 0}
   m_Value: 0
   m_Options:
-    m_Options: []
+    m_Options:
+    - m_Text: Easy
+      m_Image: {fileID: 0}
+    - m_Text: Medium
+      m_Image: {fileID: 0}
+    - m_Text: Hard
+      m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -666,7 +672,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: Easy
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1195,7 +1201,7 @@ GameObject:
   - component: {fileID: 185251862934439832}
   - component: {fileID: 185251862934439838}
   - component: {fileID: 185251862934439839}
-  - component: {fileID: 5850876630939508849}
+  - component: {fileID: 6228452539791063873}
   m_Layer: 5
   m_Name: DropdownWithLabel
   m_TagString: Untagged
@@ -1264,9 +1270,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   label: 'Difficulty:'
   labelText: {fileID: 185251862841715834}
-  options: {fileID: 5850876630939508849}
+  options: {fileID: 6228452539791063873}
   dropdown: {fileID: 185251861207393921}
---- !u!114 &5850876630939508849
+--- !u!114 &6228452539791063873
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

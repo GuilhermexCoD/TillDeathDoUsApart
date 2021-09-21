@@ -17,9 +17,9 @@ public class LevelData : ScriptableObject
 
     public bool useBSP = true;
 
-    public Vector2Int roomMaxSize;
+    public Vector2Int roomMaxSize = new Vector2Int(15, 15);
 
     public RangeInteger quantityRangeBonusRooms;
 
-    public Vector2Int size;
+    public Vector2Int size = new Vector2Int(100, 100);
 }

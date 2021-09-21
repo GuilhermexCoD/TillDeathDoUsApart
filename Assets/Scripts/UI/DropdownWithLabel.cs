@@ -36,9 +36,11 @@ public class DropdownWithLabel : Label
         {
             dropdown.ClearOptions();
 
-            var optionsList = options.GetNames().ToList();
-
-            dropdown.AddOptions(optionsList);
+            var optionsList = options?.GetNames().ToList();
+            if (optionsList != null)
+            {
+                dropdown.AddOptions(optionsList);
+            }
         }
     }
     public int GetInputFieldValue()

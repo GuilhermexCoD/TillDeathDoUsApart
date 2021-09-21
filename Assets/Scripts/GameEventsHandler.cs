@@ -15,7 +15,7 @@ public class GameEventsHandler : MonoBehaviour
 
     public Dictionary<int, ShellParticleSystem> shellParticleDictionary = new Dictionary<int, ShellParticleSystem>();
 
-    private void Start()
+    private void Awake()
     {
         current = Singleton<GameEventsHandler>.Instance;
 
