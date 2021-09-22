@@ -39,13 +39,15 @@ public class InputFieldWithLabel : Label
 
     private void OnValueChanged(string value)
     {
+        Debug.LogWarning($"Changed Value: {value}");
+
         onValueChanged?.Invoke(this, new TextArgs()
         {
             value = value
         });
     }
 
-    private void SetCharacterValidation(TMP_InputField.CharacterValidation characterValidation)
+    public void SetCharacterValidation(TMP_InputField.CharacterValidation characterValidation)
     {
         this.characterValidation = characterValidation;
 
@@ -53,8 +55,13 @@ public class InputFieldWithLabel : Label
             inputField.characterValidation = characterValidation;
     }
 
-    public string GetInputFieldValue()
+    public string GetValue()
     {
         return inputField.text;
+    }
+
+    public void SetValue(string value)
+    {
+        inputField.text = value;
     }
 }

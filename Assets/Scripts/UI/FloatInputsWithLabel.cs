@@ -7,6 +7,8 @@ using TMPro;
 public class FloatInputsWithLabel : Label
 {
     [SerializeField]
+    private List<string> labels;
+    [SerializeField]
     private List<float> values;
 
     public event EventHandler<FloatArrayArgs> onValueChanged;
@@ -17,11 +19,15 @@ public class FloatInputsWithLabel : Label
     [SerializeField]
     private GameObject prefabInput;
 
-    private List<GameObject> inputsGo;
+    [SerializeField]
+    private TMP_InputField.CharacterValidation characterValidation;
+
+    public List<InputFieldWithLabel> inputFields;
 
     protected override void Awake()
     {
         base.Awake();
+        inputFields = new List<InputFieldWithLabel>();
         ClearFields();
         GenerateFloats();
     }
@@ -43,20 +49,44 @@ public class FloatInputsWithLabel : Label
 
     public void GenerateFloats()
     {
-        foreach (var value in values)
+        for (int i = 0; i < values.Count; i++)
         {
+            var value = values[i];
             var inputGo = Instantiate<GameObject>(prefabInput, group);
-            var inputField = inputGo.GetComponent<TMP_InputField>();
+            var inputField = inputGo.GetComponent<InputFieldWithLabel>();
 
-            inputField.text = value.ToString();
+            inputField.SetValue(value.ToString());
+            inputField.SetCharacterValidation(characterValidation);
 
-            if (inputsGo == null)
+            inputFields.Add(inputField);
+            inputField.onValueChanged += OnInputValueChanged;
+
+            if (i < labels.Count)
             {
-                inputsGo = new List<GameObject>();
+                inputField.SetLabel(labels[i]);
+            }
+            else
+            {
+                inputField.SetLabel(string.Empty);
             }
 
-            inputsGo.Add(inputGo);
         }
+    }
+
+    private void OnInputValueChanged(object sender, TextArgs e)
+    {
+        int index = inputFields.FindIndex(input => input == (InputFieldWithLabel)sender);
+
+        float.TryParse(e.value, out float result);
+
+        values[index] = result;
+
+        OnValueChanged(values.ToArray());
+    }
+
+    public List<float> GetValues()
+    {
+        return values;
     }
 
     private void OnValueChanged(float[] values)
