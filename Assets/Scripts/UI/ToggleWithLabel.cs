@@ -22,4 +22,9 @@ public class ToggleWithLabel : Label
             value = value
         });
     }
+
+    public bool GetValue()
+    {
+        return toggle.isOn;
+    }
 }

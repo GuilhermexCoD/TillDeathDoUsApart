@@ -4,9 +4,16 @@ using UnityEngine;
 
 public class BaseUI : MonoBehaviour, I_BaseUI
 {
-    
+    protected new string name;
+
     public virtual void UpdateVisual()
     {
+        SetGameObjectName(name);
+    }
+
+    public virtual void SetGameObjectName(string name)
+    {
+        this.gameObject.name = $"{Util.RemoveSpecialCharacters(name)}_{this.GetType().Name}";
 
     }
 }

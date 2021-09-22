@@ -16,13 +16,18 @@ public class Label : BaseUI
         UpdateVisual();
     }
 
+    public void SetLabel(string label)
+    {
+        this.label = label;
+        UpdateVisual();
+    }
+
     public override void UpdateVisual()
     {
+        name = label;
         base.UpdateVisual();
 
         if (labelText != null)
             labelText.text = label;
-
-        this.gameObject.name = $"{Util.RemoveSpecialCharacters(label)}_{this.GetType().Name}";
     }
 }

@@ -35,9 +35,32 @@ public class PlayerVisualManager : MonoBehaviour
         }
     }
 
-    public void UpdatePart(EBodyPartType bodyPart)
+    public void SetPart(EBodyPartType bodyPartType, BodyData data)
     {
-        switch (bodyPart)
+        switch (bodyPartType)
+        {
+            case EBodyPartType.Head:
+                head = data;
+                break;
+            case EBodyPartType.Torso:
+                torso = data;
+                break;
+            case EBodyPartType.Hand:
+                handL = data;
+                handR = data;
+                break;
+            case EBodyPartType.Foot:
+                footL = data;
+                footR = data;
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void UpdatePart(EBodyPartType bodyPartType)
+    {
+        switch (bodyPartType)
         {
             case EBodyPartType.Head:
                 UpdatePartVisual(head, headSprite);

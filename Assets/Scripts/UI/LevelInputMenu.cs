@@ -26,21 +26,66 @@ public class LevelInputMenu : MonoBehaviour
     [SerializeField]
     private ToggleWithLabel useBspToggle;
 
+    [SerializeField]
+    private FloatInputsWithLabel roomSizesInputField;
+
+    [SerializeField]
+    private FloatInputsWithLabel mapSizeInputField;
+
     // Start is called before the first frame update
     void Awake()
     {
         data = ScriptableObject.CreateInstance<LevelData>();
+        SubscribeToEvents();
+    }
 
+    private void SubscribeToEvents()
+    {
         seedInputField.onValueChanged += OnSeedChanged;
+        OnSeedChanged(seedInputField, new TextArgs() { value = seedInputField.GetValue() });
 
         difficultyDropdown.onValueChanged += OnDifficultyChanged;
+        OnDifficultyChanged(difficultyDropdown, new EnumArgs() { value = difficultyDropdown.GetValue()});
 
         maxRoomQuantityInputField.onValueChanged += OnMaxRoomChanged;
+        OnMaxRoomChanged(maxRoomQuantityInputField, new TextArgs() { value = maxRoomQuantityInputField.GetValue() });
 
         maxEnemyQuantityInputField.onValueChanged += OnEnemyQuantityChanged;
+        OnEnemyQuantityChanged(maxEnemyQuantityInputField, new TextArgs() { value = maxEnemyQuantityInputField.GetValue() });
 
         useBspToggle.onValueChanged += OnUseBspChanged;
+        OnUseBspChanged(useBspToggle, new BoolArgs() { value = useBspToggle.GetValue() });
+
+        roomSizesInputField.onValueChanged += OnRoomSizeChanged;
+        OnRoomSizeChanged(roomSizesInputField, new FloatArrayArgs() { values = roomSizesInputField.GetValues().ToArray() });
+
+        mapSizeInputField.onValueChanged += OnMapSizeChanged;
+        OnMapSizeChanged(mapSizeInputField, new FloatArrayArgs() { values = mapSizeInputField.GetValues().ToArray() });
     }
+
+    #region Map Size
+
+    private void OnMapSizeChanged(object sender, FloatArrayArgs e)
+    {
+        int width = (int)e.values[0];
+        int height = (int)e.values[1];
+
+        data.size = new Vector2Int(width, height);
+    }
+
+    #endregion
+
+    #region Room Size
+
+    private void OnRoomSizeChanged(object sender, FloatArrayArgs e)
+    {
+        int width = (int)e.values[0];
+        int height = (int)e.values[1];
+
+        data.roomMaxSize = new Vector2Int(width, height);
+    }
+
+    #endregion
 
     #region Binary Space Partitioning
 

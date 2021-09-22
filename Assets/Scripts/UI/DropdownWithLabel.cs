@@ -43,7 +43,7 @@ public class DropdownWithLabel : Label
             }
         }
     }
-    public int GetInputFieldValue()
+    public int GetValue()
     {
         return dropdown.value;
     }
