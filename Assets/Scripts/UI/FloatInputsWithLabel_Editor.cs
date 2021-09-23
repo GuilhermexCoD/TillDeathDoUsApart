@@ -4,6 +4,8 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
+#if UNITY_EDITOR
+
 [CustomEditor(typeof(FloatInputsWithLabel), true)]
 public class FloatInputsWithLabel_Editor : Editor
 {
@@ -55,3 +57,5 @@ public class FloatInputsWithLabel_Editor : Editor
         return base.RequiresConstantRepaint();
     }
 }
+
+#endif

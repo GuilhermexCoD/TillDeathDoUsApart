@@ -1,8 +1,8 @@
 using UnityEditor;
 using UnityEngine;
 
+#if UNITY_EDITOR
 [CustomEditor(typeof(Weapon), true)]
-
 public class WeaponEditor : Editor
 {
     Weapon weapon;
@@ -27,3 +27,5 @@ public class WeaponEditor : Editor
         }
     }
 }
+
+#endif
