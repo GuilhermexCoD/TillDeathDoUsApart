@@ -11,19 +11,21 @@ public class UpdaterSoundManager : MonoBehaviour
 
     private void Awake()
     {
-        value = SoundManager.masterVolume;
+        value = volume.GetValue();
+        SoundManager.SetMasterVolume(value);
         volume.onValueChanged += OnVolumeChanged;
     }
 
     private void OnVolumeChanged(object sender, FloatArgs e)
     {
+        Debug.Log($"Volume Changed:{e.value}");
         SetValue(e.value);
     }
 
     public void SetValue(float value)
     {
         this.value = value;
-        SoundManager.masterVolume = value;
+        SoundManager.SetMasterVolume(value);
     }
 
     public float GetValue()

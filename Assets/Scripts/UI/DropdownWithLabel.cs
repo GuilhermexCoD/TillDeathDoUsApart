@@ -19,6 +19,7 @@ public class DropdownWithLabel : Label
     {
         base.Awake();
         dropdown?.onValueChanged.AddListener(OnDropdownValueChanged);
+
     }
 
     public void OnDropdownValueChanged(int value)
@@ -31,7 +32,9 @@ public class DropdownWithLabel : Label
 
     public override void UpdateVisual()
     {
+
         base.UpdateVisual();
+
         if (dropdown != null)
         {
             dropdown.ClearOptions();

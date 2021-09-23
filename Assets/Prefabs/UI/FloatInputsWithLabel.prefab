@@ -249,12 +249,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   label: 'Max room sizes:'
   labelText: {fileID: 7435967291382338288}
+  labels: []
   values:
   - 0
   - 2
   - 3
   group: {fileID: 5731562406775701943}
   prefabInput: {fileID: 7446239003521954745, guid: 1b2e4e1b34ecac343ab151daaa960816, type: 3}
+  characterValidation: 0
+  inputFields: []
 --- !u!114 &4820236738445854388
 MonoBehaviour:
   m_ObjectHideFlags: 0

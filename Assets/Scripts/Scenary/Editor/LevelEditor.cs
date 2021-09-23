@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
+#if UNITY_EDITOR
 [CustomEditor(typeof(Level),true)]
 public class LevelEditor : Editor
 {
@@ -46,3 +47,4 @@ public class LevelEditor : Editor
         GUILayout.EndHorizontal();
     }
 }
+#endif

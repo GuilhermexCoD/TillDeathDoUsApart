@@ -1,6 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
+#if UNITY_EDITOR
 [CustomEditor(typeof(PlayerVisualManager), true)]
 public class PlayerVisualManagerEditor : Editor
 {
@@ -21,3 +22,5 @@ public class PlayerVisualManagerEditor : Editor
         }
     }
 }
+
+#endif

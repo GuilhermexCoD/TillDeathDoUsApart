@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEditor;
 
+#if UNITY_EDITOR
 [CustomEditor(typeof(Level))]
 [CanEditMultipleObjects]
 public class RangeIntEditor : Editor
@@ -21,3 +22,4 @@ public class RangeIntEditor : Editor
         serializedObject.ApplyModifiedProperties();
     }
 }
+#endif

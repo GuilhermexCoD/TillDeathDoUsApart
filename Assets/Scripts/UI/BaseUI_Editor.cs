@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
+#if UNITY_EDITOR
 [CustomEditor(typeof(BaseUI), true)]
 public class BaseUI_Editor : Editor
 {
@@ -21,3 +22,4 @@ public class BaseUI_Editor : Editor
         return base.RequiresConstantRepaint();
     }
 }
+#endif
