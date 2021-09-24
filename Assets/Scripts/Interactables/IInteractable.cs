@@ -7,4 +7,5 @@ public interface IInteractable
     IInteractable PickUp(object actor);
     void Interact(object actor);
     string GetInfo();
+    bool IsStackable();
 }

@@ -8,11 +8,6 @@ public class Potion : MonoBehaviour, IInteractable
 
     public DrinkablesData data;
 
-    private void Awake()
-    {
-        
-    }
-
     public void Interact(object actor)
     {
         Debug.Log(this.ToString());
@@ -38,5 +33,10 @@ public class Potion : MonoBehaviour, IInteractable
         Destroy(this.gameObject);
 
         return this;
+    }
+
+    public bool IsStackable()
+    {
+        return true;
     }
 }

@@ -32018,10 +32018,6 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1772446588, guid: ce0af79053ca9ea47a3367d65ad11e1a, type: 3}
-      propertyPath: reloadActionName
-      value: Reload
-      objectReference: {fileID: 0}
-    - target: {fileID: 1772446588, guid: ce0af79053ca9ea47a3367d65ad11e1a, type: 3}
       propertyPath: shootShakeMultiplier
       value: 0.025
       objectReference: {fileID: 0}

@@ -34,18 +34,6 @@ public class Weapon : MonoBehaviour, IInteractable
         return (D)data;
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     public IInteractable PickUp(object actor)
     {
         
@@ -60,5 +48,10 @@ public class Weapon : MonoBehaviour, IInteractable
     public string GetInfo()
     {
         return data.ToString();
+    }
+
+    public bool IsStackable()
+    {
+        return false;
     }
 }
