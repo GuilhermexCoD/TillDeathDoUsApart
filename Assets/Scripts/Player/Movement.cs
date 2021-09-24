@@ -29,7 +29,7 @@ public class Movement : MonoBehaviour
     //Chamado uma unica vez e antes do Start
     private void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -49,11 +49,22 @@ public class Movement : MonoBehaviour
         float moveY = Input.GetAxisRaw("Vertical");
 
         moveDirection = new Vector2(moveX, moveY).normalized;
+
+        if (moveDirection.magnitude == 0)
+        {
+            goRigidbody.drag = 10;
+        }
+        else
+        {
+            goRigidbody.drag = 1;
+        }
     }
 
-    public void AddForce(Vector2 force)
+    public void AddForce(Vector2 force, ForceMode2D mode)
     {
-        goRigidbody.AddForce(force);
+        //SetBlockMovement(true);
+        goRigidbody.AddForce(force * Time.deltaTime, mode);
+        //SetBlockMovement(false);
     }
 
     public void SetVelocity(Vector2 velocity)
@@ -76,16 +87,13 @@ public class Movement : MonoBehaviour
     {
         if (!blockMovement)
         {
+            //AddForce(moveDirection * speed, ForceMode2D.Impulse);
             goRigidbody.velocity = (moveDirection * speed);
         }
     }
 
-    public void SetBlockMovement(bool block){
-        blockMovement = block;
-    }
-
-    private void OnAnimatorMove()
+    public void SetBlockMovement(bool block)
     {
-
+        blockMovement = block;
     }
 }

@@ -84,6 +84,6 @@ public class TilemapVisualizer : MonoBehaviour
 
     public void Clear()
     {
-        Tilemaps.ForEach(t => t.ClearAllTiles());
+        Tilemaps.ForEach(t => t?.ClearAllTiles());
     }
 }

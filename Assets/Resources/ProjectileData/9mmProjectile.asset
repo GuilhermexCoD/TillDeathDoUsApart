@@ -21,12 +21,13 @@ MonoBehaviour:
     CausedByWorld: 0
   lifeSpan: 10
   hitEffect: {fileID: 0}
+  shotSound: {fileID: 8300000, guid: ae65be1a7df10f1478a1fcea0ac53f30, type: 3}
   visualProjectile: {fileID: 21300000, guid: ff46c9621d92cc140840c29234fba31b, type: 3}
   color: {r: 0.99381757, g: 1, b: 0, a: 1}
   round: {fileID: 21300000, guid: 61c297393d004eb4aa1de29e37c3e011, type: 3}
   shellParticleData: {fileID: 11400000, guid: b4892fa90862e6646b320bcaeb31f3f5, type: 2}
   muzzleFlashParticle: {fileID: 6335153301942870110, guid: 52500f00fc7fdba4db076dacdfc95008, type: 3}
-  flashParticle: {fileID: 6302071229590575753, guid: 2b521d448fa19dd48a5dbe680972f4e4, type: 3}
+  flashParticle: {fileID: 6417226581635197010, guid: 8a4b378578eea53429ae8b9866361326, type: 3}
   tracerTime: 1
   tracerMaterial: {fileID: 2100000, guid: f121e772a32cc8647b71b58aef0099c0, type: 2}
   tracerGradient:

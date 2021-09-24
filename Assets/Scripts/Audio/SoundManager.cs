@@ -29,6 +29,7 @@ public static class SoundManager
         audioSubcriber.SetAudioSource(audioSource);
 
         audioSource.PlayOneShot(clip);
+        GameObject.Destroy(soundGo, clip.length);
     }
 
     public static void PlaySound(AudioClip clip,bool loop)

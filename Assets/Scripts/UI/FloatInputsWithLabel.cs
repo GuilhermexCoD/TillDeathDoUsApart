@@ -41,7 +41,6 @@ public class FloatInputsWithLabel : Label
     {
         if (group != null)
         {
-            print("Child:" + group.childCount);
             for (int i = group.childCount; i > 0; --i)
                 DestroyImmediate(group.GetChild(0).gameObject);
         }

@@ -30,7 +30,6 @@ public class ShootComponent : MonoBehaviour
 
     public void Shoot()
     {
-        print($"Shooting {projectileData.startSpeed}");
         var projectileGo = Instantiate<GameObject>(projectilePrefab, shotTransform.position, shotTransform.rotation);
 
         var projectile = projectileGo.GetComponent<Projectile>();

@@ -9,11 +9,34 @@ public class RangedWeapon : Weapon
 
     public event EventHandler<OnShootEventArgs> onShoot;
 
+    private int currentAmmo;
+
+    private bool isReloading;
+
+    private float reloadTimer;
+
     public override void Attack()
     {
         base.Attack();
 
-        shootComponent.Shoot();
+        if (currentAmmo > 0 && !isReloading)
+        {
+            shootComponent.Shoot();
+            currentAmmo--;
+        }
+        else if(!isReloading)
+        {
+            Util.CreateWorldTextPopup("Click!...", this.transform.position, 20, Vector3.one * 0.2f,2, 1);
+        }
+    }
+
+    public void Reload()
+    {
+        if (currentAmmo != GetData<RangedWeaponData>().magazineSize)
+        {
+            isReloading = true;
+            Util.CreateWorldTextPopup("Reloading!...", this.transform.position, 20, Vector3.one * 0.2f, 2, 1);
+        }
     }
 
     // Start is called before the first frame update
@@ -24,6 +47,25 @@ public class RangedWeapon : Weapon
         GetShootComponent().SetProjectileData(data.projectile);
 
         shootComponent.onShoot += OnShootEvent;
+
+        currentAmmo = data.magazineSize;
+        reloadTimer = data.reloadTime;
+    }
+
+    private void Update()
+    {
+        if (isReloading)
+        {
+            reloadTimer -= Time.deltaTime;
+            if (reloadTimer <= 0)
+            {
+                isReloading = false;
+                var data = GetData<RangedWeaponData>();
+                currentAmmo = data.magazineSize;
+                reloadTimer = data.reloadTime;
+                Util.CreateWorldTextPopup("Ready to shoot!", this.transform.position, 20, Vector3.one * 0.2f, 2, 1);
+            }
+        }
     }
 
     private void OnShootEvent(object sender, OnShootEventArgs e)

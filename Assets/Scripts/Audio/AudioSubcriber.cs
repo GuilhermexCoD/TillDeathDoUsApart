@@ -26,4 +26,9 @@ public class AudioSubcriber : MonoBehaviour
     {
         this.audioSource = audioSource;
     }
+
+    private void OnDestroy()
+    {
+        SoundManager.onMasterVolumeChanged -= OnVolumeMasterChanged;
+    }
 }

@@ -6,4 +6,7 @@ using UnityEngine;
 public class RangedWeaponData : WeaponData
 {
     public ProjectileData projectile;
+
+    public int magazineSize; 
+    public float reloadTime;
 }

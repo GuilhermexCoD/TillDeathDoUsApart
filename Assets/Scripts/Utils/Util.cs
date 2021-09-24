@@ -53,9 +53,9 @@ public static class Util
     }
 
     // Create a Text Popup in the World, no parent
-    public static void CreateWorldTextPopup(string text, Vector3 localPosition, int fontSize, Vector3 localScale, float popupTime = 1f)
+    public static void CreateWorldTextPopup(string text, Vector3 localPosition, int fontSize, Vector3 localScale,float speed, float popupTime = 1f)
     {
-        CreateWorldTextPopup(null, text, localPosition, fontSize, localScale, Color.white, localPosition + new Vector3(0, 20), popupTime);
+        CreateWorldTextPopup(null, text, localPosition, fontSize, localScale, Color.white, localPosition + new Vector3(0, speed), popupTime);
     }
 
     // Create Text in the World

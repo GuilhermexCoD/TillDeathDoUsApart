@@ -23,3 +23,5 @@ MonoBehaviour:
   handL_Rotation: {x: 0, y: 0, z: 182.71352}
   color: {r: 1, g: 1, b: 1, a: 1}
   projectile: {fileID: 11400000, guid: 26505c101db9dc44eb3773a28efca7f1, type: 2}
+  magazineSize: 6
+  reloadTime: 2
