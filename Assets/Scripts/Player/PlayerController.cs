@@ -18,6 +18,8 @@ public class PlayerController : MonoBehaviour
     private string pickUpActionName = "PickUp";
     [SerializeField]
     private string attackActionName = "Attack";
+    [SerializeField]
+    private string reloadActionName = "Reload";
 
     [SerializeField]
     private FlipAccordingRotation flipWeapon;
@@ -82,13 +84,17 @@ public class PlayerController : MonoBehaviour
                 }
             }
 
-            Debug.Log($"Picked up an item : {pickedUp}");
             inventory.Add(pickedUp);
         }
 
         if (Input.GetButtonDown(attackActionName) && equipedWeapon != null)
         {
             equipedWeapon.Attack();
+        }
+
+        if (Input.GetButtonDown(reloadActionName) && equipedWeapon != null)
+        {
+            ((RangedWeapon)equipedWeapon).Reload();
         }
 
         if (Camera.current != null && equipedWeapon != null)
@@ -115,13 +121,7 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject != null)
         {
             interactableObject = collision.gameObject.GetComponent<IInteractable>();
-
-            if (interactableObject != null)
-            {
-                Debug.Log($"Interactable = {interactableObject.GetInfo()}");
-            }
         }
-
     }
 
     private void OnTriggerExit2D(Collider2D collision)

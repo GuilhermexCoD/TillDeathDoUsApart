@@ -10,6 +10,8 @@ public class ScenaryManager : MonoBehaviour
     public static ScenaryManager current;
 
     private int dungeonLevel = 1;
+
+    [SerializeField]
     private LevelData levelData;
 
     [SerializeField]
@@ -20,6 +22,11 @@ public class ScenaryManager : MonoBehaviour
     public void Subscribe(EventHandler<LevelArgs> handler)
     {
         onLevelLoaded += handler;
+    }
+
+    public void UnSubscribe(EventHandler<LevelArgs> handler)
+    {
+        onLevelLoaded -= handler;
     }
 
     #region Setters
@@ -171,7 +178,7 @@ public class ScenaryManager : MonoBehaviour
     {
         if (arg0.buildIndex > 0)
         {
-            Debug.LogWarning(seed.GetHashCode());
+            Debug.LogWarning($"Seed: {seed} (HashCode) {seed.GetHashCode()}");
             Random.InitState(seed.GetHashCode());
         }
 

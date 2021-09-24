@@ -39,8 +39,6 @@ public class InputFieldWithLabel : Label
 
     private void OnValueChanged(string value)
     {
-        Debug.LogWarning($"Changed Value: {value}");
-
         onValueChanged?.Invoke(this, new TextArgs()
         {
             value = value

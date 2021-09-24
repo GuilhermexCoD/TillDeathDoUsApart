@@ -19,6 +19,7 @@ public class ProjectileData : ScriptableObject
 
     [Header("Visuals")]
     public ParticleSystem hitEffect;
+    public AudioClip shotSound;
 
     public Sprite visualProjectile;
     public Color color = Color.white;

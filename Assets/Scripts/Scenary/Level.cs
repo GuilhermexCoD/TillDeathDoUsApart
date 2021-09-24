@@ -16,6 +16,8 @@ public class Level : MonoBehaviour
 
     #endregion
 
+
+    public static float offSet = 0.5f;
     public static Level current;
 
     [SerializeField]
@@ -77,7 +79,7 @@ public class Level : MonoBehaviour
             rooms = new List<Room<GeneratorRule>>();
             roomColors = new List<Color>();
             corridors = new HashSet<Vector2Int>();
-            tilemapVisualizer.Clear();
+            tilemapVisualizer?.Clear();
         }
     }
 
@@ -257,18 +259,18 @@ public class Level : MonoBehaviour
         return new Vector2Int(Random.Range(0, data.size.x), Random.Range(0, data.size.y));
     }
 
-    public static Vector3 CalculatePosition(Vector2Int coord, Vector3 startPosition)
+    public static Vector3 CalculatePosition(Vector2Int coord)
     {
-        Vector3 position = startPosition;
+        Vector3 position = Vector3.zero;
 
-        position += new Vector3(coord.x, coord.y, 0);
+        position += new Vector3(coord.x + offSet, coord.y + offSet);
 
         return position;
     }
 
     private void OnDestroy()
     {
-        //TODO unsubscribe from Rooms 
+        ScenaryManager.current?.UnSubscribe(OnLevelLoaded);
     }
 
     public Vector2Int GetLevelSize()
@@ -278,7 +280,7 @@ public class Level : MonoBehaviour
 
     public Vector2Int GetRandomPositionInsideRoom()
     {
-        return rooms[0].GetRandomCoord();
+        return rooms[Random.Range(0, rooms.Count)].GetRandomCoord();
     }
 
     public void CallOnGenerated()
@@ -337,5 +339,4 @@ public class Level : MonoBehaviour
     }
 
     #endregion
-
 }

@@ -28,7 +28,6 @@ public class FloatInputsWithLabel_Editor : Editor
             inputs.ClearFields();
             inputs.GenerateFloats();
             lastValues = inputs.GetValues().ToArray();
-            Debug.Log("Changed");
         }
     }
 

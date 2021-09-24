@@ -130,6 +130,7 @@ MonoBehaviour:
   shootShakeMultiplier: 0.05
   pickUpActionName: PickUp
   attackActionName: Attack
+  reloadActionName: Reload
   flipWeapon: {fileID: 1381324537}
   weaponTransform: {fileID: 8255957689367915285}
   offSetTransform: {fileID: 6935983729019232623}
