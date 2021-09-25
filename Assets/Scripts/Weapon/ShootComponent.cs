@@ -56,7 +56,7 @@ public class ShootComponent : MonoBehaviour
             position = shotTransform.position,
             direction = direction,
             range = projectileData.range,
-            projectileIndex = projectileData.item.id
+            projectileIndex = projectileData.id
         });
     }
 

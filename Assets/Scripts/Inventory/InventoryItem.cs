@@ -9,6 +9,16 @@ public class InventoryItem
     public IInteractable interactable { get; set; }
     public int quantity { get; set; }
 
+    public int GetId()
+    {
+        return interactable.GetId();
+    }
+
+    public bool IsStackable()
+    {
+        return interactable.IsStackable();
+    }
+
     public void IncreaseQuantity(int value)
     {
         quantity += value;
@@ -23,6 +33,7 @@ public class InventoryItem
     {
         return interactable.GetType();
     }
+
     public T CastTo<T>()
     {
         try

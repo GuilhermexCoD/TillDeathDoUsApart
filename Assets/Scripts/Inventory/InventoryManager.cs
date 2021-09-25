@@ -12,7 +12,7 @@ public class InventoryManager : MonoBehaviour
     {
         if (item.IsStackable())
         {
-            var foundItem = items.FirstOrDefault(i => i.GetInteractableType() == item.GetType());
+            var foundItem = FindItem(item.GetId());
 
             if (foundItem != null)
             {
@@ -40,9 +40,14 @@ public class InventoryManager : MonoBehaviour
         return items.Count;
     }
 
-    public IEnumerable<InventoryItem> FindItems<T>()
+    public InventoryItem FindItem(int id)
     {
-        var foundItems = items.Where(i => i.IsType<T>());
+        return items.FirstOrDefault(i => i.GetId() == id);
+    }
+
+    public IEnumerable<InventoryItem> FindItems(int id)
+    {
+        var foundItems = items.Where(i => i.GetId() == id);
         return foundItems;
     }
 }

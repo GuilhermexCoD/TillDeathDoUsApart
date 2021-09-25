@@ -5,6 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New RangedWeapon", menuName = "Items/Weapons/Ranged")]
 public class RangedWeaponData : WeaponData
 {
+    [Header("Ranged Weapon")]
     public ProjectileData projectile;
 
     public int magazineSize; 
