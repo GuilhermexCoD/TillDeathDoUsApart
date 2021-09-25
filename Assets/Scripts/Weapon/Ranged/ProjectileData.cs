@@ -4,11 +4,8 @@ using UnityEngine;
 using static UnityEngine.ParticleSystem;
 
 [CreateAssetMenu(fileName = "New Projectile", menuName = "Weapon/Projectile")]
-public class ProjectileData : ScriptableObject
+public class ProjectileData : ItemData
 {
-    [Header("Item Data")]
-    public ItemData item;
-
     [Header("Bullet Properties")]
     public float startSpeed;
     public float damage;

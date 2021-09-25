@@ -2,10 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Weapon : MonoBehaviour, IInteractable
+public class Weapon : Interactable
 {
-    [SerializeField]
-    protected WeaponData data;
+    protected WeaponData weaponData { get { return GetData<WeaponData>(); } }
 
     [SerializeField]
     protected SpriteRenderer weaponVisual;
@@ -20,38 +19,12 @@ public class Weapon : MonoBehaviour, IInteractable
         if (weaponVisual != null)
         {
             weaponVisual.sprite = data.spriteAsset;
-            weaponVisual.color = data.color;
+            weaponVisual.color = weaponData.color;
         }
     }
 
     public virtual void Attack()
     {
 
-    }
-
-    public virtual D GetData<D>() where D : WeaponData
-    {
-        return (D)data;
-    }
-
-    public IInteractable PickUp(object actor)
-    {
-        
-        return this;
-    }
-
-    public void Interact(object actor)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public string GetInfo()
-    {
-        return data.ToString();
-    }
-
-    public bool IsStackable()
-    {
-        return false;
     }
 }
