@@ -16,23 +16,53 @@ public class InventoryManager : MonoBehaviour
 
             if (foundItem != null)
             {
-                foundItem.IncreaseQuantity(1);
+                foundItem.IncreaseQuantity();
                 return;
             }
         }
 
-        AddNewItem(item);
+        var inventoryItem = AddNewItem(item);
+        inventoryItem.onQuantityChanged += OnInventoryItemQuantityChanged;
     }
 
-    private void AddNewItem(IInteractable item)
+    private void OnInventoryItemQuantityChanged(object sender, int quantity)
     {
-        var intaractable = new InventoryItem()
+        if (quantity <= 0)
+        {
+            var inventoryItem = (InventoryItem)sender;
+
+
+        }
+    }
+
+    public bool RemoveItem(int id)
+    {
+        var foundItem = FindItem(id);
+
+        if (foundItem != null)
+        {
+            return items.Remove(foundItem);
+        }
+
+        return false;
+    }
+
+    public void RemoveAllItem(int id)
+    {
+        var value = items.RemoveAll(i => i.GetId() == id);
+    }
+
+    private InventoryItem AddNewItem(IInteractable item)
+    {
+        var inventoryItem = new InventoryItem()
         {
             interactable = item,
             quantity = 1
         };
 
-        items.Add(intaractable);
+        items.Add(inventoryItem);
+
+        return inventoryItem;
     }
 
     public int GetItemsCount()

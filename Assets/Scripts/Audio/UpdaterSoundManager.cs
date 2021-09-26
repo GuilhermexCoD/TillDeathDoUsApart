@@ -16,10 +16,9 @@ public class UpdaterSoundManager : MonoBehaviour
         volume.onValueChanged += OnVolumeChanged;
     }
 
-    private void OnVolumeChanged(object sender, FloatArgs e)
+    private void OnVolumeChanged(object sender, float value)
     {
-        Debug.Log($"Volume Changed:{e.value}");
-        SetValue(e.value);
+        SetValue(value);
     }
 
     public void SetValue(float value)

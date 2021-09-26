@@ -9,6 +9,8 @@ public class InventoryItem
     public IInteractable interactable { get; set; }
     public int quantity { get; set; }
 
+    public event EventHandler<int> onQuantityChanged;
+
     public int GetId()
     {
         return interactable.GetId();
@@ -19,14 +21,16 @@ public class InventoryItem
         return interactable.IsStackable();
     }
 
-    public void IncreaseQuantity(int value)
+    public void IncreaseQuantity(int value = 1)
     {
         quantity += value;
+        onQuantityChanged?.Invoke(this, quantity);
     }
 
-    public void DecreaseQuantity(int value)
+    public void DecreaseQuantity(int value = 1)
     {
         quantity -= value;
+        onQuantityChanged?.Invoke(this, quantity);
     }
 
     public Type GetInteractableType()
@@ -72,5 +76,4 @@ public class InventoryItem
             return false;
         }
     }
-
 }
