@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class SliderWithLabel : Label
 {
-    public event EventHandler<FloatArgs> onValueChanged;
+    public event EventHandler<float> onValueChanged;
     public Slider slider;
 
     protected override void Awake()
@@ -17,17 +17,14 @@ public class SliderWithLabel : Label
 
     public void OnSliderChangedValue(float value)
     {
-        onValueChanged?.Invoke(this, new FloatArgs()
-        {
-            value = value
-        });
+        onValueChanged?.Invoke(this, value);
     }
 
     public override void UpdateVisual()
     {
         base.UpdateVisual();
     }
-    
+
     public void SetValue(float value)
     {
         slider.value = value;

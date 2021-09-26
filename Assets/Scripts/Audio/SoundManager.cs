@@ -7,16 +7,13 @@ public static class SoundManager
 {
     private static float masterVolume = 1;
 
-    public static event EventHandler<FloatArgs> onMasterVolumeChanged;
+    public static event EventHandler<float> onMasterVolumeChanged;
 
     public static void SetMasterVolume(float value)
     {
         masterVolume = value;
 
-        onMasterVolumeChanged?.Invoke(null, new FloatArgs()
-        {
-            value = masterVolume
-        });
+        onMasterVolumeChanged?.Invoke(null, masterVolume);
     }
 
     public static void PlaySound(AudioClip clip)

@@ -16,10 +16,9 @@ public class AudioSubcriber : MonoBehaviour
         SoundManager.onMasterVolumeChanged += OnVolumeMasterChanged;
     }
 
-    private void OnVolumeMasterChanged(object sender, FloatArgs e)
+    private void OnVolumeMasterChanged(object sender, float value)
     {
-        Debug.Log($"MUDOUUUUUUU {e.value} ");
-        audioSource.volume = e.value;
+        audioSource.volume = value;
     }
 
     public void SetAudioSource(AudioSource audioSource)
