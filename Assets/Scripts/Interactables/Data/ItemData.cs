@@ -11,6 +11,7 @@ public class ItemData : ScriptableObject
     public Sprite spriteAsset;
     public int value;
     public bool stackable = true;
+    public int quantity = 1;
 
     public override string ToString()
     {

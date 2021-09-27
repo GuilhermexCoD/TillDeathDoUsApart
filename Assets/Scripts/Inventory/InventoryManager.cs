@@ -16,7 +16,7 @@ public class InventoryManager : MonoBehaviour
 
             if (foundItem != null)
             {
-                foundItem.IncreaseQuantity();
+                foundItem.IncreaseQuantity(item.GetQuantity());
                 return;
             }
         }
@@ -31,8 +31,35 @@ public class InventoryManager : MonoBehaviour
         {
             var inventoryItem = (InventoryItem)sender;
 
-
+            RemoveItem(inventoryItem.GetId());
         }
+    }
+
+    public bool TryConsumeItem(int id,int quantity, out int notConsumed,bool forceConsume = false)
+    {
+        notConsumed = quantity;
+
+        var foundItem = FindItem(id);
+
+        if (foundItem != null)
+        {
+            int totalQuantity = foundItem.quantity;
+            int delta = totalQuantity - quantity;
+            if (delta >= 0)
+            {
+                foundItem.DecreaseQuantity(quantity);
+                notConsumed = 0;
+                return true;
+            }
+            else if(forceConsume)
+            {
+                foundItem.DecreaseQuantity(totalQuantity);
+                notConsumed = Math.Abs(delta); 
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public bool RemoveItem(int id)
@@ -57,7 +84,7 @@ public class InventoryManager : MonoBehaviour
         var inventoryItem = new InventoryItem()
         {
             interactable = item,
-            quantity = 1
+            quantity = item.GetQuantity()
         };
 
         items.Add(inventoryItem);
