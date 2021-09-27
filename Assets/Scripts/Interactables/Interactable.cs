@@ -26,6 +26,11 @@ public class Interactable : MonoBehaviour, IInteractable
         return data.ToString();
     }
 
+    public int GetQuantity()
+    {
+        return data.quantity;
+    }
+
     public void Interact(object instigator)
     {
         onInteracted?.Invoke(this, new InteractableArgs { instigator = instigator });

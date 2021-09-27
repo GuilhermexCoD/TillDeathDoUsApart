@@ -33,6 +33,11 @@ public class InventoryItem
         onQuantityChanged?.Invoke(this, quantity);
     }
 
+    public int GetQuantity()
+    {
+        return quantity;
+    }
+
     public Type GetInteractableType()
     {
         return interactable.GetType();

@@ -117,17 +117,133 @@ public class InventoryManagerTest
         inventoryManager.AddItem(interactableItemC);
         inventoryManager.AddItem(interactableItemD);
 
+        inventoryManager.RemoveItem(id1);
         inventoryManager.RemoveAllItem(id2);
 
         //Assert
-        Assert.IsTrue(inventoryManager.GetItemsCount() == 1);
-        Assert.IsTrue(inventoryManager.FindItems(id1).Count() == 1);
-        Assert.IsTrue(inventoryManager.FindItem(id1).quantity == 2);
+        Assert.IsTrue(inventoryManager.GetItemsCount() == 0);
+        Assert.IsTrue(inventoryManager.FindItems(id1).Count() == 0);
+        Assert.IsNull(inventoryManager.FindItem(id1));
 
         Assert.IsTrue(inventoryManager.FindItems(id2).Count() == 0);
         Assert.IsNull(inventoryManager.FindItem(id2));
     }
 
+    [Test]
+    public void IfInventoryManagerWhenTryConsumeLessThenTotalThenRemoveCorrectly()
+    {
+        //Arrange
+        int id1 = 0;
+        bool stackable1 = true;
+
+        var inventoryManager = new InventoryManager();
+
+        var interactableItemA = CreateInteractable(id1, stackable1);
+        var interactableItemB = CreateInteractable(id1, stackable1);
+        var interactableItemC = CreateInteractable(id1, stackable1);
+        var interactableItemD = CreateInteractable(id1, stackable1);
+
+        //Act
+        inventoryManager.AddItem(interactableItemA);
+        inventoryManager.AddItem(interactableItemB);
+        inventoryManager.AddItem(interactableItemC);
+        inventoryManager.AddItem(interactableItemD);
+
+        var result = inventoryManager.TryConsumeItem(id1, 3, out int notConsumed);
+
+        //Assert
+        Assert.IsTrue(inventoryManager.GetItemsCount() == 1);
+        Assert.IsTrue(inventoryManager.FindItem(id1).GetQuantity() == 1);
+        Assert.IsTrue(result);
+        Assert.IsTrue(notConsumed == 0);
+    }
+
+    [Test]
+    public void IfInventoryManagerWhenTryConsumeExactlyAmountThenRemoveCorrectly()
+    {
+        //Arrange
+        int id1 = 0;
+        bool stackable1 = true;
+
+        var inventoryManager = new InventoryManager();
+
+        var interactableItemA = CreateInteractable(id1, stackable1);
+        var interactableItemB = CreateInteractable(id1, stackable1);
+        var interactableItemC = CreateInteractable(id1, stackable1);
+        var interactableItemD = CreateInteractable(id1, stackable1);
+
+        inventoryManager.AddItem(interactableItemA);
+        inventoryManager.AddItem(interactableItemB);
+        inventoryManager.AddItem(interactableItemC);
+        inventoryManager.AddItem(interactableItemD);
+
+        //Act
+        var result = inventoryManager.TryConsumeItem(id1, 4, out int notConsumed);
+
+        //Assert
+        Assert.IsTrue(inventoryManager.GetItemsCount() == 0);
+        Assert.IsNull(inventoryManager.FindItem(id1));
+        Assert.IsTrue(result);
+        Assert.IsTrue(notConsumed == 0);
+    }
+
+    [Test]
+    public void IfInventoryManagerWhenTryConsumeMoreThenTotalForceConsumeFalseThenDontRemove()
+    {
+        //Arrange
+        int id1 = 0;
+        bool stackable1 = true;
+
+        var inventoryManager = new InventoryManager();
+
+        var interactableItemA = CreateInteractable(id1, stackable1);
+        var interactableItemB = CreateInteractable(id1, stackable1);
+        var interactableItemC = CreateInteractable(id1, stackable1);
+        var interactableItemD = CreateInteractable(id1, stackable1);
+
+        inventoryManager.AddItem(interactableItemA);
+        inventoryManager.AddItem(interactableItemB);
+        inventoryManager.AddItem(interactableItemC);
+        inventoryManager.AddItem(interactableItemD);
+
+        //Act
+        var result = inventoryManager.TryConsumeItem(id1, 5, out int notConsumed);
+
+        //Assert
+        Assert.IsTrue(inventoryManager.GetItemsCount() == 1);
+        Assert.IsTrue(inventoryManager.FindItem(id1).GetQuantity() == 4);
+        Assert.IsFalse(result);
+        Assert.IsTrue(notConsumed == 5);
+    }
+
+    [Test]
+    public void IfInventoryManagerWhenTryConsumeMoreThenTotalForceConsumeTrueThenRemove()
+    {
+        //Arrange
+        int id1 = 0;
+        bool stackable1 = true;
+
+        var inventoryManager = new InventoryManager();
+
+        var interactableItemA = CreateInteractable(id1, stackable1);
+        var interactableItemB = CreateInteractable(id1, stackable1);
+        var interactableItemC = CreateInteractable(id1, stackable1);
+        var interactableItemD = CreateInteractable(id1, stackable1);
+
+        inventoryManager.AddItem(interactableItemA);
+        inventoryManager.AddItem(interactableItemB);
+        inventoryManager.AddItem(interactableItemC);
+        inventoryManager.AddItem(interactableItemD);
+
+        //Act
+        var result = inventoryManager.TryConsumeItem(id1, 5, out int notConsumed, true);
+
+        //Assert
+        Assert.IsTrue(inventoryManager.GetItemsCount() == 0);
+        Assert.IsNull(inventoryManager.FindItem(id1));
+        Assert.IsTrue(result);
+        Assert.IsTrue(notConsumed == 1);
+    }
     private static Interactable CreateInteractable(int id, bool stackable)
     {
         var interactableItem = new Interactable();
