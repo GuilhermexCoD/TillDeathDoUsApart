@@ -56,7 +56,7 @@ public class ShootComponent : MonoBehaviour
             position = shotTransform.position,
             direction = direction,
             range = projectileData.range,
-            projectileIndex = projectileData.id
+            projectileIndex = projectileData.GetId()
         });
     }
 
@@ -76,12 +76,9 @@ public class ShootComponent : MonoBehaviour
                 particle = CreateParticle(prefab);
                 UpdateParticleColor(ref particle);
             }
-            else
-            {
-                particle.Stop();
-                particle.Clear();
-                particle.Play();
-            }
+
+            particle.Clear();
+            particle.Play();
         }
     }
 

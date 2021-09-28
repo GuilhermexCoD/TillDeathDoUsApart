@@ -28,14 +28,17 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private Transform offSetTransform;
 
+
     [SerializeField]
     private IInteractable interactableObject;
-    public List<IInteractable> inventory = new List<IInteractable>();
+    private InventoryManager inventoryManager = new InventoryManager();
+    private int equipedItemIndex = -1;
 
-    private Weapon equipedWeapon;
+    public float lastX;
 
     public Transform handRTransform;
     public Transform handLTransform;
+
 
     // Start is called before the first frame update
     void Awake()
@@ -48,10 +51,11 @@ public class PlayerController : MonoBehaviour
         dash.Subscribe(OnPlayerDashed);
     }
 
-    public void OnPlayerDashed(object sender, OnDashEventArgs args)
+    private void OnPlayerDashed(object sender, OnDashEventArgs args)
     {
         CinemachineShake.Current.ShakeCamera(args.direction.magnitude * dashCameraShakeMultiplier, dashCameraShakeTime);
     }
+
     private void OnPlayerShooted(object sender, OnShootEventArgs e)
     {
         CinemachineShake.Current.ShakeCamera(e.damage * shootShakeMultiplier, shootCameraShakeTime);
@@ -62,42 +66,47 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetButtonDown(pickUpActionName) && interactableObject != null)
         {
-            var pickedUp = interactableObject.PickUp(this);
+            var pickedUp = (Interactable)interactableObject.PickUp(this);
 
-            if (pickedUp.GetType().BaseType == typeof(Weapon))
+            var itemIndex = inventoryManager.AddItem(pickedUp);
+
+            pickedUp.SetActive(false);
+            pickedUp.transform.SetParent(offSetTransform);
+            pickedUp.transform.localPosition = Vector3.zero;
+            pickedUp.transform.localRotation = Quaternion.Euler(0, 0, 0);
+
+            if (!IsWeaponEquiped())
             {
-                var weapon = ((Weapon)pickedUp);
-                weapon.transform.SetParent(offSetTransform);
-                weapon.transform.localPosition = Vector3.zero;
-                weapon.transform.localRotation = Quaternion.Euler(0, 0, 0);
-                equipedWeapon = weapon;
+                bool pickedUpIsWeapon = IsWeapon(itemIndex);
 
-                handRTransform.localPosition = equipedWeapon.GetData<RangedWeaponData>().handR_Transform;
-                handRTransform.localEulerAngles = equipedWeapon.GetData<RangedWeaponData>().handR_Rotation;
-
-                handLTransform.localPosition = equipedWeapon.GetData<RangedWeaponData>().handL_Transform;
-                handLTransform.localEulerAngles = equipedWeapon.GetData<RangedWeaponData>().handL_Rotation;
-
-                if (weapon.GetType() == typeof(RangedWeapon))
+                if (pickedUpIsWeapon)
                 {
-                    (weapon as RangedWeapon).onShoot += OnPlayerShooted;
+                    EquipItem(itemIndex);
                 }
             }
-
-            inventory.Add(pickedUp);
         }
 
-        if (Input.GetButtonDown(attackActionName) && equipedWeapon != null)
+        if (Input.GetButton(pickUpActionName) && Input.GetButtonDown("Horizontal"))
         {
-            equipedWeapon.Attack();
+            var x = Input.GetAxisRaw("Horizontal");
+
+            var desiredEquipIndex = Util.ModLoop(equipedItemIndex + (int)Mathf.Sign(x), inventoryManager.GetItemsCount());
+            Util.CreateWorldTextPopup($"Equip id:{equipedItemIndex}", this.transform.position, 20, Vector3.one * 0.2f, 2, 1);
+            EquipItem(desiredEquipIndex);
+            
         }
 
-        if (Input.GetButtonDown(reloadActionName) && equipedWeapon != null)
+        if (Input.GetButtonDown(attackActionName) && IsWeaponEquiped())
         {
-            ((RangedWeapon)equipedWeapon).Reload();
+            GetWeapon()?.Attack();
         }
 
-        if (Camera.current != null && equipedWeapon != null)
+        if (Input.GetButtonDown(reloadActionName) && IsWeaponEquiped())
+        {
+            ((RangedWeapon)GetWeapon())?.Reload();
+        }
+
+        if (Camera.current != null && IsWeaponEquiped())
         {
             Vector3 mousePosition = Util.GetMouseWorldPosition();
 
@@ -110,11 +119,83 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            SceneManager.LoadScene(0,LoadSceneMode.Single);
+            SceneManager.LoadScene(0, LoadSceneMode.Single);
         }
     }
 
+    private bool IsWeaponEquiped()
+    {
+        return IsWeapon(equipedItemIndex);
+    }
 
+    private Weapon GetWeapon()
+    {
+        var weapon = inventoryManager.ElementAt(equipedItemIndex)?.CastTo<Weapon>();
+
+        return weapon;
+    }
+
+    private bool IsWeapon(int index)
+    {
+        var inventoryItem = inventoryManager.ElementAt(index);
+
+        if (inventoryItem != null)
+        {
+            return inventoryItem.interactable.GetType().BaseType == typeof(Weapon);
+        }
+
+        return false;
+    }
+
+    public InventoryManager GetInventory()
+    {
+        return inventoryManager;
+    }
+
+    private void EquipItem(int index)
+    {
+        if (equipedItemIndex != index)
+        {
+            var lastInventoryItem = inventoryManager.ElementAt(equipedItemIndex);
+            if (lastInventoryItem != null)
+                lastInventoryItem.interactable.SetActive(false);
+
+            equipedItemIndex = index;
+
+            var inventoryItem = inventoryManager.ElementAt(index);
+
+            if (inventoryItem != null)
+            {
+                inventoryItem.interactable.SetActive(true);
+
+                var interactable = (Interactable)inventoryItem.interactable;
+
+                offSetTransform.localPosition = interactable.GetData<ItemData>().offSetPosition;
+
+                UpdateHandPositionAndRotation(interactable.GetData<ItemData>());
+
+                //TODO change logic for equipping weapon
+                if (interactable.GetType().BaseType == typeof(Weapon))
+                {
+                    var weapon = ((Weapon)interactable);
+
+                    if (weapon.GetType() == typeof(RangedWeapon))
+                    {
+                        (weapon as RangedWeapon).onShoot += OnPlayerShooted;
+                    }
+                }
+            }
+        }
+    }
+
+    private void UpdateHandPositionAndRotation(ItemData data)
+    {
+        handRTransform.localPosition = data.handR_Transform;
+        handRTransform.localEulerAngles = data.handR_Rotation;
+
+        handLTransform.localPosition = data.handL_Transform;
+        handLTransform.localEulerAngles = data.handL_Rotation;
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {

@@ -10,12 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f500bca70cb5e924999d00731bc41e8b, type: 3}
-  m_Name: Potion_S
+  m_Name: Potion_M_Data
   m_EditorClassIdentifier: 
-  Id: 0
-  Name: Small Potion
-  Icon: {fileID: 0}
-  Value: 2
+  name: Medium Potion
+  icon: {fileID: 0}
+  spriteAsset: {fileID: 0}
+  value: 0
+  stackable: 1
+  quantity: 1
+  offSetPosition: {x: 0, y: 0, z: 0}
+  handR_Transform: {x: 0.157, y: -0.014, z: 0}
+  handR_Rotation: {x: 0, y: 0, z: 0}
+  handL_Transform: {x: -0.144, y: -0.021, z: 0}
+  handL_Rotation: {x: 10, y: 0, z: 0}
   status: 0
   liquidColor: {r: 1, g: 0.13725491, b: 0.13725491, a: 1}
-  HealAmount: 5
+  amount: 0

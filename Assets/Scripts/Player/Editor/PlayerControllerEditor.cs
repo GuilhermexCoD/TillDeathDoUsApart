@@ -19,9 +19,13 @@ public class PlayerControllerEditor : Editor
         base.OnInspectorGUI();
 
         GUILayout.Label("Inventory");
-        foreach (var item in playerController.inventory)
+
+        var inventoryManager = playerController.GetInventory();
+        var items = inventoryManager.GetItems();
+        foreach (var item in items)
         {
-            int index = playerController.inventory.IndexOf(item);
+            int index = items.IndexOf(item);
+
             GUILayout.BeginHorizontal();
             GUILayout.Label($"{index}: {item}");
 

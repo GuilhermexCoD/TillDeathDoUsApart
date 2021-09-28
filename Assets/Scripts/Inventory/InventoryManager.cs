@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class InventoryManager : MonoBehaviour
+public class InventoryManager
 {
     private List<InventoryItem> items = new List<InventoryItem>();
 
-    public void AddItem(IInteractable item)
+    public int AddItem(IInteractable item)
     {
         if (item.IsStackable())
         {
@@ -17,12 +17,16 @@ public class InventoryManager : MonoBehaviour
             if (foundItem != null)
             {
                 foundItem.IncreaseQuantity(item.GetQuantity());
-                return;
+                var index = items.IndexOf(foundItem);
+                return index;
             }
         }
 
         var inventoryItem = AddNewItem(item);
+
         inventoryItem.onQuantityChanged += OnInventoryItemQuantityChanged;
+
+        return items.IndexOf(inventoryItem);
     }
 
     private void OnInventoryItemQuantityChanged(object sender, int quantity)
@@ -97,6 +101,18 @@ public class InventoryManager : MonoBehaviour
         return items.Count;
     }
 
+    public InventoryItem ElementAt(int index)
+    {
+        try
+        {
+            return items.ElementAt(index);
+        }
+        catch (Exception)
+        {
+            return null;
+        }
+    }
+
     public InventoryItem FindItem(int id)
     {
         return items.FirstOrDefault(i => i.GetId() == id);
@@ -106,5 +122,10 @@ public class InventoryManager : MonoBehaviour
     {
         var foundItems = items.Where(i => i.GetId() == id);
         return foundItems;
+    }
+
+    public List<InventoryItem> GetItems()
+    {
+        return items;
     }
 }

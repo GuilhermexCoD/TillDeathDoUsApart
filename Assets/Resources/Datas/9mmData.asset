@@ -10,10 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: eb752ab1d8edd5944aca5cd0be4cfa26, type: 3}
-  m_Name: 9mm
+  m_Name: 9mmData
   m_EditorClassIdentifier: 
-  Id: 0
-  Name: 9 mm
-  Icon: {fileID: 2800000, guid: 9a000c97b6cd34b449e59665baf61c4c, type: 3}
-  Asset: {fileID: 21300000, guid: 9a000c97b6cd34b449e59665baf61c4c, type: 3}
-  Value: 1
+  name: 9mm
+  icon: {fileID: 0}
+  spriteAsset: {fileID: 0}
+  value: 0
+  stackable: 1
+  quantity: 1
+  offSetPosition: {x: 0, y: 0, z: 0}
+  handR_Transform: {x: 0, y: 0, z: 0}
+  handR_Rotation: {x: 0, y: 0, z: 0}
+  handL_Transform: {x: 0, y: 0, z: 0}
+  handL_Rotation: {x: 0, y: 0, z: 0}
