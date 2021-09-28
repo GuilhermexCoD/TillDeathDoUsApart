@@ -18,7 +18,7 @@ public class Interactable : MonoBehaviour, IInteractable
 
     public int GetId()
     {
-        return data.id;
+        return data.GetId();
     }
 
     public string GetInfo()
@@ -45,6 +45,11 @@ public class Interactable : MonoBehaviour, IInteractable
     {
         onPickedUp?.Invoke(this, new InteractableArgs { instigator = instigator});
         return this;
+    }
+
+    public void SetActive(bool active)
+    {
+        this.gameObject.SetActive(active);
     }
 
     public void SetData<D>(D data) where D : ItemData

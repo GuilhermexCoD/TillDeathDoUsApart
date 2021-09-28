@@ -249,7 +249,7 @@ public class InventoryManagerTest
         var interactableItem = new Interactable();
 
         var itemData = ScriptableObject.CreateInstance<ItemData>();
-        itemData.id = id;
+        //itemData.id = id;
         itemData.stackable = stackable;
         interactableItem.SetData<ItemData>(itemData);
 

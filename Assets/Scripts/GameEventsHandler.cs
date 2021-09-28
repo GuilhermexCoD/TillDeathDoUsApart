@@ -94,7 +94,7 @@ public class GameEventsHandler : MonoBehaviour
 
     public ProjectileData GetProjectileDataByIndex(int index)
     {
-        var projectile = Resources.LoadAll<ProjectileData>(PROJECTILE_DATA_PATH).Where(p => p.id == index).FirstOrDefault();
+        var projectile = Resources.LoadAll<ProjectileData>(PROJECTILE_DATA_PATH).Where(p => p.GetId() == index).FirstOrDefault();
 
         return projectile;
     }

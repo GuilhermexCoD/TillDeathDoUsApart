@@ -12,4 +12,6 @@ public interface IInteractable
     D GetData<D>() where D : ItemData;
     void SetData<D>(D data) where D : ItemData;
     int GetQuantity();
+    void SetActive(bool active);
+
 }
