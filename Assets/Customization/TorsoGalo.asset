@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b05f437f6649708429348557e498653f, type: 3}
-  m_Name: HandNormal
+  m_Name: TorsoGalo
   m_EditorClassIdentifier: 
   id: 0
-  name: Hand Normal
-  visual: {fileID: 21300000, guid: ba165752be128db46890572a6b827384, type: 3}
-  color: {r: 0.9528302, g: 0.50185615, b: 0.112362035, a: 1}
-  bodyPartType: 2
+  name: Tronco Fortao
+  visual: {fileID: 21300000, guid: 21d449179227e9b47b92a200375ef28b, type: 3}
+  color: {r: 1, g: 1, b: 1, a: 1}
+  bodyPartType: 1

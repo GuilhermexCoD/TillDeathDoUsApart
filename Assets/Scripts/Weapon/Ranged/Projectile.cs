@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -9,6 +10,8 @@ public class Projectile : MonoBehaviour
     [SerializeField]
     private SpriteRenderer spriteRenderer;
 
+    private Vector3 startPosition;
+
     private Vector2 direction;
     private float speed;
 
@@ -16,6 +19,8 @@ public class Projectile : MonoBehaviour
 
     private Sprite visualAsset;
     private Color colorAsset;
+
+    public event EventHandler<HitEventArgs> onHit;
 
     private void Awake()
     {
@@ -30,7 +35,7 @@ public class Projectile : MonoBehaviour
             SetSpriteRenderer(GetComponent<SpriteRenderer>());
         }
 
-        //SetLifeSpan(LifeSpan);
+        startPosition = this.transform.position;
     }
 
     public void UpdateVisuals()
@@ -95,5 +100,19 @@ public class Projectile : MonoBehaviour
     void Update()
     {
 
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        onHit?.Invoke(this, new HitEventArgs
+        {
+            startPosition = startPosition,
+            hitPosition = collision.transform.position,
+            direction = direction * -1,
+            hitCollider = collision,
+            damage = -1,
+            projectileIndex = -1,
+            range = Vector3.Distance(startPosition,collision.transform.position)
+        });
     }
 }
