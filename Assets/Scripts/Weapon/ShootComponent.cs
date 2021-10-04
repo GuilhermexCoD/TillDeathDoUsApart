@@ -18,9 +18,16 @@ public class ShootComponent : MonoBehaviour
     private ProjectileData projectileData;
 
     public event EventHandler<OnShootEventArgs> onShoot;
+    public event EventHandler<HitEventArgs> onHit;
 
     private ParticleSystem muzzleParticle;
     private ParticleSystem flashParticle;
+
+    [SerializeField]
+    private bool isRaytraced;
+
+    [SerializeField]
+    private LayerMask hitLayer;
 
     private void Awake()
     {
@@ -30,14 +37,6 @@ public class ShootComponent : MonoBehaviour
 
     public void Shoot()
     {
-        var projectileGo = Instantiate<GameObject>(projectilePrefab, shotTransform.position, shotTransform.rotation);
-
-        var projectile = projectileGo.GetComponent<Projectile>();
-
-        projectile.SetVelocity(shotTransform.right, projectileData.startSpeed);
-        projectile.SetLifeSpan(projectileData.lifeSpan);
-        projectile.SetAsset(projectileData.visualProjectile, projectileData.color);
-
         Vector3 direction = shotTransform.right * projectileData.range;
         Vector3 targetPosition = (shotTransform.position + direction);
 
@@ -45,9 +44,9 @@ public class ShootComponent : MonoBehaviour
 
         CreateShootTracer(shotTransform.position, targetPosition, eulerZ - 90);
 
-        PlayParticle(projectileData.muzzleFlashParticle,ref muzzleParticle);
+        PlayParticle(projectileData.muzzleFlashParticle, ref muzzleParticle);
 
-        PlayParticle(projectileData.flashParticle,ref flashParticle);
+        PlayParticle(projectileData.flashParticle, ref flashParticle);
 
         CallOnShoot(new OnShootEventArgs
         {
@@ -58,6 +57,37 @@ public class ShootComponent : MonoBehaviour
             range = projectileData.range,
             projectileIndex = projectileData.GetId()
         });
+
+        if (isRaytraced)
+        {
+            var hit = Physics2D.Raycast(shotTransform.position, direction.normalized, projectileData.range, hitLayer);
+
+            Debug.DrawRay(shotTransform.position, direction.normalized * projectileData.range, Color.green, 10f);
+
+            if (hit.collider != null)
+            {
+                Debug.Log("Hit Something");
+                CallOnHit(shotTransform.position, hit.point, hit.normal.normalized, hit.collider);
+                Debug.DrawRay(hit.point, hit.normal.normalized * 2f, Color.red, 10f);
+            }
+        }
+        else
+        {
+            var projectileGo = Instantiate<GameObject>(projectilePrefab, shotTransform.position, shotTransform.rotation);
+
+            var projectile = projectileGo.GetComponent<Projectile>();
+
+            projectile.SetVelocity(shotTransform.right, projectileData.startSpeed);
+            projectile.SetLifeSpan(projectileData.lifeSpan);
+            projectile.SetAsset(projectileData.visualProjectile, projectileData.color);
+
+            projectile.onHit += OnProjectileHit;
+        }
+    }
+
+    private void OnProjectileHit(object sender, HitEventArgs e)
+    {
+        CallOnHit(e.startPosition, e.hitPosition, e.direction, e.hitCollider);
     }
 
     private ParticleSystem CreateParticle(GameObject prefab)
@@ -119,5 +149,24 @@ public class ShootComponent : MonoBehaviour
     private void CallOnShoot(OnShootEventArgs args)
     {
         onShoot?.Invoke(this, args);
+    }
+
+    private void CallOnHit(Vector3 start, Vector3 end, Vector3 direction, Collider2D collider)
+    {
+        CallOnHit(new HitEventArgs
+        {
+            startPosition = start,
+            hitPosition = end,
+            direction = direction,
+            hitCollider = collider,
+            damage = projectileData.damage,
+            range = Vector3.Distance(start, end),
+            projectileIndex = projectileData.GetId()
+        });
+    }
+
+    private void CallOnHit(HitEventArgs args)
+    {
+        onHit?.Invoke(this, args);
     }
 }

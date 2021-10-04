@@ -15,7 +15,6 @@ public class ProjectileData : ItemData
     public float lifeSpan;
 
     [Header("Visuals")]
-    public ParticleSystem hitEffect;
     public AudioClip shotSound;
 
     public Sprite visualProjectile;
@@ -23,6 +22,8 @@ public class ProjectileData : ItemData
     public Sprite round;
 
     public MeshParticleData shellParticleData;
+
+    public GameObject hitEffectPrefab;
 
     public GameObject muzzleFlashParticle;
     public GameObject flashParticle;

@@ -40,15 +40,17 @@ public class GameEventsHandler : MonoBehaviour
         onLevelGenerated?.Invoke(this, null);
     }
 
-
     public void SubcribeToShoot(ShootComponent shootComponent)
     {
         shootComponent.onShoot += OnShootEvent;
+        shootComponent.onHit += OnHitEvent;
+
     }
 
     public void UnSubscribeToShoot(ShootComponent shootComponent)
     {
         shootComponent.onShoot -= OnShootEvent;
+        shootComponent.onHit -= OnHitEvent;
     }
 
     private void OnShootEvent(object sender, OnShootEventArgs e)
@@ -67,6 +69,14 @@ public class GameEventsHandler : MonoBehaviour
         SoundManager.PlaySound(projectileData.shotSound);
 
         //AddForceFeedback(-e.direction, e.damage * feedbackTest);
+    }
+    private void OnHitEvent(object sender, HitEventArgs e)
+    {
+        Util.CreateWorldTextPopup($"Hit : {e.hitCollider.gameObject.name} ", e.hitPosition, 20, Vector3.one * 0.2f, 2, 1);
+
+        var projectileData = GetProjectileDataByIndex(e.projectileIndex);
+        var z = Util.GetAngleFromVectorFloat(e.direction) + 180f;
+        Instantiate<GameObject>(projectileData.hitEffectPrefab, e.hitPosition, Quaternion.Euler(0,0,z));
     }
 
     private void AddForceFeedback(Vector3 direction, float forceMagnitude)

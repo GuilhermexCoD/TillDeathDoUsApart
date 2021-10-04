@@ -97,6 +97,10 @@ MonoBehaviour:
   shotTransform: {fileID: 9070832529959077309}
   shellEjection: {fileID: 5309624273484374090}
   projectileData: {fileID: 11400000, guid: 26505c101db9dc44eb3773a28efca7f1, type: 2}
+  isRaytraced: 1
+  hitLayer:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!58 &7904725444322179072
 CircleCollider2D:
   m_ObjectHideFlags: 0

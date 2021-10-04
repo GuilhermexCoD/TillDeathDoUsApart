@@ -12,12 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5328bbe7dd8b784091a552e72d6d724, type: 3}
   m_Name: 9mmProjectileData
   m_EditorClassIdentifier: 
-  id: 0
   name: 9mm
   icon: {fileID: 2800000, guid: 9a000c97b6cd34b449e59665baf61c4c, type: 3}
   spriteAsset: {fileID: 21300000, guid: ff46c9621d92cc140840c29234fba31b, type: 3}
   value: 0
   stackable: 1
+  quantity: 1
+  offSetPosition: {x: 0, y: 0, z: 0}
+  handR_Transform: {x: 0, y: 0, z: 0}
+  handR_Rotation: {x: 0, y: 0, z: 0}
+  handL_Transform: {x: 0, y: 0, z: 0}
+  handL_Rotation: {x: 0, y: 0, z: 0}
   startSpeed: 10
   damage: 30
   range: 5
@@ -25,12 +30,12 @@ MonoBehaviour:
     DamageImpulse: 10
     CausedByWorld: 0
   lifeSpan: 10
-  hitEffect: {fileID: 0}
   shotSound: {fileID: 8300000, guid: ae65be1a7df10f1478a1fcea0ac53f30, type: 3}
   visualProjectile: {fileID: 21300000, guid: ff46c9621d92cc140840c29234fba31b, type: 3}
   color: {r: 0.99381757, g: 1, b: 0, a: 1}
   round: {fileID: 21300000, guid: 61c297393d004eb4aa1de29e37c3e011, type: 3}
   shellParticleData: {fileID: 11400000, guid: b4892fa90862e6646b320bcaeb31f3f5, type: 2}
+  hitEffectPrefab: {fileID: 2157772107162517810, guid: 0ca813fde1772004fb775a2edc526d38, type: 3}
   muzzleFlashParticle: {fileID: 6335153301942870110, guid: 52500f00fc7fdba4db076dacdfc95008, type: 3}
   flashParticle: {fileID: 6417226581635197010, guid: 8a4b378578eea53429ae8b9866361326, type: 3}
   tracerTime: 1
