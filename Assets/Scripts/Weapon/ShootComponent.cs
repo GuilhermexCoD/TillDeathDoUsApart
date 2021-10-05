@@ -38,11 +38,8 @@ public class ShootComponent : MonoBehaviour
     public void Shoot()
     {
         Vector3 direction = shotTransform.right * projectileData.range;
-        Vector3 targetPosition = (shotTransform.position + direction);
 
         float eulerZ = Util.GetAngleFromVectorFloat(direction);
-
-        CreateShootTracer(shotTransform.position, targetPosition, eulerZ - 90);
 
         PlayParticle(projectileData.muzzleFlashParticle, ref muzzleParticle);
 
@@ -64,12 +61,18 @@ public class ShootComponent : MonoBehaviour
 
             Debug.DrawRay(shotTransform.position, direction.normalized * projectileData.range, Color.green, 10f);
 
+            Vector3 targetPosition = (shotTransform.position + direction);
+
             if (hit.collider != null)
             {
-                Debug.Log("Hit Something");
-                CallOnHit(shotTransform.position, hit.point, hit.normal.normalized, hit.collider);
+                targetPosition = hit.point;
+
+                CallOnHit(shotTransform.position, targetPosition, hit.normal.normalized, hit.collider);
+
                 Debug.DrawRay(hit.point, hit.normal.normalized * 2f, Color.red, 10f);
             }
+
+            CreateShootTracer(shotTransform.position, targetPosition, eulerZ - 90);
         }
         else
         {

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,6 +17,8 @@ public class Movement : MonoBehaviour
 
     [SerializeField]
     private bool blockMovement;
+
+    public event EventHandler<Vector2> onSpeedChanged;
 
     //Chamado uma unica vez e antes do Start
     private void Awake()
@@ -41,6 +44,7 @@ public class Movement : MonoBehaviour
     private void FixedUpdate()
     {
         Move();
+        onSpeedChanged?.Invoke(this, goRigidbody.velocity);
     }
 
     void ProcessInputs()
@@ -59,6 +63,8 @@ public class Movement : MonoBehaviour
             goRigidbody.drag = 1;
         }
     }
+
+
 
     public void AddForce(Vector2 force, ForceMode2D mode)
     {

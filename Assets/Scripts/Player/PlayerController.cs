@@ -1,19 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
 
-    [InspectorName("Dash")]
+    [Header("Dash")]
     public float dashCameraShakeMultiplier = 2;
     public float dashCameraShakeTime = 0.2f;
     private DashComponent dash;
 
+    [Header("Dash")]
+    private Movement movement;
+
+    [Header("Shot")]
     public float shootCameraShakeTime = 0.1f;
     public float shootShakeMultiplier = 2;
 
+
+    [Header("Actions")]
     [SerializeField]
     private string pickUpActionName = "PickUp";
     [SerializeField]
@@ -21,6 +28,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private string reloadActionName = "Reload";
 
+    [Header("Weapon")]
     [SerializeField]
     private FlipAccordingRotation flipWeapon;
     [SerializeField]
@@ -28,7 +36,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private Transform offSetTransform;
 
-
+    [Header("Inventory")]
     [SerializeField]
     private IInteractable interactableObject;
     private InventoryManager inventoryManager = new InventoryManager();
@@ -36,9 +44,19 @@ public class PlayerController : MonoBehaviour
 
     public float lastX;
 
-    public Transform handRTransform;
-    public Transform handLTransform;
+    [Header("Hands")]
+    [SerializeField]
+    private Transform handRTransform;
+    [SerializeField]
+    private OverrideTransform handROverride;
+    [SerializeField]
+    private Transform handLTransform;
+    [SerializeField]
+    private OverrideTransform handLOverride;
 
+    [Header("Animation")]
+    [SerializeField]
+    private Animator animator;
 
     // Start is called before the first frame update
     void Awake()
@@ -49,6 +67,18 @@ public class PlayerController : MonoBehaviour
         }
 
         dash.Subscribe(OnPlayerDashed);
+
+        if (movement == null)
+        {
+            movement = GetComponent<Movement>();
+        }
+
+        movement.onSpeedChanged += OnSpeedChanged;
+    }
+
+    private void OnSpeedChanged(object sender, Vector2 e)
+    {
+        animator.SetFloat("Speed", e.magnitude);
     }
 
     private void OnPlayerDashed(object sender, OnDashEventArgs args)
@@ -93,7 +123,7 @@ public class PlayerController : MonoBehaviour
             var desiredEquipIndex = Util.ModLoop(equipedItemIndex + (int)Mathf.Sign(x), inventoryManager.GetItemsCount());
             Util.CreateWorldTextPopup($"Equip id:{equipedItemIndex}", this.transform.position, 20, Vector3.one * 0.2f, 2, 1);
             EquipItem(desiredEquipIndex);
-            
+
         }
 
         if (Input.GetButtonDown(attackActionName) && IsWeaponEquiped())
@@ -157,6 +187,7 @@ public class PlayerController : MonoBehaviour
         if (equipedItemIndex != index)
         {
             var lastInventoryItem = inventoryManager.ElementAt(equipedItemIndex);
+
             if (lastInventoryItem != null)
                 lastInventoryItem.interactable.SetActive(false);
 
@@ -172,7 +203,7 @@ public class PlayerController : MonoBehaviour
 
                 offSetTransform.localPosition = interactable.GetData<ItemData>().offSetPosition;
 
-                UpdateHandPositionAndRotation(interactable.GetData<ItemData>());
+                UpdateHandPositionAndRotation(interactable.GetData<ItemData>(), 1);
 
                 //TODO change logic for equipping weapon
                 if (interactable.GetType().BaseType == typeof(Weapon))
@@ -188,13 +219,15 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void UpdateHandPositionAndRotation(ItemData data)
+    private void UpdateHandPositionAndRotation(ItemData data, float weight)
     {
         handRTransform.localPosition = data.handR_Transform;
         handRTransform.localEulerAngles = data.handR_Rotation;
+        handROverride.weight = weight;
 
         handLTransform.localPosition = data.handL_Transform;
         handLTransform.localEulerAngles = data.handL_Rotation;
+        handLOverride.weight = weight;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

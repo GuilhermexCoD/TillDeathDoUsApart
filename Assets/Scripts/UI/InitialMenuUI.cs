@@ -11,7 +11,7 @@ public class InitialMenuUI : MonoBehaviour
     private Transform canvasTransform;
 
     // Start is called before the first frame update
-    void Awake()
+    void Start()
     {
         for (int i = 0; i < canvasTransform.childCount; i++)
         {
