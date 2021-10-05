@@ -72,8 +72,6 @@ public class GameEventsHandler : MonoBehaviour
     }
     private void OnHitEvent(object sender, HitEventArgs e)
     {
-        Util.CreateWorldTextPopup($"Hit : {e.hitCollider.gameObject.name} ", e.hitPosition, 20, Vector3.one * 0.2f, 2, 1);
-
         var projectileData = GetProjectileDataByIndex(e.projectileIndex);
         var z = Util.GetAngleFromVectorFloat(e.direction) + 180f;
         Instantiate<GameObject>(projectileData.hitEffectPrefab, e.hitPosition, Quaternion.Euler(0,0,z));

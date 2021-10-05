@@ -71,6 +71,8 @@ public class ShellParticleSystem : MonoBehaviour
     {
         private MeshParticleSystem meshParticleSystem;
 
+        private int hitLayer = 64; //2^ layerIndex = 2^6
+
         private Vector3 position;
         private Vector3 direction;
         private float rotation;
@@ -101,7 +103,26 @@ public class ShellParticleSystem : MonoBehaviour
 
         public void Update()
         {
-            position += direction * Time.deltaTime * speed;
+            var startPosition = new Vector3(position.x, position.y, position.z);
+
+            var desiredPosition = startPosition + (direction.normalized * Time.deltaTime * speed);
+
+            var distance = Vector3.Distance(startPosition, desiredPosition);
+
+            Debug.DrawRay(startPosition, direction.normalized * distance, Color.green, 1f);
+
+            var hit = Physics2D.Raycast(startPosition, direction, distance, hitLayer);
+
+            if (hit.collider != null)
+            {
+                direction = hit.normal;
+                position = (Vector3)hit.point + (direction * distance);
+            }
+            else
+            {
+                position = desiredPosition;
+            }
+
             rotation += 360f * Time.deltaTime * speed;
 
             speed -= speed * slowDownFactor * Time.deltaTime;
