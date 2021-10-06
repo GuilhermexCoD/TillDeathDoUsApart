@@ -106,13 +106,18 @@ public class Projectile : MonoBehaviour
     {
         onHit?.Invoke(this, new HitEventArgs
         {
-            startPosition = startPosition,
-            hitPosition = collision.transform.position,
-            direction = direction * -1,
-            hitCollider = collision,
+            hitResult = new HitResult
+            { 
+                blockingHit = false,
+                traceStart = startPosition,
+                traceEnd = collision.transform.position,
+                hitPosition = collision.transform.position,
+                collider = collision,
+                normal = direction * -1,
+                direction = direction
+            },
             damage = -1,
             projectileIndex = -1,
-            range = Vector3.Distance(startPosition,collision.transform.position)
         });
     }
 }

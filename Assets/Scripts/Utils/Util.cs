@@ -65,12 +65,6 @@ public static class Util
         return n;
     }
 
-    // Create a Text Popup in the World, no parent
-    public static void CreateWorldTextPopup(string text, Vector3 localPosition, int fontSize, Vector3 localScale, float speed, float popupTime = 1f)
-    {
-        CreateWorldTextPopup(null, text, localPosition, fontSize, localScale, Color.white, localPosition + new Vector3(0, speed), popupTime);
-    }
-
     // Create Text in the World
     public static TextMesh CreateWorldText(Transform parent, string text, Vector3 localPosition, int fontSize, Color color, TextAnchor textAnchor, TextAlignment textAlignment, int sortingOrder)
     {
@@ -109,5 +103,16 @@ public static class Util
                 return false;
             }
         }, "WorldTextPopup");
+    }
+
+    // Create a Text Popup in the World, no parent
+    public static void CreateWorldTextPopup(string text, Vector3 localPosition, int fontSize, Vector3 localScale, float speed, float popupTime = 1f)
+    {
+        CreateWorldTextPopup(null, text, localPosition, fontSize, localScale, Color.white, localPosition + new Vector3(0, speed), popupTime);
+    }
+
+    public static void CreateWorldTextPopup(string text, Vector3 localPosition, int fontSize, Vector3 localScale, Color color, float speed, float popupTime = 1f)
+    {
+        CreateWorldTextPopup(null, text, localPosition, fontSize, localScale, color, localPosition + new Vector3(0, speed), popupTime);
     }
 }

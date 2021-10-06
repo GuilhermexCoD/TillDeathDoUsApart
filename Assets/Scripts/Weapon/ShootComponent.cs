@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class ShootComponent : MonoBehaviour
 {
+    private GameObject instigator;
+
     [SerializeField]
     private GameObject projectilePrefab;
 
@@ -59,20 +61,35 @@ public class ShootComponent : MonoBehaviour
         {
             var hit = Physics2D.Raycast(shotTransform.position, direction.normalized, projectileData.range, hitLayer);
 
+            var traceEnd = shotTransform.position + (direction.normalized * projectileData.range);
+
             Debug.DrawRay(shotTransform.position, direction.normalized * projectileData.range, Color.green, 10f);
 
-            Vector3 targetPosition = (shotTransform.position + direction);
+            Vector3 hitPosition = (shotTransform.position + direction);
 
             if (hit.collider != null)
             {
-                targetPosition = hit.point;
+                hitPosition = hit.point;
 
-                CallOnHit(shotTransform.position, targetPosition, hit.normal.normalized, hit.collider);
+                var hitInfo = new HitResult
+                {
+                    traceStart = shotTransform.position,
+                    traceEnd = traceEnd,
+                    hitPosition = hitPosition,
+                    direction = direction.normalized,
+                    normal = hit.normal.normalized,
+                    collider = hit.collider,
+                    blockingHit = false
+                };
+
+                CallOnHit(hitInfo);
 
                 Debug.DrawRay(hit.point, hit.normal.normalized * 2f, Color.red, 10f);
+
+                Gameplay.ApplyPointDamage(hit.collider.GetComponent<Actor>(), GetDamage(), hitInfo, GetInstigator(), GetDamageType());
             }
 
-            CreateShootTracer(shotTransform.position, targetPosition, eulerZ - 90);
+            CreateShootTracer(shotTransform.position, hitPosition, eulerZ - 90);
         }
         else
         {
@@ -88,9 +105,24 @@ public class ShootComponent : MonoBehaviour
         }
     }
 
+    private DamageType GetDamageType()
+    {
+        return projectileData.damageType;
+    }
+
     private void OnProjectileHit(object sender, HitEventArgs e)
     {
-        CallOnHit(e.startPosition, e.hitPosition, e.direction, e.hitCollider);
+        CallOnHit(e.hitResult);
+    }
+
+    private float GetDamage()
+    {
+        return projectileData.damage;
+    }
+
+    private Actor GetInstigator()
+    {
+        return this.transform.root.GetComponent<Actor>();
     }
 
     private ParticleSystem CreateParticle(GameObject prefab)
@@ -154,18 +186,39 @@ public class ShootComponent : MonoBehaviour
         onShoot?.Invoke(this, args);
     }
 
-    private void CallOnHit(Vector3 start, Vector3 end, Vector3 direction, Collider2D collider)
+    private void CallOnHit(HitResult hitResult)
     {
         CallOnHit(new HitEventArgs
         {
-            startPosition = start,
-            hitPosition = end,
-            direction = direction,
-            hitCollider = collider,
+            hitResult = new HitResult
+            {
+                blockingHit = hitResult.blockingHit,
+                traceStart = hitResult.traceStart,
+                traceEnd = hitResult.traceEnd,
+                hitPosition = hitResult.hitPosition,
+                collider = hitResult.collider,
+                normal = hitResult.normal,
+                direction = hitResult.direction
+            },
             damage = projectileData.damage,
-            range = Vector3.Distance(start, end),
-            projectileIndex = projectileData.GetId()
+            projectileIndex = projectileData.GetId(),
         });
+    }
+
+    private void CallOnHit(Vector3 start, Vector3 end, Vector3 hitPosition, Vector3 direction, Vector3 normal, Collider2D collider)
+    {
+        var hitResult = new HitResult
+        {
+            blockingHit = false,
+            traceStart = start,
+            traceEnd = end,
+            hitPosition = hitPosition,
+            collider = collider,
+            normal = normal,
+            direction = direction
+        };
+
+        CallOnHit(hitResult);
     }
 
     private void CallOnHit(HitEventArgs args)
