@@ -10,7 +10,7 @@ public class ProjectileData : ItemData
     public float startSpeed;
     public float damage;
     public float range;
-    public DamageType type;
+    public DamageType damageType;
 
     public float lifeSpan;
 

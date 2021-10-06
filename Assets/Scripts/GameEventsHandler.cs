@@ -73,8 +73,8 @@ public class GameEventsHandler : MonoBehaviour
     private void OnHitEvent(object sender, HitEventArgs e)
     {
         var projectileData = GetProjectileDataByIndex(e.projectileIndex);
-        var z = Util.GetAngleFromVectorFloat(e.direction) + 180f;
-        Instantiate<GameObject>(projectileData.hitEffectPrefab, e.hitPosition, Quaternion.Euler(0,0,z));
+        var z = Util.GetAngleFromVectorFloat(e.hitResult.normal) + 180f;
+        Instantiate<GameObject>(projectileData.hitEffectPrefab, e.hitResult.hitPosition, Quaternion.Euler(0,0,z));
     }
 
     private void AddForceFeedback(Vector3 direction, float forceMagnitude)
