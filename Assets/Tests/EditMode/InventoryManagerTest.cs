@@ -9,7 +9,7 @@ public class InventoryManagerTest
     public void IfInventoryManagerWhenAddingNewItemThenQuantityOne()
     {
         //Arrange
-        int id = 0;
+        string id = "0";
         var inventoryManager = new InventoryManager();
         var interactableItem = CreateInteractable(id, true);
 
@@ -18,8 +18,8 @@ public class InventoryManagerTest
 
         //Assert
         Assert.IsTrue(inventoryManager.GetItemsCount() == 1);
-        Assert.IsTrue(inventoryManager.FindItems(id).Count() == 1);
-        Assert.IsTrue(inventoryManager.FindItem(id).quantity == 1);
+        Assert.IsTrue(inventoryManager.FindItems(id.GetHashCode()).Count() == 1);
+        Assert.IsTrue(inventoryManager.FindItem(id.GetHashCode()).quantity == 1);
 
     }
 
@@ -28,7 +28,7 @@ public class InventoryManagerTest
     public void IfInventoryManagerWhenAddingTwoStackablesThenQuantityOne()
     {
         //Arrange
-        int id = 0;
+        string id = "0";
         var inventoryManager = new InventoryManager();
         var interactableItemA = CreateInteractable(id, true);
         var interactableItemB = CreateInteractable(id, true);
@@ -39,15 +39,15 @@ public class InventoryManagerTest
 
         //Assert
         Assert.IsTrue(inventoryManager.GetItemsCount() == 1);
-        Assert.IsTrue(inventoryManager.FindItems(id).Count() == 1);
-        Assert.IsTrue(inventoryManager.FindItem(id).quantity == 2);
+        Assert.IsTrue(inventoryManager.FindItems(id.GetHashCode()).Count() == 1);
+        Assert.IsTrue(inventoryManager.FindItem(id.GetHashCode()).quantity == 2);
     }
 
     [Test]
     public void IfInventoryManagerWhenAddingTwoNonStackablesThenQuantityTwo()
     {
         //Arrange
-        int id = 0;
+        string id = "0";
         var inventoryManager = new InventoryManager();
         var interactableItemA = CreateInteractable(id, false);
         var interactableItemB = CreateInteractable(id, false);
@@ -58,18 +58,18 @@ public class InventoryManagerTest
 
         //Assert
         Assert.IsTrue(inventoryManager.GetItemsCount() == 2);
-        Assert.IsTrue(inventoryManager.FindItems(id).Count() == 2);
-        Assert.IsTrue(inventoryManager.FindItem(id).quantity == 1);
+        Assert.IsTrue(inventoryManager.FindItems(id.GetHashCode()).Count() == 2);
+        Assert.IsTrue(inventoryManager.FindItem(id.GetHashCode()).quantity == 1);
     }
 
     [Test]
     public void IfInventoryManagerWhenAddingThreeDifferentItensThenStackCorrectly()
     {
         //Arrange
-        int id1 = 0;
+        string id1 = "0";
         bool stackable1 = true;
 
-        int id2 = 1;
+        string id2 = "1";
         bool stackable2 = false;
 
         var inventoryManager = new InventoryManager();
@@ -86,21 +86,21 @@ public class InventoryManagerTest
 
         //Assert
         Assert.IsTrue(inventoryManager.GetItemsCount() == 2);
-        Assert.IsTrue(inventoryManager.FindItems(id1).Count() == 1);
-        Assert.IsTrue(inventoryManager.FindItem(id1).quantity == 2);
+        Assert.IsTrue(inventoryManager.FindItems(id1.GetHashCode()).Count() == 1);
+        Assert.IsTrue(inventoryManager.FindItem(id1.GetHashCode()).quantity == 2);
 
-        Assert.IsTrue(inventoryManager.FindItems(id2).Count() == 1);
-        Assert.IsTrue(inventoryManager.FindItem(id2).quantity == 1);
+        Assert.IsTrue(inventoryManager.FindItems(id2.GetHashCode()).Count() == 1);
+        Assert.IsTrue(inventoryManager.FindItem(id2.GetHashCode()).quantity == 1);
     }
 
     [Test]
     public void IfInventoryManagerWhenRemoveAllThenRemoveCorrectly()
     {
         //Arrange
-        int id1 = 0;
+        string id1 = "0";
         bool stackable1 = true;
 
-        int id2 = 1;
+        string id2 = "1";
         bool stackable2 = false;
 
         var inventoryManager = new InventoryManager();
@@ -117,23 +117,23 @@ public class InventoryManagerTest
         inventoryManager.AddItem(interactableItemC);
         inventoryManager.AddItem(interactableItemD);
 
-        inventoryManager.RemoveItem(id1);
-        inventoryManager.RemoveAllItem(id2);
+        inventoryManager.RemoveItem(id1.GetHashCode());
+        inventoryManager.RemoveAllItem(id2.GetHashCode());
 
         //Assert
         Assert.IsTrue(inventoryManager.GetItemsCount() == 0);
-        Assert.IsTrue(inventoryManager.FindItems(id1).Count() == 0);
-        Assert.IsNull(inventoryManager.FindItem(id1));
+        Assert.IsTrue(inventoryManager.FindItems(id1.GetHashCode()).Count() == 0);
+        Assert.IsNull(inventoryManager.FindItem(id1.GetHashCode()));
 
-        Assert.IsTrue(inventoryManager.FindItems(id2).Count() == 0);
-        Assert.IsNull(inventoryManager.FindItem(id2));
+        Assert.IsTrue(inventoryManager.FindItems(id2.GetHashCode()).Count() == 0);
+        Assert.IsNull(inventoryManager.FindItem(id2.GetHashCode()));
     }
 
     [Test]
     public void IfInventoryManagerWhenTryConsumeLessThenTotalThenRemoveCorrectly()
     {
         //Arrange
-        int id1 = 0;
+        string id1 = "0";
         bool stackable1 = true;
 
         var inventoryManager = new InventoryManager();
@@ -149,11 +149,11 @@ public class InventoryManagerTest
         inventoryManager.AddItem(interactableItemC);
         inventoryManager.AddItem(interactableItemD);
 
-        var result = inventoryManager.TryConsumeItem(id1, 3, out int notConsumed);
+        var result = inventoryManager.TryConsumeItem(id1.GetHashCode(), 3, out int notConsumed);
 
         //Assert
         Assert.IsTrue(inventoryManager.GetItemsCount() == 1);
-        Assert.IsTrue(inventoryManager.FindItem(id1).GetQuantity() == 1);
+        Assert.IsTrue(inventoryManager.FindItem(id1.GetHashCode()).GetQuantity() == 1);
         Assert.IsTrue(result);
         Assert.IsTrue(notConsumed == 0);
     }
@@ -162,7 +162,7 @@ public class InventoryManagerTest
     public void IfInventoryManagerWhenTryConsumeExactlyAmountThenRemoveCorrectly()
     {
         //Arrange
-        int id1 = 0;
+        string id1 = "0";
         bool stackable1 = true;
 
         var inventoryManager = new InventoryManager();
@@ -178,11 +178,11 @@ public class InventoryManagerTest
         inventoryManager.AddItem(interactableItemD);
 
         //Act
-        var result = inventoryManager.TryConsumeItem(id1, 4, out int notConsumed);
+        var result = inventoryManager.TryConsumeItem(id1.GetHashCode(), 4, out int notConsumed);
 
         //Assert
         Assert.IsTrue(inventoryManager.GetItemsCount() == 0);
-        Assert.IsNull(inventoryManager.FindItem(id1));
+        Assert.IsNull(inventoryManager.FindItem(id1.GetHashCode()));
         Assert.IsTrue(result);
         Assert.IsTrue(notConsumed == 0);
     }
@@ -191,7 +191,7 @@ public class InventoryManagerTest
     public void IfInventoryManagerWhenTryConsumeMoreThenTotalForceConsumeFalseThenDontRemove()
     {
         //Arrange
-        int id1 = 0;
+        string id1 = "0";
         bool stackable1 = true;
 
         var inventoryManager = new InventoryManager();
@@ -207,11 +207,11 @@ public class InventoryManagerTest
         inventoryManager.AddItem(interactableItemD);
 
         //Act
-        var result = inventoryManager.TryConsumeItem(id1, 5, out int notConsumed);
+        var result = inventoryManager.TryConsumeItem(id1.GetHashCode(), 5, out int notConsumed);
 
         //Assert
         Assert.IsTrue(inventoryManager.GetItemsCount() == 1);
-        Assert.IsTrue(inventoryManager.FindItem(id1).GetQuantity() == 4);
+        Assert.IsTrue(inventoryManager.FindItem(id1.GetHashCode()).GetQuantity() == 4);
         Assert.IsFalse(result);
         Assert.IsTrue(notConsumed == 5);
     }
@@ -220,7 +220,7 @@ public class InventoryManagerTest
     public void IfInventoryManagerWhenTryConsumeMoreThenTotalForceConsumeTrueThenRemove()
     {
         //Arrange
-        int id1 = 0;
+        string id1 = "0";
         bool stackable1 = true;
 
         var inventoryManager = new InventoryManager();
@@ -236,20 +236,20 @@ public class InventoryManagerTest
         inventoryManager.AddItem(interactableItemD);
 
         //Act
-        var result = inventoryManager.TryConsumeItem(id1, 5, out int notConsumed, true);
+        var result = inventoryManager.TryConsumeItem(id1.GetHashCode(), 5, out int notConsumed, true);
 
         //Assert
         Assert.IsTrue(inventoryManager.GetItemsCount() == 0);
-        Assert.IsNull(inventoryManager.FindItem(id1));
+        Assert.IsNull(inventoryManager.FindItem(id1.GetHashCode()));
         Assert.IsTrue(result);
         Assert.IsTrue(notConsumed == 1);
     }
-    private static Interactable CreateInteractable(int id, bool stackable)
+    private static Interactable CreateInteractable(string id, bool stackable)
     {
         var interactableItem = new Interactable();
 
         var itemData = ScriptableObject.CreateInstance<ItemData>();
-        //itemData.id = id;
+        itemData.name = id;
         itemData.stackable = stackable;
         interactableItem.SetData<ItemData>(itemData);
 
