@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
@@ -27,6 +28,11 @@ public static class Util
         result = b1 + (value - a1) * (b2 - b1) / (a2 - a1);
 
         return result;
+    }
+
+    public static int GetActualPage(int index, int clusterSize)
+    {
+        return Math.Abs(index / clusterSize) + 1;
     }
 
     public static float ModLoop(float value, float mod)

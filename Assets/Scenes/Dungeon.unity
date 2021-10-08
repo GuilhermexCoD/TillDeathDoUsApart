@@ -31983,6 +31983,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 2166446234662471621, guid: ce0af79053ca9ea47a3367d65ad11e1a, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 01daeba77375c5544a9a9854be02b752, type: 3}
+    - target: {fileID: 3104228896679504430, guid: ce0af79053ca9ea47a3367d65ad11e1a, type: 3}
+      propertyPath: head
+      value: 
+      objectReference: {fileID: 11400000, guid: 1c13642f5387ea64b97492f385e32e83, type: 2}
+    - target: {fileID: 3104228896679504430, guid: ce0af79053ca9ea47a3367d65ad11e1a, type: 3}
+      propertyPath: torso
+      value: 
+      objectReference: {fileID: 11400000, guid: fa718b97e6002104aa2a76da7227ab01, type: 2}
     - target: {fileID: 3729014706177872671, guid: ce0af79053ca9ea47a3367d65ad11e1a, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -32027,5 +32039,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9170169854417848721, guid: ce0af79053ca9ea47a3367d65ad11e1a, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: d3205247cef588e4384e8a28f67d67b3, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ce0af79053ca9ea47a3367d65ad11e1a, type: 3}
