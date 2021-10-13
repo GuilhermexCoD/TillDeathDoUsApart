@@ -6,7 +6,7 @@ using System;
 
 public class CustomizationMenu : MonoBehaviour
 {
-   public PlayerVisualManager visualManager;
+    public PlayerVisualManager visualManager;
 
     public List<BodyData> heads;
     public List<BodyData> torsos;
@@ -14,40 +14,46 @@ public class CustomizationMenu : MonoBehaviour
     public List<BodyData> feet;
     public int currentHead;
     public int currentTorso;
-    public int currentHand; 
+    public int currentHand;
     public int currentFoot;
-    private int incr=0;
+    private int incr = 0;
 
-    public void carregarCena(string nome){
-         SceneManager.LoadScene(nome);
+    private ResourceManager<EBodyPartType, BodyData> resourceManager;
+
+    private void Awake()
+    {
+        resourceManager = new ResourceManager<EBodyPartType, BodyData>("Customization");
+    }
+
+    public void CarregarCena(string nome)
+    {
+        SceneManager.LoadScene(nome);
     }
 
     public void SetId(int id)
-    {      
+    {
         int currentOption;
-        List<BodyData> tmp = heads;
         EBodyPartType type = (EBodyPartType)id;
-        switch(type){
+        List<BodyData> tmp = resourceManager.GetAssets((int)type);
+
+        switch (type)
+        {
             case EBodyPartType.Head:
-                tmp = heads;
-                currentHead = (int)Util.ModLoop((float)this.currentHead+incr, (float)tmp.Count);
+                currentHead = (int)Util.ModLoop((float)this.currentHead + incr, (float)tmp.Count);
                 currentOption = currentHead;
                 break;
             case EBodyPartType.Torso:
-                tmp = torsos;
-                currentTorso = (int)Util.ModLoop((float)this.currentTorso+incr, (float)tmp.Count);
+                currentTorso = (int)Util.ModLoop((float)this.currentTorso + incr, (float)tmp.Count);
                 currentOption = currentTorso;
                 break;
             case EBodyPartType.Hand:
-                tmp = hands;
-                currentHand = (int)Util.ModLoop((float)this.currentHand+incr, (float)tmp.Count);
+                currentHand = (int)Util.ModLoop((float)this.currentHand + incr, (float)tmp.Count);
                 currentOption = currentHand;
                 break;
-            case EBodyPartType.Foot: 
-                tmp = feet;
-                currentFoot = (int)Util.ModLoop((float)this.currentFoot+incr, (float)tmp.Count);
+            case EBodyPartType.Foot:
+                currentFoot = (int)Util.ModLoop((float)this.currentFoot + incr, (float)tmp.Count);
                 currentOption = currentFoot;
-                break;   
+                break;
             default:
                 currentOption = 0;
                 break;
@@ -57,11 +63,13 @@ public class CustomizationMenu : MonoBehaviour
         return;
     }
 
-    public void setIncr(int x){
-        this.incr=x;
+    public void SetIncr(int x)
+    {
+        this.incr = x;
     }
 
-    public void setSelector(int x){
+    public void SetSelector(int x)
+    {
         GameObject.Find("ColorPicker").GetComponent<ColorPicker>().option = x;
     }
 }
