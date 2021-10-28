@@ -4369,11 +4369,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   visualManager: {fileID: 1741103254}
-  headParts:
-  - {fileID: 11400000, guid: c883ee7cc774d44479f3eb4c3bffcf36, type: 2}
-  - {fileID: 11400000, guid: 7204d5b44e867c94b88b7c4ac5f81b64, type: 2}
-  - {fileID: 11400000, guid: 7204d5b44e867c94b88b7c4ac5f81b64, type: 2}
-  id: 0
+  heads: []
+  torsos: []
+  hands: []
+  feet: []
+  currentHead: 0
+  currentTorso: 0
+  currentHand: 0
+  currentFoot: 0
 --- !u!4 &1137424929
 Transform:
   m_ObjectHideFlags: 0
@@ -6332,7 +6335,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aea9552eabb637743b4d8f4d7f68a91a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clip: {fileID: 8300000, guid: 5d72fa2f3ad55d74ea6dc53b406e944c, type: 3}
+  clip: {fileID: 8300000, guid: 17559e1efce61744da92ac295108ff41, type: 3}
 --- !u!4 &1804668479
 Transform:
   m_ObjectHideFlags: 0

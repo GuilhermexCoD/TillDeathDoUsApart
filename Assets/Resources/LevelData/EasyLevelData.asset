@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: EasyLevelData
   m_EditorClassIdentifier: 
   Start: {x: 0, y: 0}
-  maxQuantityOfRooms: 50
   difficulty: 0
+  maxQuantityOfRooms: 1
   themes: 01000000
   maxQuantityOfEnemies: 50
   useBSP: 1

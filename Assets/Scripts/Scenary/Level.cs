@@ -16,7 +16,6 @@ public class Level : MonoBehaviour
 
     #endregion
 
-
     public static float offSet = 0.5f;
     public static Level current;
 

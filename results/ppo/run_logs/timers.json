@@ -1,0 +1,47 @@
+{
+    "name": "root",
+    "metadata": {
+        "timer_format_version": "0.1.0",
+        "start_time_seconds": "1635295423",
+        "python_version": "3.7.9 (tags/v3.7.9:13c94747c7, Aug 17 2020, 18:58:18) [MSC v.1900 64 bit (AMD64)]",
+        "command_line_arguments": "C:\\Users\\guilh\\OneDrive\\GitHub\\Unity\\TillDeathDoUsApart\\venv\\Scripts\\mlagents-learn --force",
+        "mlagents_version": "0.22.0",
+        "mlagents_envs_version": "0.22.0",
+        "communication_protocol_version": "1.2.0",
+        "pytorch_version": "1.7.0+cu110",
+        "numpy_version": "1.18.5",
+        "end_time_seconds": "1635295473"
+    },
+    "total": 49.886325400000004,
+    "count": 1,
+    "self": 0.3412249000000003,
+    "children": {
+        "run_training.setup": {
+            "total": 0.012351699999999965,
+            "count": 1,
+            "self": 0.012351699999999965
+        },
+        "TrainerController.start_learning": {
+            "total": 49.5327488,
+            "count": 1,
+            "self": 0.0006742999999929111,
+            "children": {
+                "TrainerController._reset_env": {
+                    "total": 49.53137520000001,
+                    "count": 1,
+                    "self": 49.53137520000001
+                },
+                "trainer_threads": {
+                    "total": 1.900000000887303e-06,
+                    "count": 1,
+                    "self": 1.900000000887303e-06
+                },
+                "TrainerController._save_models": {
+                    "total": 0.0006973999999999592,
+                    "count": 1,
+                    "self": 0.0006973999999999592
+                }
+            }
+        }
+    }
+}

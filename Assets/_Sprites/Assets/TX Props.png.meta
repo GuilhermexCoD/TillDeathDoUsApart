@@ -106,16 +106,16 @@ TextureImporter:
     second: TX Props_33
   - first:
       213: 912855357614513927
-    second: TX Props_34
+    second: Bottom_Light
   - first:
       213: -6568481390458680246
-    second: TX Props_35
+    second: Left_Light
   - first:
       213: 7388503698291035636
-    second: TX Props_36
+    second: Top_Light
   - first:
       213: -3526906408505785437
-    second: TX Props_37
+    second: Altar
   - first:
       213: -137612848341414727
     second: Jar_2
@@ -161,6 +161,9 @@ TextureImporter:
   - first:
       213: 1435152747246214799
     second: TX Props_52
+  - first:
+      213: -6675287661300316775
+    second: Right_Light
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -976,7 +979,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TX Props_34
+      name: Bottom_Light
       rect:
         serializedVersion: 2
         x: 330
@@ -997,7 +1000,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TX Props_35
+      name: Left_Light
       rect:
         serializedVersion: 2
         x: 330
@@ -1018,15 +1021,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TX Props_36
+      name: Top_Light
       rect:
         serializedVersion: 2
         x: 337
-        y: 234
+        y: 241
         width: 5
-        height: 12
+        height: 5
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1039,13 +1042,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TX Props_37
+      name: Altar
       rect:
         serializedVersion: 2
         x: 353
-        y: 163
+        y: 171
         width: 94
-        height: 80
+        height: 72
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1370,6 +1373,27 @@ TextureImporter:
       bones: []
       spriteID: f8e5902e1dfaae310800000000000000
       internalID: 1435152747246214799
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Right_Light
+      rect:
+        serializedVersion: 2
+        x: 337
+        y: 234
+        width: 5
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 99585ae3d3d9c53a0800000000000000
+      internalID: -6675287661300316775
       vertices: []
       indices: 
       edges: []

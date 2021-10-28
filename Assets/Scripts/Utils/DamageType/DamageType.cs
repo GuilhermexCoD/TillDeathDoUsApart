@@ -9,6 +9,12 @@ public class DamageType
 
     public bool CausedByWorld;
 
+    public DamageType(float damageImpulse, bool causedByWorld)
+    {
+        DamageImpulse = damageImpulse;
+        CausedByWorld = causedByWorld;
+    }
+
     public virtual float ProccessDamage(float damage)
     {
         return damage;
