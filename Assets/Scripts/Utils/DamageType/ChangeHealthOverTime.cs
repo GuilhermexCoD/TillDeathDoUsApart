@@ -9,16 +9,35 @@ public class ChangeHealthOverTime : MonoBehaviour
     private float _seconds;
     private Actor _causer;
     private bool _bisHealing;
-
+    private Coroutine changeCoroutine;
     public void OnInitialize(Actor causer, float amount, float seconds, bool bHealing)
     {
         _healthSystem = GetComponent<HealthSystem>();
+        _healthSystem.OnHealthChanged += OnHealthChanged;
         _causer = causer;
         _amount = amount;
         _seconds = seconds;
         _bisHealing = bHealing;
 
-        StartCoroutine(Change());
+        changeCoroutine = StartCoroutine(Change());
+    }
+
+    private void OnDestroy()
+    {
+        _healthSystem.OnHealthChanged -= OnHealthChanged;
+    }
+
+    private void OnHealthChanged(object sender, HealthArgs e)
+    {
+        if (e.health <= 0 || _healthSystem.GetHealthNormalized() == 1)
+        {
+            if (changeCoroutine != null)
+            {
+                StopCoroutine(changeCoroutine);
+            }
+
+            Destroy(this);
+        }
     }
 
     private IEnumerator Change()

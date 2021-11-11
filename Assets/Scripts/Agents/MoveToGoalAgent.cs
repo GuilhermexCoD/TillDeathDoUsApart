@@ -56,6 +56,8 @@ public class MoveToGoalAgent : Agent
     {
         _healthSystem.OnInitialize(false);
         _lastHealth = _healthSystem.GetHealth();
+
+        //Destroy(this.gameObject.GetComponent<ChangeHealthOverTime>());
     }
 
     public override void CollectObservations(VectorSensor sensor)
