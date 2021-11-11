@@ -60,6 +60,11 @@ public class MoveAgent : MonoBehaviour
         rigidbody2D.velocity = velocity;
     }
 
+    public Vector2 GetVelocity()
+    {
+        return rigidbody2D.velocity;
+    }
+
     public void SetBlockMovement(bool block)
     {
         blockMovement = block;

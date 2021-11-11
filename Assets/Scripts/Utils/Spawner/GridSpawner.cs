@@ -22,9 +22,19 @@ public class GridSpawner : MonoBehaviour
                 GameObject go = Instantiate<GameObject>(prefab, pos, Quaternion.identity, this.transform);
 
                 go.GetComponent<TrainingManager>().offsetIndex = new Vector2Int(i, j);
-
+                go.GetComponent<TrainingManager>().startOffset = new Vector2Int((int)offSet.x, (int)offSet.y);
                 go.name = $"{prefab.name}_{i}_{j}";
             }
+        }
+    }
+
+    public void ClearChilds()
+    {
+        Debug.Log($"TrainingChilds: {this.transform.childCount}");
+
+        while(this.transform.childCount > 0)
+        {
+            DestroyImmediate(this.transform.GetChild(0).gameObject);
         }
     }
 }

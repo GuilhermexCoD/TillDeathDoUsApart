@@ -1,0 +1,38 @@
+{
+    "WonderAgentHealing": {
+        "checkpoints": [
+            {
+                "steps": 499963,
+                "file_path": "results\\wonderAgent01\\WonderAgentHealing\\WonderAgentHealing-499963.onnx",
+                "reward": -9.34375,
+                "creation_time": 1636513876.295881,
+                "auxillary_file_paths": [
+                    "results\\wonderAgent01\\WonderAgentHealing\\WonderAgentHealing-499963.pt"
+                ]
+            },
+            {
+                "steps": 500015,
+                "file_path": "results\\wonderAgent01\\WonderAgentHealing\\WonderAgentHealing-500015.onnx",
+                "reward": -9.06060606060606,
+                "creation_time": 1636513876.3448594,
+                "auxillary_file_paths": [
+                    "results\\wonderAgent01\\WonderAgentHealing\\WonderAgentHealing-500015.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 500015,
+            "file_path": "results\\wonderAgent01\\WonderAgentHealing.onnx",
+            "reward": -9.06060606060606,
+            "creation_time": 1636513876.3448594,
+            "auxillary_file_paths": [
+                "results\\wonderAgent01\\WonderAgentHealing\\WonderAgentHealing-500015.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.27.0",
+        "torch_version": "1.7.0+cu110"
+    }
+}

@@ -314,4 +314,42 @@ public class GraphTest
         Assert.IsTrue(visited.Count == vertices.Count);
         Assert.IsTrue(visited.TrueForAll(c => c == true));
     }
+
+    [Test]
+    public void Trabalho()
+    {
+        //Arrange
+        string a = "A";
+        string b = "B";
+        string c = "C";
+        string d = "D";
+
+        var vertexA = new Vertex<string>(a);
+        var vertexB = new Vertex<string>(b);
+        var vertexC = new Vertex<string>(c);
+        var vertexD = new Vertex<string>(d);
+
+        var vertices = new List<Vertex<string>>();
+
+        vertices.Add(vertexA);
+        vertices.Add(vertexB);
+        vertices.Add(vertexC);
+        vertices.Add(vertexD);
+
+        var graph = new Graph<string, WeightLabel>(vertices);
+
+        graph.AddEdge(vertexA, vertexB);
+        graph.AddEdge(vertexA, vertexC);
+
+        graph.AddEdge(vertexB, vertexC);
+
+        graph.AddEdge(vertexC, vertexD);
+
+        //Act
+
+        //Assert
+        Assert.IsTrue(graph.GetVertexEdges(vertexA).Count == 2);
+        Assert.IsTrue(graph.GetVertexEdges(vertexB).Count == 1);
+        Assert.IsTrue(graph.GetVertexEdges(vertexC).Count == 1);
+    }
 }

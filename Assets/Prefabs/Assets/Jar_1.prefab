@@ -109,8 +109,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f73be8fa4bb30340801bc438011410f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 100
-  maxHealth: 100
+  health: 50
+  maxHealth: 50
   _bCanDestroy: 1
 --- !u!61 &7249147299408621177
 BoxCollider2D:
@@ -136,5 +136,5 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.65625, y: 1.0625}
+  m_Size: {x: 0.35, y: 0.93}
   m_EdgeRadius: 0

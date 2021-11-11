@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class Weight
 {
-    private int value;
+    public int value;
 
     public static bool operator ==(Weight a, Weight b) => (a.value == b.value);
     public static bool operator !=(Weight a, Weight b) => (a.value != b.value);

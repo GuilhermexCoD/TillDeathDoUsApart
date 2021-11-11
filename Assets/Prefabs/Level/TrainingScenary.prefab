@@ -56,7 +56,7 @@ MonoBehaviour:
   - {fileID: 8327947587188772483}
   - {fileID: 961387583414978496}
   - {fileID: 961387582321969676}
-  minSize: {x: 10, y: 10}
+  minSize: {x: 4, y: 4}
   startOffset: {x: 40, y: 40}
   offsetIndex: {x: 0, y: 0}
 --- !u!114 &8327947587377965406
@@ -727,6 +727,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8327947587377965405}
     m_Modifications:
+    - target: {fileID: 7446624563900320337, guid: 861207be494671245aebbfc03e0926c6, type: 3}
+      propertyPath: damageAmount
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 9134805124114288832, guid: 861207be494671245aebbfc03e0926c6, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -846,6 +850,10 @@ PrefabInstance:
       propertyPath: b_isHealing
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7446624563900320337, guid: 861207be494671245aebbfc03e0926c6, type: 3}
+      propertyPath: damageAmount
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 9134805124114288832, guid: 861207be494671245aebbfc03e0926c6, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -925,6 +933,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8327947587377965405}
     m_Modifications:
+    - target: {fileID: 7446624563900320337, guid: 861207be494671245aebbfc03e0926c6, type: 3}
+      propertyPath: damageAmount
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 9134805124114288832, guid: 861207be494671245aebbfc03e0926c6, type: 3}
       propertyPath: m_RootOrder
       value: 3

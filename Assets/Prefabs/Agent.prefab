@@ -89,15 +89,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 1
+    VectorObservationSize: 6
     NumStackedVectorObservations: 1
     VectorActionSize: 02000000
     VectorActionDescriptions: []
     VectorActionSpaceType: 1
-  m_Model: {fileID: 5022602860645237092, guid: cfe341282e3fcad449b9c8b6d4db4d21, type: 3}
+  m_Model: {fileID: 5022602860645237092, guid: 74eb5b7a0a932464da73d7f4110db6c6, type: 3}
   m_InferenceDevice: 0
   m_BehaviorType: 0
-  m_BehaviorName: target_agent_01
+  m_BehaviorName: WonderAgentHealing
   TeamId: 0
   m_UseChildSensors: 1
   m_UseChildActuators: 1
@@ -118,8 +118,10 @@ MonoBehaviour:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
   MaxStep: 5000
-  move: {fileID: 8654319617491234921}
-  healthSystem: {fileID: 8654319617491234927}
+  _move: {fileID: 8654319617491234921}
+  _healthSystem: {fileID: 8654319617491234927}
+  _actor: {fileID: 8654319617491234920}
+  _bUseVectorObs: 1
 --- !u!114 &8654319617491234922
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -132,7 +134,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DecisionPeriod: 5
+  DecisionPeriod: 10
   TakeActionsBetweenDecisions: 1
 --- !u!114 &8654319617491234921
 MonoBehaviour:
@@ -146,7 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 904b9709448db514790dc8498962d576, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 2
+  speed: 5
   moveDirection: {x: 0, y: 0}
   rigidbody2D: {fileID: 8654319617491234933}
   blockMovement: 0
@@ -248,7 +250,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_Sprite: {fileID: -359908854502224583, guid: c83ec9cbb525f764099c3780eaf0203f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

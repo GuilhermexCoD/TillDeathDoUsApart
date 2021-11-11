@@ -18,9 +18,23 @@ public class GridSpawnerEditor : Editor
     {
         base.OnInspectorGUI();
 
+        if (GUILayout.Button("Clear"))
+        {
+            gridSpawner.ClearChilds();
+        }
+
         if (GUILayout.Button("Create Grid"))
         {
+            gridSpawner.ClearChilds();
             gridSpawner.SpawnGrid();
+        }
+
+        if (GUILayout.Button("Generate"))
+        {
+            for (int i = 0; i < gridSpawner.transform.childCount; i++)
+            {
+                gridSpawner.transform.GetChild(i)?.GetComponent<TrainingManager>()?.Setup();
+            }
         }
     }
 }

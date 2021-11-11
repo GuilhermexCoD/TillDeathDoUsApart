@@ -1,0 +1,29 @@
+{
+    "WonderAgentHealing": {
+        "checkpoints": [
+            {
+                "steps": 38219,
+                "file_path": "results\\wonderAgent02\\WonderAgentHealing\\WonderAgentHealing-38219.onnx",
+                "reward": 8.109375,
+                "creation_time": 1636669591.7081163,
+                "auxillary_file_paths": [
+                    "results\\wonderAgent02\\WonderAgentHealing\\WonderAgentHealing-38219.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 38219,
+            "file_path": "results\\wonderAgent02\\WonderAgentHealing.onnx",
+            "reward": 8.109375,
+            "creation_time": 1636669591.7081163,
+            "auxillary_file_paths": [
+                "results\\wonderAgent02\\WonderAgentHealing\\WonderAgentHealing-38219.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.27.0",
+        "torch_version": "1.7.0+cu110"
+    }
+}

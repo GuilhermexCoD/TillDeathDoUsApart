@@ -156,9 +156,9 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ml-agents": {
-      "version": "file:../../com.unity.ml-agents",
+      "version": "file:com.unity.ml-agents",
       "depth": 0,
-      "source": "local",
+      "source": "embedded",
       "dependencies": {
         "com.unity.barracuda": "1.1.2-preview",
         "com.unity.modules.imageconversion": "1.0.0",
@@ -168,9 +168,9 @@
       }
     },
     "com.unity.ml-agents.extensions": {
-      "version": "file:../../com.unity.ml-agents.extensions",
+      "version": "file:com.unity.ml-agents.extensions",
       "depth": 0,
-      "source": "local",
+      "source": "embedded",
       "dependencies": {
         "com.unity.ml-agents": "1.6.0-preview"
       }

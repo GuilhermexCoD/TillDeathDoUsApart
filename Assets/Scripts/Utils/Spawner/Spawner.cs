@@ -6,6 +6,7 @@ public class Spawner : MonoBehaviour
 {
 
     public List<GameObject> spawnPrefabs = new List<GameObject>();
+    public List<Vector2> takenPositions = new List<Vector2>();
 
     private void Awake()
     {
@@ -19,6 +20,15 @@ public class Spawner : MonoBehaviour
             var coord = Level.current.GetRandomPositionInsideRoom();
 
             var position = Level.CalculatePosition(coord);
+
+            while(takenPositions.Contains(position))
+            {
+                coord = Level.current.GetRandomPositionInsideRoom();
+                position = Level.CalculatePosition(coord);
+            }
+
+            takenPositions.Add(position);
+
 
             var go = Instantiate<GameObject>(prefab, position, Quaternion.identity);
         }

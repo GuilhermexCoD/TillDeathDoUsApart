@@ -18,9 +18,9 @@ MonoBehaviour:
   themes: 01000000
   maxQuantityOfEnemies: 1
   useBSP: 1
-  roomMaxSize: {x: 15, y: 15}
+  roomMaxSize: {x: 6, y: 6}
   quantityRangeBonusRooms:
     Min: 0
     Max: 0
     Value: 0
-  size: {x: 20, y: 20}
+  size: {x: 10, y: 10}

@@ -463,6 +463,7 @@ MonoBehaviour:
   healColorAltar: {r: 1, g: 1, b: 1, a: 1}
   damageColorLights: {r: 1, g: 0, b: 0.039215688, a: 1}
   damageColorAltar: {r: 0.627451, g: 0.7176471, b: 1, a: 1}
+  _rate: 0.5
   b_isHealing: 1
-  healAmount: 2
-  damageAmount: 10
+  healAmount: 5
+  damageAmount: 5

@@ -164,6 +164,13 @@ public class Graph<V, E> where E : class
         return edges;
     }
 
+    public List<Edge<E>> GetVertexEdges(Vertex<V> vertex)
+    {
+        int index = GetVertexIndex(vertex);
+
+        return GetVertexEdges(index);
+    }
+
     public bool IsVertexLinkedTo(int indexA, int indexB)
     {
         bool result = false;

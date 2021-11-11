@@ -22,11 +22,14 @@ public class GameEventsHandler : MonoBehaviour
     {
         current = Singleton<GameEventsHandler>.Instance;
 
-        Level.current.onGenerated += OnLevelGenerated;
-
-        if (Level.current.IsGenerated())
+        if (Level.current != null)
         {
-            OnLevelGenerated(this, new EventArgs());
+            Level.current.onGenerated += OnLevelGenerated;
+
+            if (Level.current.IsGenerated())
+            {
+                OnLevelGenerated(this, new EventArgs());
+            }
         }
     }
 
@@ -44,7 +47,6 @@ public class GameEventsHandler : MonoBehaviour
     {
         shootComponent.onShoot += OnShootEvent;
         shootComponent.onHit += OnHitEvent;
-
     }
 
     public void UnSubscribeToShoot(ShootComponent shootComponent)
@@ -70,6 +72,7 @@ public class GameEventsHandler : MonoBehaviour
 
         //AddForceFeedback(-e.direction, e.damage * feedbackTest);
     }
+
     private void OnHitEvent(object sender, HitEventArgs e)
     {
         var projectileData = GetProjectileDataByIndex(e.projectileIndex);

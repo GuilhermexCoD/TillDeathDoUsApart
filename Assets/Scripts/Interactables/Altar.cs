@@ -19,15 +19,20 @@ public class Altar : Actor
 
     private bool b_isOn;
 
-    public bool isOn { get => b_isOn; 
-        set 
-        { 
+    [SerializeField]
+    private float _rate;
+
+    public bool isOn
+    {
+        get => b_isOn;
+        set
+        {
             b_isOn = value;
             foreach (var light in lights)
             {
                 light.SetActive(b_isOn);
             }
-        } 
+        }
     }
 
     [SerializeField]
@@ -39,13 +44,15 @@ public class Altar : Actor
     [SerializeField]
     private float damageAmount = 1;
 
-    public bool B_isHealing { get => b_isHealing; 
-        set 
-        { 
+    public bool B_isHealing
+    {
+        get => b_isHealing;
+        set
+        {
             b_isHealing = value;
 
             UpdateColor(b_isHealing);
-        } 
+        }
     }
 
     private void UpdateColor(bool isHealing)
@@ -67,25 +74,25 @@ public class Altar : Actor
         B_isHealing = b_isHealing;
     }
 
+    private float GetChangeHealthAmount()
+    {
+        return (b_isHealing ? healAmount : damageAmount);
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         isOn = true;
 
         Actor actor = collision.gameObject.GetComponent<Actor>();
-        if (b_isHealing)
-        {
-            HealthSystem healthSystem = collision.GetComponent<HealthSystem>();
-            healthSystem.IncreaseHealth(healAmount);
-        }
-        else
-        {
-            Gameplay.ApplyDamage(actor, damageAmount, this, new DamageType(0f, true));
-        }
+
+        actor.gameObject.AddComponent<ChangeHealthOverTime>().OnInitialize(this, GetChangeHealthAmount(), _rate, b_isHealing);
+
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
         isOn = false;
 
+        Destroy(collision.gameObject.GetComponent<ChangeHealthOverTime>());
     }
 }

@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class Enumerator : MonoBehaviour , IEnumerator
+public class Enumerator : MonoBehaviour , IEnumeratorEnum
 {
     public virtual string[] GetNames()
     {

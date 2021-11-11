@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Start: {x: 0, y: 0}
   difficulty: 0
-  maxQuantityOfRooms: 1
+  maxQuantityOfRooms: 50
   themes: 01000000
   maxQuantityOfEnemies: 50
   useBSP: 1
