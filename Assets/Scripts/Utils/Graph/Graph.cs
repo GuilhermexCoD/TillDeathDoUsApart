@@ -33,6 +33,15 @@ public class Graph<V, E> where E : class
         this.edgesList = edgesList;
     }
 
+    public int AddVertex(string label, V data)
+    {
+        int index = vertices.Count;
+
+        vertices.Add(new Vertex<V>(label, data));
+
+        return index;
+    }
+
     public int AddVertex(V data)
     {
         int index = vertices.Count;
@@ -147,6 +156,19 @@ public class Graph<V, E> where E : class
         return vertices.IndexOf(vertex);
     }
 
+    public Vertex<V> GetVertex(V data)
+    {
+        foreach (var vertex in vertices)
+        {
+            if (vertex.GetData().GetHashCode() == data.GetHashCode())
+            {
+                return vertex;
+            }
+        }
+
+        return null;
+    }
+
     public Vertex<V> GetVertex(int index)
     {
         return vertices[index];
@@ -252,7 +274,7 @@ public class Graph<V, E> where E : class
 
         int currentVertex = 0;
 
-        while (currentVertex < size &&  !visited[currentVertex])
+        while (currentVertex < size && !visited[currentVertex])
         {
             DepthFirstSearch(currentVertex, ref visited);
             currentVertex++;

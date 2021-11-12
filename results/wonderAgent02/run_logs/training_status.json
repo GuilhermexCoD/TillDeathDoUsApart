@@ -2,22 +2,22 @@
     "WonderAgentHealing": {
         "checkpoints": [
             {
-                "steps": 38219,
-                "file_path": "results\\wonderAgent02\\WonderAgentHealing\\WonderAgentHealing-38219.onnx",
-                "reward": 8.109375,
-                "creation_time": 1636669591.7081163,
+                "steps": 252096,
+                "file_path": "results\\wonderAgent02\\WonderAgentHealing\\WonderAgentHealing-252096.onnx",
+                "reward": null,
+                "creation_time": 1636673047.092817,
                 "auxillary_file_paths": [
-                    "results\\wonderAgent02\\WonderAgentHealing\\WonderAgentHealing-38219.pt"
+                    "results\\wonderAgent02\\WonderAgentHealing\\WonderAgentHealing-252096.pt"
                 ]
             }
         ],
         "final_checkpoint": {
-            "steps": 38219,
+            "steps": 252096,
             "file_path": "results\\wonderAgent02\\WonderAgentHealing.onnx",
-            "reward": 8.109375,
-            "creation_time": 1636669591.7081163,
+            "reward": null,
+            "creation_time": 1636673047.092817,
             "auxillary_file_paths": [
-                "results\\wonderAgent02\\WonderAgentHealing\\WonderAgentHealing-38219.pt"
+                "results\\wonderAgent02\\WonderAgentHealing\\WonderAgentHealing-252096.pt"
             ]
         }
     },

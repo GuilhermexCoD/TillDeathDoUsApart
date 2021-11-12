@@ -14,6 +14,10 @@ public class Level : MonoBehaviour
     public TileBase debugTile;
     public int iteration = 0;
 
+    //TODO : remover esse prefab do Graph
+    public GameObject GraphVertexPrefab;
+    public Graph<Vector2Int, Weight> graph;
+
     #endregion
 
     public static float offSet = 0.5f;
@@ -48,6 +52,7 @@ public class Level : MonoBehaviour
 
         ScenaryManager.current?.Subscribe(OnLevelLoaded);
 
+        graph = new Graph<Vector2Int, Weight>();
     }
 
     private void OnLevelLoaded(object sender, LevelArgs e)
@@ -67,7 +72,69 @@ public class Level : MonoBehaviour
         tilemapVisualizer.PaintFloors(map);
         tilemapVisualizer.PaintWalls(map);
 
+        //TODO: Remover esse metodo
+        SpawnGraphVertex();
+
         CallOnGenerated();
+    }
+
+    private void SpawnGraphVertex()
+    {
+        GameObject parent = new GameObject($"Graphs");
+
+        foreach (var coord in map)
+        {
+            int vertexIndex = graph.AddVertex($"{coord.x}_{coord.y}", coord);
+
+            var graphVertex = Instantiate(GraphVertexPrefab, Vector3.zero, Quaternion.identity, parent.transform);
+            graphVertex.GetComponent<WorldGraphVertexUI>().SetCoord(coord);
+        }
+
+        foreach (var vertex in graph.GetVertices())
+        {
+            var coord = vertex.GetData();
+            foreach (var direction in Direction2D.EightDirections)
+            {
+                Vector2Int compareCoord = coord + direction.Value;
+                bool connection = map.Contains(compareCoord);
+
+                if (connection)
+                {
+                    var connectedVertex = graph.GetVertex(compareCoord);
+                    graph.AddEdge(vertex, connectedVertex, false, new Weight(1));
+                }
+            }
+        }
+
+        //foreach (var room in rooms)
+        //{
+        //    int roomIndex = rooms.IndexOf(room);
+        //    GameObject roomGo = new GameObject($"GraphRoom_{roomIndex}");
+        //    roomGo.transform.SetParent(parent.transform);
+        //    foreach (var coord in room.map)
+        //    {
+        //        var graphVertex = Instantiate(GraphVertexPrefab, Vector3.zero, Quaternion.identity, roomGo.transform);
+        //        graphVertex.GetComponent<WorldGraphVertexUI>().SetCoord(coord);
+
+        //        foreach (var direction in Direction2D.EightDirections)
+        //        {
+        //            Vector2Int compareCoord = coord + direction.Value;
+        //            bool connection = map.Contains(compareCoord);
+
+        //            if (connection)
+        //            {
+
+        //            }
+        //        }
+
+        //    }
+        //}
+
+        //foreach (var coord in corridors)
+        //{
+        //    var graphVertex = Instantiate(GraphVertexPrefab, Vector3.zero, Quaternion.identity, parent.transform);
+        //    graphVertex.GetComponent<WorldGraphVertexUI>().SetCoord(coord);
+        //}
     }
 
     public void Clean()

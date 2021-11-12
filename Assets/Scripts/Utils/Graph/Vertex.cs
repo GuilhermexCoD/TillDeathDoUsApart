@@ -13,7 +13,7 @@ public class Vertex<T>
         this.data = data;
     }
 
-    public Vertex(string label,T data)
+    public Vertex(string label, T data)
     {
         this.label = label;
         this.data = data;

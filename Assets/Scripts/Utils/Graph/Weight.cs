@@ -5,6 +5,11 @@ public class Weight
 {
     public int value;
 
+    public Weight(int value)
+    {
+        this.value = value;
+    }
+
     public static bool operator ==(Weight a, Weight b) => (a.value == b.value);
     public static bool operator !=(Weight a, Weight b) => (a.value != b.value);
 

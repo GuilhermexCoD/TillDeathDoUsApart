@@ -56,8 +56,6 @@ public class MoveToGoalAgent : Agent
     {
         _healthSystem.OnInitialize(false);
         _lastHealth = _healthSystem.GetHealth();
-
-        //Destroy(this.gameObject.GetComponent<ChangeHealthOverTime>());
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -67,23 +65,15 @@ public class MoveToGoalAgent : Agent
             if (damageCauserTransform != null)
             {
                 sensor.AddObservation((Vector2)damageCauserTransform.position);
-                //sensor.AddObservation(damageCauserTransform.position.y);
             }
 
             if (healingCauserTransform != null)
             {
                 sensor.AddObservation((Vector2)healingCauserTransform.position);
-                //sensor.AddObservation(healingCauserTransform.position.y);
             }
 
             sensor.AddObservation(_move.GetVelocity());
         }
-
-        //for (int i = 0; i < sensor.GetObservationShape().Length; i++)
-        //{
-        //    var observation = sensor.GetObservationShape()[i];
-        //    Debug.Log($"{this.gameObject.name} : Observations{i} {observation}");
-        //}
     }
 
     private void OnHealthChanged(object sender, HealthArgs e)
@@ -100,6 +90,11 @@ public class MoveToGoalAgent : Agent
         
         SetReward(reward);
 
+        if (healed)
+        {
+            //healingCauserTransform 
+        }
+
         if (e.health == 0)
         {
             DeadReward();
@@ -108,7 +103,7 @@ public class MoveToGoalAgent : Agent
 
     private void DeadReward()
     {
-        float reward = -10f;
+        float reward = -1f;
         Debug.Log($"{this.gameObject.name} : reward(Death) = {reward}");
         SetReward(reward);
         EndEpisode();
