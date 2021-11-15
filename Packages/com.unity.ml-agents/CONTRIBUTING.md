@@ -8,7 +8,7 @@ of guidelines to ensure that your extensions can be easily integrated.
 ## Communication
 
 First, please read through our
-[code of conduct](https://github.com/Unity-Technologies/ml-agents/blob/master/CODE_OF_CONDUCT.md),
+[code of conduct](https://github.com/Unity-Technologies/ml-agents/blob/main/CODE_OF_CONDUCT.md),
 as we expect all our contributors to follow it.
 
 Second, before starting on a project that you intend to contribute to the
@@ -25,7 +25,7 @@ the `Requests` or `Bug` label.
 
 ## Git Branches
 
-The master branch corresponds to the most recent version of the project. Note
+The main branch corresponds to the most recent version of the project. Note
 that this may be newer that the
 [latest release](https://github.com/Unity-Technologies/ml-agents/releases/tag/latest_release).
 
@@ -40,11 +40,11 @@ contains the following:
 
 ## Environments
 
-We are also actively open to adding community contributed environments as
-examples, as long as they are small, simple, demonstrate a unique feature of the
-platform, and provide a unique non-trivial challenge to modern machine learning
-algorithms. Feel free to submit these environments with a PR explaining the
-nature of the environment and task.
+We are currently not accepting environment contributions directly into ML-Agents.
+However, we believe community created enviornments have a lot of value to the
+community. If you have an interesting enviornment and are willing to share,
+feel free to showcase it and share any relevant files in the
+[ML-Agents forum](https://forum.unity.com/forums/ml-agents.453/).
 
 ## Continuous Integration (CI)
 
@@ -52,7 +52,13 @@ We run continuous integration on all PRs; all tests must be passing before the P
 
 Several static checks are run on the codebase using the
 [pre-commit framework](https://pre-commit.com/) during CI. To execute the same
-checks locally, run `pip install pre-commit` and then `pre-commit run --all-files`.
+checks locally, run:
+```bash
+pip install pre-commit>=2.8.0
+pip install identify>==2.1.3
+pre-commit run --all-files
+```
+
 Some hooks (for example, `black`) will output the corrected version of the code;
 others (like `mypy`) may require more effort to fix. You can optionally run
 `pre-commit install` to install it as a git hook; after this it will run on all
@@ -64,8 +70,8 @@ All python code should be formatted with
 [`black`](https://github.com/psf/black).
 
 C# code is formatted using [`dotnet-format`](https://github.com/dotnet/format).
-You must have [dotnet](https://dotnet.microsoft.com/download) and
-`dotnet-format` installed first.
+You must have [dotnet](https://dotnet.microsoft.com/download) installed first
+(but don't need to install `dotnet-format` - `pre-commit` will do that for you).
 
 ### Python type annotations
 

@@ -11,6 +11,9 @@ public class WorldGraphVertexUI : MonoBehaviour
     private TextMeshProUGUI text;
 
     [SerializeField]
+    private Vertex<Vector2Int> vertex;
+
+    [SerializeField]
     private Vector2Int coord;
 
     private string value;

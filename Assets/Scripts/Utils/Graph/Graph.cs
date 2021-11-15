@@ -297,4 +297,14 @@ public class Graph<V, E> where E : class where V : IEquatable<V>
             DepthFirstSearch(next.GetVertexIndex(), ref visited);
         }
     }
+
+    public void Teste(Graph<V,E> graph) 
+    {
+        var novoGraph = new Graph<V, E>();
+
+        foreach (var vertex in graph.GetVertices())
+        {
+
+        }
+    }
 }

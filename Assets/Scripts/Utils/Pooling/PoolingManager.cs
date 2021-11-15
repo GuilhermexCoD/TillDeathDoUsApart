@@ -76,11 +76,11 @@ public class PoolingManager : MonoBehaviour
         return poolGo;
     }
 
-    public void ReturnObjectToPoll(GameObject polledObject)
+    public void ReturnObjectToPoll<T>(T polledObject) where T : MonoBehaviour
     {
-        polledObject.SetActive(false);
+        polledObject.gameObject.SetActive(false);
 
-        var poolingObject = poolingObjects.FirstOrDefault(p => p.Equals(polledObject));
+        var poolingObject = poolingObjects.FirstOrDefault(p => p.pooledObject.GetComponent<T>().GetType() == typeof(T));
 
         if (poolingObject != null)
         {
