@@ -7,6 +7,7 @@ public class Vertex<T> where T : IEquatable<T>
 {
     private T data;
     private string label;
+    public ENodeColor color;
 
     public Vertex(T data)
     {
