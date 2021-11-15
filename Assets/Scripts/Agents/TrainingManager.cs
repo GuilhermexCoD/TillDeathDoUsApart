@@ -29,9 +29,14 @@ public class TrainingManager : MonoBehaviour
 
     public event EventHandler<EventArgs> onGenerated;
 
-    private bool isLevelGenerated = false;
+    private bool _isLevelGenerated = false;
 
     #endregion
+
+    public bool IsLevelGenerated()
+    {
+        return _isLevelGenerated;
+    }
 
     void Awake()
     {
@@ -71,16 +76,16 @@ public class TrainingManager : MonoBehaviour
 
     public void CallOnGenerated()
     {
-        isLevelGenerated = true;
+        _isLevelGenerated = true;
         onGenerated?.Invoke(this, new EventArgs());
 
-        Vector2Int randomAgentPosition = GetRandomPositionInsideRoom();
-        agent.transform.position = new Vector3(randomAgentPosition.x, randomAgentPosition.y);
+        var randomAgentPosition = GetRandomPositionInsideRoom();
+        agent.transform.position = randomAgentPosition;
 
         foreach (var altar in altars)
         {
             randomAgentPosition = GetRandomPositionInsideRoom();
-            altar.transform.position = new Vector3(randomAgentPosition.x, randomAgentPosition.y);
+            altar.transform.position = randomAgentPosition;
         }
     }
 
@@ -237,8 +242,19 @@ public class TrainingManager : MonoBehaviour
         return new Vector2Int(Random.Range(levelData.Start.x, levelData.Start.x + levelData.size.x), Random.Range(levelData.Start.y, levelData.Start.y + levelData.size.y));
     }
 
-    public Vector2Int GetRandomPositionInsideRoom()
+    public Vector3 GetRandomPositionInsideRoom()
     {
-        return rooms[Random.Range(0, rooms.Count)].GetRandomCoord();
+        var coord = rooms[Random.Range(0, rooms.Count)].GetRandomCoord();
+        //return CalculatePosition(coord);
+        return new Vector3(coord.x,coord.y);
+    }
+
+    public Vector3 CalculatePosition(Vector2Int coord)
+    {
+        Vector3 position = Vector3.zero;
+
+        position += new Vector3(coord.x + startOffset.x, coord.y + startOffset.y);
+
+        return position;
     }
 }

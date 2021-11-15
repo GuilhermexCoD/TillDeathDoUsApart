@@ -11,6 +11,8 @@ public interface IHealthSystem
 
     event EventHandler OnHealthEqualsZero;
 
+    Actor GetActor();
+
     float GetHealth();
 
     float GetHealthNormalized();

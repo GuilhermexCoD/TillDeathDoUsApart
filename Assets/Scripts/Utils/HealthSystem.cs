@@ -50,9 +50,14 @@ public class HealthSystem : MonoBehaviour, IHealthSystem
         return health;
     }
 
+    public float NormalizeByHealthMax(float amount)
+    {
+        return amount / maxHealth;
+    }
+
     public float GetHealthNormalized()
     {
-        return health / maxHealth;
+        return NormalizeByHealthMax(health);
     }
 
     public void SetHealth(float value, Actor causer)

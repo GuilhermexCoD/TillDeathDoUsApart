@@ -2,31 +2,31 @@
     "WonderAgentHealing": {
         "checkpoints": [
             {
-                "steps": 499963,
-                "file_path": "results\\wonderAgent01\\WonderAgentHealing\\WonderAgentHealing-499963.onnx",
-                "reward": -9.34375,
-                "creation_time": 1636513876.295881,
+                "steps": 499995,
+                "file_path": "results\\wonderAgent01\\WonderAgentHealing\\WonderAgentHealing-499995.onnx",
+                "reward": 0.0032812495628604665,
+                "creation_time": 1636987906.075535,
                 "auxillary_file_paths": [
-                    "results\\wonderAgent01\\WonderAgentHealing\\WonderAgentHealing-499963.pt"
+                    "results\\wonderAgent01\\WonderAgentHealing\\WonderAgentHealing-499995.pt"
                 ]
             },
             {
-                "steps": 500015,
-                "file_path": "results\\wonderAgent01\\WonderAgentHealing\\WonderAgentHealing-500015.onnx",
-                "reward": -9.06060606060606,
-                "creation_time": 1636513876.3448594,
+                "steps": 500059,
+                "file_path": "results\\wonderAgent01\\WonderAgentHealing\\WonderAgentHealing-500059.onnx",
+                "reward": 0.0032812495628604665,
+                "creation_time": 1636987906.1524904,
                 "auxillary_file_paths": [
-                    "results\\wonderAgent01\\WonderAgentHealing\\WonderAgentHealing-500015.pt"
+                    "results\\wonderAgent01\\WonderAgentHealing\\WonderAgentHealing-500059.pt"
                 ]
             }
         ],
         "final_checkpoint": {
-            "steps": 500015,
+            "steps": 500059,
             "file_path": "results\\wonderAgent01\\WonderAgentHealing.onnx",
-            "reward": -9.06060606060606,
-            "creation_time": 1636513876.3448594,
+            "reward": 0.0032812495628604665,
+            "creation_time": 1636987906.1524904,
             "auxillary_file_paths": [
-                "results\\wonderAgent01\\WonderAgentHealing\\WonderAgentHealing-500015.pt"
+                "results\\wonderAgent01\\WonderAgentHealing\\WonderAgentHealing-500059.pt"
             ]
         }
     },

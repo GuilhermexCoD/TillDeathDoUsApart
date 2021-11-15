@@ -1,8 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Vertex<T>
+public class Vertex<T> where T : IEquatable<T>
 {
     private T data;
     private string label;

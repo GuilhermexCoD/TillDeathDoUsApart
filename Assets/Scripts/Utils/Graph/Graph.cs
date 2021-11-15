@@ -10,7 +10,7 @@ public class Graph
     }
 }
 
-public class Graph<V, E> where E : class
+public class Graph<V, E> where E : class where V : IEquatable<V>
 {
     private List<Vertex<V>> vertices;
     private Dictionary<int, List<Edge<E>>> edgesList;
@@ -160,7 +160,7 @@ public class Graph<V, E> where E : class
     {
         foreach (var vertex in vertices)
         {
-            if (vertex.GetData().GetHashCode() == data.GetHashCode())
+            if (vertex.GetData().Equals(data))
             {
                 return vertex;
             }

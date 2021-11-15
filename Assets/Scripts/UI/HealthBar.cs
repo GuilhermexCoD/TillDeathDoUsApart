@@ -100,6 +100,12 @@ public class HealthBar : MonoBehaviour
         _healthSystem.OnHealthChanged += OnHealthChanged;
         _healthSystem.OnHealthEqualsFull += OnHealthFull;
         _healthSystem.OnHealthEqualsZero += OnHealthZero;
+        _healthSystem.GetActor().OnDestroyed += OnActorDestroyed; ;
+    }
+
+    private void OnActorDestroyed(Actor obj)
+    {
+        PoolingManager.current.ReturnObjectToPoll(this.gameObject);
     }
 
     private void ClearSubscribedEvents()

@@ -482,7 +482,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7854277180798598706}
-  - component: {fileID: 7854277180798598707}
   - component: {fileID: 7854277180798598704}
   - component: {fileID: 8503499960203737191}
   m_Layer: 5
@@ -514,30 +513,6 @@ RectTransform:
   m_AnchoredPosition: {x: -240, y: -230}
   m_SizeDelta: {x: 160, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &7854277180798598707
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7854277180798598709}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3bc2393e638a2a0448689ef2b02291c4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _sliderLostHealth: {fileID: 7854277179717909489}
-  _sliderActualHealth: {fileID: 7854277180600437067}
-  _anim: {fileID: 8503499960203737191}
-  _delay: 0.4
-  _timeToReach: 0.3
-  _timeFade: 1
-  _backgroundColor: {r: 0, g: 0, b: 0, a: 1}
-  _backgroundImage: {fileID: 7854277179049216063}
-  _lostHealthColor: {r: 1, g: 0, b: 0, a: 1}
-  _lostHealthImage: {fileID: 7854277179358902166}
-  _actualHealthColor: {r: 0, g: 1, b: 0, a: 1}
-  _actualHealthImage: {fileID: 7854277180527392738}
 --- !u!222 &7854277180798598704
 CanvasRenderer:
   m_ObjectHideFlags: 0

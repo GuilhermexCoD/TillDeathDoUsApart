@@ -85,9 +85,6 @@ public class Level : MonoBehaviour
         foreach (var coord in map)
         {
             int vertexIndex = graph.AddVertex($"{coord.x}_{coord.y}", coord);
-
-            var graphVertex = Instantiate(GraphVertexPrefab, Vector3.zero, Quaternion.identity, parent.transform);
-            graphVertex.GetComponent<WorldGraphVertexUI>().SetCoord(coord);
         }
 
         foreach (var vertex in graph.GetVertices())
@@ -96,6 +93,7 @@ public class Level : MonoBehaviour
             foreach (var direction in Direction2D.EightDirections)
             {
                 Vector2Int compareCoord = coord + direction.Value;
+
                 bool connection = map.Contains(compareCoord);
 
                 if (connection)
@@ -104,6 +102,27 @@ public class Level : MonoBehaviour
                     graph.AddEdge(vertex, connectedVertex, false, new Weight(1));
                 }
             }
+        }
+
+        foreach (var edgeList in graph.GetEdgeList())
+        {
+            int vertexIndex = edgeList.Key;
+            var vertex = graph.GetVertex(vertexIndex);
+
+            var graphVertex = Instantiate(GraphVertexPrefab, Vector3.zero, Quaternion.identity, parent.transform);
+            var vertexUI = graphVertex.GetComponent<WorldGraphVertexUI>();
+
+            vertexUI.SetCoord(vertex.GetData());
+
+            foreach (var edge in edgeList.Value)
+            {
+                int targetIndex = edge.GetVertexIndex();
+                var targetVertex = graph.GetVertex(targetIndex);
+
+                var targetWorldPosition = CalculatePosition(targetVertex.GetData());
+                vertexUI.AddNeightbour(targetWorldPosition);
+            }
+            vertexUI.CreateEdges();
         }
 
         //foreach (var room in rooms)
@@ -224,21 +243,21 @@ public class Level : MonoBehaviour
 
     }
 
-    private void RoomGraphToCorridors(Graph<Room<GeneratorRule>, Weight> graph)
-    {
-        foreach (var vertexEdges in graph.GetEdgeList())
-        {
-            int indexA = vertexEdges.Key;
+    //private void RoomGraphToCorridors(Graph<Room<GeneratorRule>, Weight> graph)
+    //{
+    //    foreach (var vertexEdges in graph.GetEdgeList())
+    //    {
+    //        int indexA = vertexEdges.Key;
 
-            var roomA = graph.GetVertex(indexA).GetData();
+    //        var roomA = graph.GetVertex(indexA).GetData();
 
-            foreach (var edge in vertexEdges.Value)
-            {
-                int indexB = edge.GetVertexIndex();
-                var roomB = graph.GetVertex(indexB).GetData();
-            }
-        }
-    }
+    //        foreach (var edge in vertexEdges.Value)
+    //        {
+    //            int indexB = edge.GetVertexIndex();
+    //            var roomB = graph.GetVertex(indexB).GetData();
+    //        }
+    //    }
+    //}
 
     private void RoomGeneration(Vector2Int start, ETheme theme, int maxWidth, int maxHeight)
     {

@@ -82,9 +82,7 @@ public class Altar : Actor
     private void OnTriggerEnter2D(Collider2D collision)
     {
         isOn = true;
-
-        Actor actor = collision.gameObject.GetComponent<Actor>();
-
+        Actor actor = collision.gameObject.GetComponentInParent<Actor>();
         actor.gameObject.AddComponent<ChangeHealthOverTime>().OnInitialize(this, GetChangeHealthAmount(), _rate, b_isHealing);
 
     }
@@ -92,7 +90,7 @@ public class Altar : Actor
     private void OnTriggerExit2D(Collider2D collision)
     {
         isOn = false;
-
-        Destroy(collision.gameObject.GetComponent<ChangeHealthOverTime>());
+        var changeHealth = collision.gameObject.GetComponentInParent<ChangeHealthOverTime>();
+        Destroy(changeHealth);
     }
 }

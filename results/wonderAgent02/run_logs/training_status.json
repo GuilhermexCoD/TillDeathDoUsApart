@@ -2,22 +2,31 @@
     "WonderAgentHealing": {
         "checkpoints": [
             {
-                "steps": 252096,
-                "file_path": "results\\wonderAgent02\\WonderAgentHealing\\WonderAgentHealing-252096.onnx",
-                "reward": null,
-                "creation_time": 1636673047.092817,
+                "steps": 499987,
+                "file_path": "results\\wonderAgent02\\WonderAgentHealing\\WonderAgentHealing-499987.onnx",
+                "reward": 9.858333776394526,
+                "creation_time": 1637005392.4588401,
                 "auxillary_file_paths": [
-                    "results\\wonderAgent02\\WonderAgentHealing\\WonderAgentHealing-252096.pt"
+                    "results\\wonderAgent02\\WonderAgentHealing\\WonderAgentHealing-499987.pt"
+                ]
+            },
+            {
+                "steps": 500051,
+                "file_path": "results\\wonderAgent02\\WonderAgentHealing\\WonderAgentHealing-500051.onnx",
+                "reward": 9.858333776394526,
+                "creation_time": 1637005392.5288014,
+                "auxillary_file_paths": [
+                    "results\\wonderAgent02\\WonderAgentHealing\\WonderAgentHealing-500051.pt"
                 ]
             }
         ],
         "final_checkpoint": {
-            "steps": 252096,
+            "steps": 500051,
             "file_path": "results\\wonderAgent02\\WonderAgentHealing.onnx",
-            "reward": null,
-            "creation_time": 1636673047.092817,
+            "reward": 9.858333776394526,
+            "creation_time": 1637005392.5288014,
             "auxillary_file_paths": [
-                "results\\wonderAgent02\\WonderAgentHealing\\WonderAgentHealing-252096.pt"
+                "results\\wonderAgent02\\WonderAgentHealing\\WonderAgentHealing-500051.pt"
             ]
         }
     },
