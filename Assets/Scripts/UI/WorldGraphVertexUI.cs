@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -21,9 +22,12 @@ public class WorldGraphVertexUI : MonoBehaviour
     [SerializeField]
     private GameObject edgePrefab;
 
+    private int _totalVertices;
+
     [SerializeField]
     private Image _vertexNode;
 
+    public Gradient gradient;
     [SerializeField]
     private Color lineColor;
     [SerializeField]
@@ -33,12 +37,67 @@ public class WorldGraphVertexUI : MonoBehaviour
     private List<Vector2> neightbours = new List<Vector2>();
     private List<GameObject> edges = new List<GameObject>();
 
-    public void SetVertex(Vertex<Vector2Int> vertex)
+    public void SetVertex(Vertex<Vector2Int> vertex, int totalVertices)
     {
         this.vertex = vertex;
-        this.vertex.onColorChanged += OnColorChanged;
+        //this.vertex.onColorChanged += OnColorChanged;
+        //this.vertex.onStartTimeChanged += OnStartTimeChanged;
+        //this.vertex.onEndTimeChanged += OnEndTimeChanged;
+        this.vertex.onDistanceChanged += OnDistanceChanged;
+
+        //TODO tirar essa distancia Hardcoded
+        this._totalVertices = 144;
 
         SetCoord(vertex.GetData());
+    }
+
+    private void OnDistanceChanged(int value)
+    {
+        UpdateColor(value);
+        UpdateLabel(value, _totalVertices);
+    }
+
+    private float GetNormalizedTime(int value)
+    {
+        return (float)value / (float)_totalVertices;
+    }
+
+    private void UpdateColor(int value)
+    {
+        var color = gradient.Evaluate(GetNormalizedTime(value));
+
+        SetVertexNodeColor(color);
+    }
+
+    public void UpdateLabel(int value, int max)
+    {
+        string result = $"{value}/{max}";
+
+        SetText(result);
+    }
+
+    public void UpdateDFS_Label()
+    {
+        int startTime = vertex.GetStartTime();
+        int endTime = vertex.GetEndTime();
+
+        UpdateLabel(startTime, endTime);
+    }
+
+    private void OnEndTimeChanged(int value)
+    {
+        UpdateDFS_Label();
+        UpdateColor(value);
+    }
+
+    private void OnStartTimeChanged(int value)
+    {
+        UpdateColor(value);
+    }
+
+    private void SetVertexNodeColor(Color color)
+    {
+        _vertexNode.color = color;
     }
 
     private void OnColorChanged(ENodeColor color)
@@ -68,7 +127,7 @@ public class WorldGraphVertexUI : MonoBehaviour
 
         this.transform.position = Level.CalculatePosition(coord);
 
-        SetText($"{coord.x} , {coord.y}");
+        //SetText($"{coord.x} , {coord.y}");
     }
 
     private void SetText(string value)
@@ -93,7 +152,7 @@ public class WorldGraphVertexUI : MonoBehaviour
             float distance = Vector2.Distance(transform.position, neightbour);
             var edge = Instantiate<GameObject>(edgePrefab, Vector3.zero, Quaternion.Euler(0, 0, angle), edgeParent);
             edge.transform.localPosition = Vector3.zero;
-            edge.GetComponent<RectTransform>().sizeDelta = new Vector2(distance*10, edgeSize);
+            edge.GetComponent<RectTransform>().sizeDelta = new Vector2(distance * 10, edgeSize);
             edge.GetComponentInChildren<Image>().color = lineColor;
             edges.Add(edge);
         }

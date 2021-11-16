@@ -112,7 +112,7 @@ public class Level : MonoBehaviour
             var graphVertex = Instantiate(GraphVertexPrefab, Vector3.zero, Quaternion.identity, parent.transform);
             var vertexUI = graphVertex.GetComponent<WorldGraphVertexUI>();
 
-            vertexUI.SetVertex(vertex);
+            vertexUI.SetVertex(vertex, graph.GetSize());
             //vertexUI.SetCoord(vertex.GetData());
 
             foreach (var edge in edgeList.Value)
