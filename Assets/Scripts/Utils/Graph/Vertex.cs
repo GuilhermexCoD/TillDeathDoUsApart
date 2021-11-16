@@ -8,6 +8,8 @@ public class Vertex<T> where T : IEquatable<T>
     private T data;
     private string label;
     private ENodeColor _color;
+    private int startTime;
+    private int endTime;
 
     public event Action<ENodeColor> onColorChanged;
 
@@ -23,6 +25,26 @@ public class Vertex<T> where T : IEquatable<T>
         this.data = data;
     }
 
+    public int GetStartTime()
+    {
+        return this.startTime;
+    }
+
+    public void SetStartTime(int time)
+    {
+        this.startTime = time;
+    }    
+    
+    public int GetEndTime()
+    {
+        return this.endTime;
+    }
+
+    public void SetEndTime(int time)
+    {
+        this.endTime = time;
+    }
+
     public T GetData()
     {
         return data;
@@ -33,5 +55,10 @@ public class Vertex<T> where T : IEquatable<T>
         this._color = color;
 
         onColorChanged?.Invoke(color);
+    }
+
+    public ENodeColor GetVertexColor()
+    {
+        return this._color;
     }
 }

@@ -5,24 +5,52 @@ using UnityEngine;
 
 public class DFS : MonoBehaviour 
 {
-    public void Execute<V, E>(Graph<V, E> graph) where E : class where V : IEquatable<V>
+    int time = 0;
+
+    public void Execute<V, E>(Graph<V, E> graph, Vertex<V> source) where E : class where V : IEquatable<V>
     {
-        int time = 0;
+        
         foreach(var vertex in graph.GetVertices())
         {
             vertex.SetVertexColor(ENodeColor.WHITE);
         }
 
-        foreach (var vertex in graph.GetVertices())
+        if(source.GetVertexColor() == ENodeColor.WHITE)
         {
-            
+           DFSVisit(graph, source);
         }
+        
+    }
+
+    private void DFSVisit<V, E>(Graph<V, E> graph, Vertex<V> vertex)
+        where V : IEquatable<V>
+        where E : class
+    {
+        time++;
+        vertex.SetStartTime(time);
+        vertex.SetVertexColor(ENodeColor.GRAY);
+        foreach(var edge in graph.GetVertexEdges(vertex))
+        {
+            var targetVertex = graph.GetVertex(edge.GetVertexIndex());
+            if(targetVertex.GetVertexColor() == ENodeColor.WHITE)
+            {
+                DFSVisit(graph, targetVertex);
+            }
+        }
+        vertex.SetVertexColor(ENodeColor.BLACK);
+        time++;
+        vertex.SetEndTime(time);
     }
 
     private void Start()
     {
-        var graph = Level.current.graph;
+        var playerPosition = GameEventsHandler.current.playerGo.transform.position;
 
-        this.Execute(graph);
+        var graph = Level.current.graph;
+        var source = graph.GetVertex(new Vector2Int((int)playerPosition.x, (int)playerPosition.y));
+
+        this.Execute(graph, source);
+
+        Debug.Log($"{source.GetStartTime()} / {source.GetEndTime()}");
     }
 }
