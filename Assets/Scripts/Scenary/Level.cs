@@ -112,7 +112,8 @@ public class Level : MonoBehaviour
             var graphVertex = Instantiate(GraphVertexPrefab, Vector3.zero, Quaternion.identity, parent.transform);
             var vertexUI = graphVertex.GetComponent<WorldGraphVertexUI>();
 
-            vertexUI.SetCoord(vertex.GetData());
+            vertexUI.SetVertex(vertex);
+            //vertexUI.SetCoord(vertex.GetData());
 
             foreach (var edge in edgeList.Value)
             {
@@ -125,6 +126,9 @@ public class Level : MonoBehaviour
             vertexUI.CreateEdges();
         }
 
+        var vert = graph.GetVertex(0);
+
+        vert.SetVertexColor(ENodeColor.BLACK);
         //foreach (var room in rooms)
         //{
         //    int roomIndex = rooms.IndexOf(room);

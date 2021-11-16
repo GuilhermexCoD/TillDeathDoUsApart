@@ -10,7 +10,7 @@ public class DFS : MonoBehaviour
         int time = 0;
         foreach(var vertex in graph.GetVertices())
         {
-            vertex.color = ENodeColor.WHITE;
+            vertex.SetVertexColor(ENodeColor.WHITE);
         }
 
         foreach (var vertex in graph.GetVertices())

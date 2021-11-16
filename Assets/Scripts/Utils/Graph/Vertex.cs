@@ -7,7 +7,9 @@ public class Vertex<T> where T : IEquatable<T>
 {
     private T data;
     private string label;
-    public ENodeColor color;
+    private ENodeColor _color;
+
+    public event Action<ENodeColor> onColorChanged;
 
     public Vertex(T data)
     {
@@ -24,5 +26,12 @@ public class Vertex<T> where T : IEquatable<T>
     public T GetData()
     {
         return data;
+    }
+
+    public void SetVertexColor(ENodeColor color)
+    {
+        this._color = color;
+
+        onColorChanged?.Invoke(color);
     }
 }

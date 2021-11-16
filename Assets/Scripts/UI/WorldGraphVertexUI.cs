@@ -22,6 +22,9 @@ public class WorldGraphVertexUI : MonoBehaviour
     private GameObject edgePrefab;
 
     [SerializeField]
+    private Image _vertexNode;
+
+    [SerializeField]
     private Color lineColor;
     [SerializeField]
     private float edgeSize = 10;
@@ -29,6 +32,35 @@ public class WorldGraphVertexUI : MonoBehaviour
     private Transform edgeParent;
     private List<Vector2> neightbours = new List<Vector2>();
     private List<GameObject> edges = new List<GameObject>();
+
+    public void SetVertex(Vertex<Vector2Int> vertex)
+    {
+        this.vertex = vertex;
+        this.vertex.onColorChanged += OnColorChanged;
+
+        SetCoord(vertex.GetData());
+    }
+
+    private void OnColorChanged(ENodeColor color)
+    {
+        var vertexColor = Color.white;
+        switch (color)
+        {
+            case ENodeColor.WHITE:
+                vertexColor = Color.white;
+                break;
+            case ENodeColor.GRAY:
+                vertexColor = Color.gray;
+                break;
+            case ENodeColor.BLACK:
+                vertexColor = Color.green;
+                break;
+            default:
+                break;
+        }
+
+        _vertexNode.color = vertexColor;
+    }
 
     public void SetCoord(Vector2Int coord)
     {
