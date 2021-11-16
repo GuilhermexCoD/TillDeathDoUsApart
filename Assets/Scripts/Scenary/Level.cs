@@ -126,9 +126,9 @@ public class Level : MonoBehaviour
             vertexUI.CreateEdges();
         }
 
-        var vert = graph.GetVertex(0);
+        //var vert = graph.GetVertex(0);
 
-        vert.SetVertexColor(ENodeColor.BLACK);
+        //vert.SetVertexColor(ENodeColor.BLACK);
         //foreach (var room in rooms)
         //{
         //    int roomIndex = rooms.IndexOf(room);
