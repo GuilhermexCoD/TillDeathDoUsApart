@@ -5,9 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class BFS : MonoBehaviour
+public class BFS : IGraphAlgorithms
 {
-    int k = 0;
+    public int dephLevel = 0;
+
     public void Execute<V, E>(Graph<V, E> graph, Vertex<V> source) where E : class where V : IEquatable<V>
     {
 
@@ -35,21 +36,7 @@ public class BFS : MonoBehaviour
                 }
             }
             vertex.SetVertexColor(ENodeColor.BLACK);
-            k = vertex.GetDistance();
+            dephLevel = vertex.GetDistance();
         }
-
-        Debug.Log($"k = {k}");
-    }
-
-    private void Start()
-    {
-        var playerPosition = GameEventsHandler.current.playerGo.transform.position;
-
-        var graph = Level.current.graph;
-        var source = graph.GetVertex(new Vector2Int((int)playerPosition.x, (int)playerPosition.y));
-
-        this.Execute(graph, source);
-
-        Debug.Log($"{source.GetStartTime()} / {source.GetEndTime()}");
     }
 }

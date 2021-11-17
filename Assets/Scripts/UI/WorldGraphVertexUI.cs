@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -22,7 +21,8 @@ public class WorldGraphVertexUI : MonoBehaviour
     [SerializeField]
     private GameObject edgePrefab;
 
-    private int _totalVertices;
+    private int _lastValue;
+    private int _total;
 
     [SerializeField]
     private Image _vertexNode;
@@ -37,34 +37,65 @@ public class WorldGraphVertexUI : MonoBehaviour
     private List<Vector2> neightbours = new List<Vector2>();
     private List<GameObject> edges = new List<GameObject>();
 
-    public void SetVertex(Vertex<Vector2Int> vertex, int totalVertices)
+    public void OnInitialize(GraphManager graphManager, Vertex<Vector2Int> vertex)
+    {
+        graphManager.OnAlgorithmChanged += OnAlgorithmChanged;
+
+        SetVertex(vertex);
+    }
+
+    public void SetVertex(Vertex<Vector2Int> vertex)
     {
         this.vertex = vertex;
-        //this.vertex.onColorChanged += OnColorChanged;
-        //this.vertex.onStartTimeChanged += OnStartTimeChanged;
-        //this.vertex.onEndTimeChanged += OnEndTimeChanged;
-        this.vertex.onDistanceChanged += OnDistanceChanged;
 
-        //TODO tirar essa distancia Hardcoded
-        this._totalVertices = 144;
+        this.vertex.onDistanceChanged += OnDistanceChanged;
 
         SetCoord(vertex.GetData());
     }
 
-    private void OnDistanceChanged(int value)
+    private void OnAlgorithmChanged(GraphManager graphManager, EGraphAlgorithm algorithm)
     {
-        UpdateColor(value);
-        UpdateLabel(value, _totalVertices);
+        UnSubscribeGraphManager(graphManager);
+
+        switch (algorithm)
+        {
+            case EGraphAlgorithm.bfs:
+                graphManager.OnBFS_Executed += OnBFS_Executed;
+                break;
+            case EGraphAlgorithm.dfs:
+                break;
+            case EGraphAlgorithm.aStar:
+                break;
+            default:
+                break;
+        }
     }
 
-    private float GetNormalizedTime(int value)
+    private void UnSubscribeGraphManager(GraphManager graphManager)
     {
-        return (float)value / (float)_totalVertices;
+        graphManager.OnBFS_Executed -= OnBFS_Executed;
+    }
+
+    private void OnBFS_Executed(int distance)
+    {
+        _total = distance;
+        UpdateColor(_lastValue);
+        UpdateLabel(_lastValue, _total);
+    }
+
+    private void OnDistanceChanged(int value)
+    {
+        _lastValue = value;
+    }
+
+    private float GetNormalizedValue(int value)
+    {
+        return (float)value / (float)_total;
     }
 
     private void UpdateColor(int value)
     {
-        var color = gradient.Evaluate(GetNormalizedTime(value));
+        var color = gradient.Evaluate(GetNormalizedValue(value));
 
         SetVertexNodeColor(color);
     }
@@ -76,31 +107,7 @@ public class WorldGraphVertexUI : MonoBehaviour
         SetText(result);
     }
 
-    public void UpdateDFS_Label()
-    {
-        int startTime = vertex.GetStartTime();
-        int endTime = vertex.GetEndTime();
-
-        UpdateLabel(startTime, endTime);
-    }
-
-    private void OnEndTimeChanged(int value)
-    {
-        UpdateDFS_Label();
-        UpdateColor(value);
-    }
-
-    private void OnStartTimeChanged(int value)
-    {
-        UpdateColor(value);
-    }
-
-    private void SetVertexNodeColor(Color color)
-    {
-        _vertexNode.color = color;
-    }
-
-    private void OnColorChanged(ENodeColor color)
+    private void SetVertexNodeColorBasedOnNodeColor(ENodeColor color)
     {
         var vertexColor = Color.white;
         switch (color)
@@ -118,7 +125,7 @@ public class WorldGraphVertexUI : MonoBehaviour
                 break;
         }
 
-        _vertexNode.color = vertexColor;
+        SetVertexNodeColor(vertexColor);
     }
 
     public void SetCoord(Vector2Int coord)
@@ -127,13 +134,18 @@ public class WorldGraphVertexUI : MonoBehaviour
 
         this.transform.position = Level.CalculatePosition(coord);
 
-        //SetText($"{coord.x} , {coord.y}");
+        SetText($"{coord.x} , {coord.y}");
     }
 
     private void SetText(string value)
     {
         this.value = value;
         text.text = value;
+    }
+
+    private void SetVertexNodeColor(Color color)
+    {
+        _vertexNode.color = color;
     }
 
     public void AddNeightbour(Vector3 position)

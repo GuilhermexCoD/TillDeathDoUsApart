@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class DFS : MonoBehaviour 
+public class DFS : IGraphAlgorithms
 {
-    int time = 0;
+    public int time = 0;
 
     public void Execute<V, E>(Graph<V, E> graph, Vertex<V> source) where E : class where V : IEquatable<V>
     {
@@ -40,17 +40,5 @@ public class DFS : MonoBehaviour
         vertex.SetVertexColor(ENodeColor.BLACK);
         time++;
         vertex.SetEndTime(time);
-    }
-
-    private void Start()
-    {
-        var playerPosition = GameEventsHandler.current.playerGo.transform.position;
-
-        var graph = Level.current.graph;
-        var source = graph.GetVertex(new Vector2Int((int)playerPosition.x, (int)playerPosition.y));
-
-        this.Execute(graph, source);
-
-        Debug.Log($"{source.GetStartTime()} / {source.GetEndTime()}");
     }
 }
