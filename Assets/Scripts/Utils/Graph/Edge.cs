@@ -46,6 +46,11 @@ public class Edge<W> where W : class
         }
     }
 
+    public W GetWeight()
+    {
+        return Weight;
+    }
+
     public override int GetHashCode()
     {
         return TargetIndex.GetHashCode() + Weight.GetHashCode();

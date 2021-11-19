@@ -6,7 +6,7 @@ using UnityEngine;
 public class Vertex<T> where T : IEquatable<T>
 {
     private T data;
-    private string label;
+    private string _label;
     private ENodeColor _color;
     private int distance;
     private int startTime;
@@ -16,16 +16,17 @@ public class Vertex<T> where T : IEquatable<T>
     public event Action<int> onStartTimeChanged;
     public event Action<int> onEndTimeChanged;
     public event Action<int> onDistanceChanged;
+    public event Action<T> onDataChanged;
 
     public Vertex(T data)
     {
-        this.label = data.GetHashCode().ToString();
+        this._label = data.GetHashCode().ToString();
         this.data = data;
     }
 
     public Vertex(string label, T data)
     {
-        this.label = label;
+        this._label = label;
         this.data = data;
     }
 
@@ -60,6 +61,22 @@ public class Vertex<T> where T : IEquatable<T>
     {
         this.endTime = time;
         onEndTimeChanged?.Invoke(time);
+    }
+
+    public void SetLabel(string label)
+    {
+        this._label = label;
+    }
+
+    public string GetLabel()
+    {
+        return _label;
+    }
+
+    public void SetData(T data)
+    {
+        this.data = data;
+        onDataChanged?.Invoke(data);
     }
 
     public T GetData()

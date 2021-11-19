@@ -34,6 +34,11 @@ public class HealthSystem : MonoBehaviour, IHealthSystem
         }
     }
 
+    public bool GetCanDestroy()
+    {
+        return _bCanDestroy;
+    }
+
     public Actor GetActor()
     {
         return _actor;

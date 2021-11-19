@@ -8,6 +8,27 @@ public static class Util
 {
     public const int sortingOrderDefault = 5000;
 
+    public static bool PythagoreanTheorem(float hypotenuse, float leg1, float leg2)
+    {
+        float pLeg1 = Mathf.Pow(leg1, 2);
+        float pLeg2 = Mathf.Pow(leg2, 2);
+
+        float pHypo = Mathf.Pow(hypotenuse, 2);
+
+        return (pHypo == (pLeg1 + pLeg2));
+    }
+
+    public static float GetHypotenuse(float leg1,float leg2)
+    {
+        float pLeg1 = Mathf.Pow(leg1, 2);
+        float pLeg2 = Mathf.Pow(leg2, 2);
+        float sum = pLeg1 + pLeg2;
+
+        float hypotenuse = Mathf.Sqrt(sum);
+
+        return hypotenuse;
+    }
+
     public static Vector3 GetMouseWorldPosition()
     {
         Vector3 vector = GetMouseWorldPositionWithZ(Input.mousePosition, Camera.current);
@@ -59,6 +80,26 @@ public static class Util
             return string.Empty;
 
         return Regex.Replace(str, "[^a-zA-Z0-9_.]+", "", RegexOptions.Compiled);
+    }
+
+    public static float GetAngleFromVectorFloat(Vector2 direction)
+    {
+        direction = direction.normalized;
+
+        float n = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+
+        if (n < 0) n += 360;
+
+        return n;
+    }
+
+    public static float GetAngleFromVectorFloat(Vector2Int direction)
+    {
+        float n = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+
+        if (n < 0) n += 360;
+
+        return n;
     }
 
     public static float GetAngleFromVectorFloat(Vector3 direction)

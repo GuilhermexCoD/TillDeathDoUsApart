@@ -8,7 +8,6 @@ using UnityEngine;
 public class GraphManagerEditor : Editor
 {
     GraphManager graphManager;
-
     void OnEnable()
     {
         graphManager = (GraphManager)target;
@@ -18,9 +17,19 @@ public class GraphManagerEditor : Editor
     {
         base.OnInspectorGUI();
 
+        if (GUILayout.Button("Toogle Visuals"))
+        {
+            graphManager.ToogleVisuals();
+        }
+
         if (GUILayout.Button("Execute BFS"))
         {
             graphManager.ExecuteBFS();
+        }
+
+        if (GUILayout.Button("Execute AStar"))
+        {
+            graphManager.ExecuteAStar();
         }
     }
 }

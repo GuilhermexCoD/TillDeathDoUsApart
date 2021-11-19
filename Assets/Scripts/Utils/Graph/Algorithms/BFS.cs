@@ -5,11 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class BFS : IGraphAlgorithms
+public class BFS<V, E> : IGraphAlgorithms<V, E> where V : IEquatable<V> where E : class
 {
     public int dephLevel = 0;
 
-    public void Execute<V, E>(Graph<V, E> graph, Vertex<V> source) where E : class where V : IEquatable<V>
+    public void Execute(Graph<V, E> graph, Vertex<V> source)
     {
 
         foreach (var vertex in graph.GetVertices())
@@ -38,5 +38,10 @@ public class BFS : IGraphAlgorithms
             vertex.SetVertexColor(ENodeColor.BLACK);
             dephLevel = vertex.GetDistance();
         }
+    }
+
+    public void Execute(Graph<V, E> graph, Vertex<V> source, Vertex<V> target)
+    {
+        throw new NotImplementedException();
     }
 }

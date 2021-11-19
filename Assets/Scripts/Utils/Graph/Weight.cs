@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 public class Weight
 {
-    public int value;
+    public float value;
 
-    public Weight(int value)
+    public Weight(float value)
     {
         this.value = value;
     }

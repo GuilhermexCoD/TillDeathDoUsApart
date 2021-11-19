@@ -73,8 +73,6 @@ public class Level : MonoBehaviour
         CallOnGenerated();
     }
 
-    
-
     public void Clean()
     {
         if (map != null)
@@ -263,13 +261,14 @@ public class Level : MonoBehaviour
         return new Vector2Int(Random.Range(0, data.size.x), Random.Range(0, data.size.y));
     }
 
+    public static Vector2Int PositionToCoord(Vector2 position)
+    {
+        return new Vector2Int(Mathf.RoundToInt(position.x - offSet), Mathf.RoundToInt(position.y - offSet));
+    }
+
     public static Vector3 CalculatePosition(Vector2Int coord)
     {
-        Vector3 position = Vector3.zero;
-
-        position += new Vector3(coord.x + offSet, coord.y + offSet);
-
-        return position;
+        return new Vector3(coord.x + offSet, coord.y + offSet);
     }
 
     private void OnDestroy()

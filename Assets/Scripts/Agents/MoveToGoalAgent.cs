@@ -5,25 +5,27 @@ using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 public class MoveToGoalAgent : Agent
 {
     [SerializeField]
-    private MoveAgent _move;
+    public MoveAgent _move;
     [SerializeField]
     private HealthSystem _healthSystem;
     [SerializeField]
     private Actor _actor;
 
-    private float _lastHealth;
     [SerializeField]
     private bool _bUseVectorObs;
 
-    private float _hungry;
-
     [SerializeField]
     private float _attackRadius;
+
+    [SerializeField]
+    private float _listenRadius;
+
+    [SerializeField]
+    private float _attackDamage = 10f;
     [SerializeField]
     private float _attackCooldown;
     private float _lastAttackTime;
@@ -32,8 +34,8 @@ public class MoveToGoalAgent : Agent
 
     public event EventHandler<EventArgs> onEndEpisode;
 
-    private Transform damageCauserTransform;
-    private Transform healingCauserTransform;
+    private Actor _damagedActor;
+    private Vector2 _targetPosition;
 
     public override void Initialize()
     {
@@ -41,10 +43,8 @@ public class MoveToGoalAgent : Agent
         _move.OnInitialize(this.GetComponent<Rigidbody2D>());
 
         _healthSystem = this.GetComponent<HealthSystem>();
-        _healthSystem.OnHealthChanged += OnHealthChanged;
 
         _actor = this.GetComponent<Actor>();
-        _actor.OnAnyDamage += OnActorAnyDamage;
 
         //m_ResetParams = Academy.Instance.EnvironmentParameters;
         SetResetParameters();
@@ -52,72 +52,139 @@ public class MoveToGoalAgent : Agent
 
     private void Attack()
     {
-        var rayHit = Physics2D.OverlapCircle(this.transform.position, _attackRadius, hitLayer);
-
-        if (rayHit != null)
+        var circleColliders = Physics2D.OverlapCircleAll(this.transform.position, _attackRadius, hitLayer);
+        bool attackHit = false;
+        foreach (var collider in circleColliders)
         {
-            Debug.Log($"Attack hit: {rayHit.gameObject.name}");
-            var damagedActor = rayHit.GetComponent<Actor>();
-            float healthRegen = Gameplay.ApplyDamage(damagedActor, 10, _actor, new DamageType(0, false));
+            if (collider != null && collider.gameObject != this.gameObject)
+            {
+                if (collider.GetComponent<Actor>() != null)
+                {
+                    if (_damagedActor != collider.GetComponent<Actor>())
+                    {
+                        if (_damagedActor != null)
+                        {
+                            _damagedActor.GetComponent<HealthSystem>().OnHealthEqualsZero -= OnActorDamagedDead;
+                        }
+                        else
+                        {
+                            _damagedActor = collider.GetComponent<Actor>();
 
-            _healthSystem.IncreaseHealth(healthRegen, damagedActor);
+                            var actorHealthSystem = _damagedActor.GetComponent<HealthSystem>();
 
-            float _decreaseHunger = _healthSystem.NormalizeByHealthMax(healthRegen);
-            DecreaseHunger(_decreaseHunger);
+                            if (actorHealthSystem != null)
+                            {
+                                actorHealthSystem.OnHealthEqualsZero += OnActorDamagedDead;
+                            }
+                        }
+                    }
+
+                    //var actor = collider.GetComponent<Actor>();
+                    //var healthSystem = actor.GetComponent<HealthSystem>();
+                    //bool isGoingToDie = healthSystem.GetHealth() - _attackDamage <= 0;
+                    //if (true)
+                    //{
+
+                    //}
+
+                    //targetPosition to save on Observation
+                    _targetPosition = _damagedActor.transform.localPosition;
+
+                    //Apply Damage
+                    float healthRegen = Gameplay.ApplyDamage(_damagedActor, _attackDamage, _actor, new DamageType(0, false));
+                    _healthSystem.IncreaseHealth(healthRegen, _damagedActor);
+
+                    SetReward(0.2f);
+
+                    attackHit = true;
+                }
+            }
+
         }
-        else
+
+        if (!attackHit)
         {
+            Listen();
             SetReward(-0.1f);
         }
 
-        Debug.Log($"ATTACK : {_lastAttackTime}");
         _lastAttackTime = Time.time;
+
     }
 
-    private void OnActorAnyDamage(object sender, AnyDamageArgs e)
+    private void Listen()
     {
-        damageCauserTransform = e.damageCauser.transform;
+        var circleColliders = Physics2D.OverlapCircleAll(this.transform.position, _listenRadius, hitLayer);
+
+        foreach (var collider in circleColliders)
+        {
+            if (collider != null)
+            {
+                if (collider.GetComponent<Actor>() != null)
+                {
+                    _targetPosition = collider.transform.localPosition;
+                    return;
+                }
+            }
+        }
+    }
+
+    private void OnActorDamagedDead(object sender, EventArgs e)
+    {
+        //sender.GetComponent<HealthSystem>().OnHealthEqualsZero -= OnActorDamagedDead;
+        SetReward(1f);
+        CallEndEpisode();
     }
 
     public override void OnEpisodeBegin()
     {
-        _move.SetVelocity(Vector2.zero);
-        _hungry = Random.Range(0, 0.3f);
         //Reset the parameters when the Agent is reset.
         SetResetParameters();
     }
 
+    public void SetPositionVelocityZero(Vector3 position)
+    {
+        _move.SetBlockMovement(true);
+        _move.ResetVelocity();
+
+        this.transform.position = position;
+        _move.SetBlockMovement(false);
+    }
+
     public void SetResetParameters()
     {
-        _healthSystem.OnInitialize(false);
-        _lastHealth = _healthSystem.GetHealth();
+        _damagedActor = null;
+
+        _targetPosition = Vector2.zero;
+
+        _move.ResetVelocity();
+
+        if (!_healthSystem.GetCanDestroy())
+        {
+            _healthSystem.OnInitialize(false);
+        }
     }
 
     public override void CollectObservations(VectorSensor sensor)
     {
         if (_bUseVectorObs)
         {
-            //if (damageCauserTransform != null)
-            //{
-            //    sensor.AddObservation((Vector2)damageCauserTransform.position);
-            //}
-            //else
-            //{
-            //    sensor.AddObservation(Vector2.zero);
-            //}
+            if (_damagedActor != null)
+            {
+                sensor.AddObservation((Vector2)_damagedActor.transform.localPosition);
+            }
+            else
+            {
+                sensor.AddObservation(Vector2.zero);
+            }
 
-            //if (healingCauserTransform != null)
-            //{
-            //    sensor.AddObservation((Vector2)healingCauserTransform.position);
-            //}
-            //else
-            //{
-            //    sensor.AddObservation(Vector2.zero);
-            //}
 
+            sensor.AddObservation(_targetPosition);
+
+
+            sensor.AddObservation((Vector2)this.transform.localPosition);
             sensor.AddObservation(_move.GetVelocity());
             sensor.AddObservation(_healthSystem.GetHealthNormalized());
-            sensor.AddObservation(_hungry);
             sensor.AddObservation(GetNormilizedTimeToNextAttack());
         }
     }
@@ -127,40 +194,6 @@ public class MoveToGoalAgent : Agent
         return Mathf.Clamp01(Time.time / (_lastAttackTime + _attackCooldown));
     }
 
-    private void OnHealthChanged(object sender, HealthArgs e)
-    {
-        bool healed = (_lastHealth <= e.health);
-
-        bool isFullHealth = (_lastHealth == e.health);
-
-        //float reward = healed ? 0.1f : -0.1f * (isFullHealth ? 0.05f : 1f);
-        float reward = healed ? 0.1f : -0.1f;
-
-        _lastHealth = e.health;
-
-        Debug.Log($"{this.gameObject.name} : reward({(healed ? "Heal" : (string)(isFullHealth ? "Full Health" : "Damaged"))}) = {reward}");
-
-        SetReward(reward);
-
-        //if (healed)
-        //    healingCauserTransform = e.causer.transform;
-        //else
-        //    damageCauserTransform = e.causer.transform;
-
-        if (e.health == 0)
-        {
-            DeadReward();
-        }
-    }
-
-    private void DeadReward()
-    {
-        float reward = -1f;
-        Debug.Log($"{this.gameObject.name} : reward(Death) = {reward}");
-        SetReward(reward);
-        CallEndEpisode();
-    }
-
     public override void OnActionReceived(ActionBuffers actionBuffers)
     {
         MoveAgent(actionBuffers.ContinuousActions);
@@ -168,24 +201,6 @@ public class MoveToGoalAgent : Agent
         if (CanAttack(actionBuffers.ContinuousActions[2]))
         {
             Attack();
-        }
-
-        IncreaseHunger(0.0001f);
-    }
-
-    private void IncreaseHunger(float amount)
-    {
-        _hungry = Mathf.Clamp01(_hungry - amount);
-    }
-
-    private void DecreaseHunger(float amount)
-    {
-        _hungry = Mathf.Clamp01(_hungry + amount);
-
-        if (_hungry >= 0.98)
-        {
-            SetReward(1f);
-            CallEndEpisode();
         }
     }
 
@@ -224,11 +239,4 @@ public class MoveToGoalAgent : Agent
         }
     }
 
-    private void DebugActionBuffer(ActionSegment<float> act)
-    {
-        for (int i = 0; i < act.Length; i++)
-        {
-            Debug.Log($"{this.gameObject.name}: {i} = {(float)act[i]}");
-        }
-    }
 }

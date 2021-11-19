@@ -12,6 +12,7 @@ public class TrainingManager : MonoBehaviour
     public TilemapVisualizer tilemapVisualizer;
 
     public GameObject agent;
+    public Vector3 agentStartPosition;
 
     public GameObject[] altars;
 
@@ -20,6 +21,9 @@ public class TrainingManager : MonoBehaviour
     public Vector2Int startOffset;
 
     public Vector2Int offsetIndex;
+
+    //public List<Vector3> agentPositions = new List<Vector3>();
+    //public List<Vector3> agentVelocity = new List<Vector3>();
 
     #region Level
 
@@ -53,6 +57,17 @@ public class TrainingManager : MonoBehaviour
         Setup();
     }
 
+    private void FixedUpdate()
+    {
+        //agentPositions.Add(agent.transform.localPosition);
+        //agentVelocity.Add(agent.GetComponent<MoveToGoalAgent>()._move.GetVelocity());
+        //if (Vector3.Distance(agent.transform.position,this.transform.position) > 40)
+        //{
+        //    Debug.LogError("PARAAAAAA");
+        //    Time.timeScale = 0;
+        //}
+    }
+
     private void TrainingManager_onEndEpisode(object sender, EventArgs e)
     {
         Setup();
@@ -79,25 +94,37 @@ public class TrainingManager : MonoBehaviour
         _isLevelGenerated = true;
         onGenerated?.Invoke(this, new EventArgs());
 
-        var randomAgentPosition = GetRandomPositionInsideRoom();
-        agent.transform.position = randomAgentPosition;
+        agentStartPosition = GetRandomPositionInsideRoom();
+        agent.GetComponent<MoveToGoalAgent>().SetPositionVelocityZero(agentStartPosition);
 
-        foreach (var altar in altars)
+        Vector2Int agentPos = new Vector2Int(Mathf.FloorToInt(agent.transform.position.x), Mathf.FloorToInt(agent.transform.position.y));
+        Debug.LogWarning($"SPAWNED Agent On Position: {agentPos}");
+
+        if (!map.Contains(agentPos))
         {
-            randomAgentPosition = GetRandomPositionInsideRoom();
-            altar.transform.position = randomAgentPosition;
+            Debug.LogError("SPAWNED Agent On Invalid Position");
         }
+
+        var agentVelocity = agent.GetComponent<MoveToGoalAgent>()._move.GetVelocity();
+        if (agentVelocity.magnitude > 0.1f)
+        {
+            Debug.LogError("Agent Velocity Is Not Ideal");
+        }
+        //foreach (var altar in altars)
+        //{
+        //    randomAgentPosition = GetRandomPositionInsideRoom();
+        //    altar.transform.position = randomAgentPosition;
+        //}
     }
 
     public void Clean()
     {
-        if (map != null)
-        {
-            map = new HashSet<Vector2Int>();
-            rooms = new List<Room<GeneratorRule>>();
-            corridors = new HashSet<Vector2Int>();
-            tilemapVisualizer?.Clear();
-        }
+        map?.Clear();
+        rooms?.Clear();
+        corridors?.Clear();
+        tilemapVisualizer?.Clear();
+        //agentPositions?.Clear();
+        //agentVelocity?.Clear();
     }
 
     public void Generate()
@@ -245,15 +272,17 @@ public class TrainingManager : MonoBehaviour
     public Vector3 GetRandomPositionInsideRoom()
     {
         var coord = rooms[Random.Range(0, rooms.Count)].GetRandomCoord();
-        //return CalculatePosition(coord);
-        return new Vector3(coord.x,coord.y);
+        var pos = CalculatePosition(coord);
+        return new Vector3(coord.x, coord.y) + (Vector3.one * 0.5f);
     }
 
     public Vector3 CalculatePosition(Vector2Int coord)
     {
         Vector3 position = Vector3.zero;
 
-        position += new Vector3(coord.x + startOffset.x, coord.y + startOffset.y);
+        //var offSet = levelData.Start;
+        var offSet = Vector3.zero;
+        position += new Vector3(coord.x - offSet.x, coord.y - offSet.y);
 
         return position;
     }

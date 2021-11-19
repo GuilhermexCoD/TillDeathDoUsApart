@@ -8,9 +8,25 @@ public class WorldGraphVertexUI : MonoBehaviour
 {
 
     [SerializeField]
-    private TextMeshProUGUI text;
+    private TextMeshProUGUI _coordText;
+
+    [Header("A Star")]
+    [SerializeField]
+    private TextMeshProUGUI _gCostText;
 
     [SerializeField]
+    private TextMeshProUGUI _hCostText;
+
+    [SerializeField]
+    private TextMeshProUGUI _fCostText;
+
+    [SerializeField]
+    private GameObject _parentDirection;
+
+    [Header("Graph")]
+
+    private IVertexData<AStarVertexData<Vector2Int>> aStarData;
+
     private Vertex<Vector2Int> vertex;
 
     [SerializeField]
@@ -18,11 +34,13 @@ public class WorldGraphVertexUI : MonoBehaviour
 
     private string value;
 
-    [SerializeField]
-    private GameObject edgePrefab;
-
     private int _lastValue;
     private int _total;
+
+    [Header("Apperance")]
+
+    [SerializeField]
+    private GameObject edgePrefab;
 
     [SerializeField]
     private Image _vertexNode;
@@ -40,8 +58,69 @@ public class WorldGraphVertexUI : MonoBehaviour
     public void OnInitialize(GraphManager graphManager, Vertex<Vector2Int> vertex)
     {
         graphManager.OnAlgorithmChanged += OnAlgorithmChanged;
-
+        graphManager.OnAStarVertexDataChanged += OnAStarVertexDataChanged;
         SetVertex(vertex);
+    }
+
+    private void OnAStarVertexDataChanged(IVertexData<AStarVertexData<Vector2Int>> vertexData)
+    {
+        if (vertexData.GetData().GetVertexData().Equals(coord))
+        {
+            aStarData = vertexData.GetData();
+
+            aStarData.GetData().onGCostChanged += OnGCostChanged;
+            OnGCostChanged(aStarData.GetData().GetGCost());
+            aStarData.GetData().onHCostChanged += OnHCostChanged;
+            OnGCostChanged(aStarData.GetData().GetHCost());
+
+            aStarData.GetData().onColorChanged += OnColorChanged;
+            OnColorChanged(aStarData.GetData().GetColor());
+
+            aStarData.GetData().onParentChanged += OnParentChanged;
+            OnParentChanged(aStarData.GetData().GetParent());
+        }
+    }
+
+    private void OnParentChanged(Vertex<AStarVertexData<Vector2Int>> parent)
+    {
+        if (parent != null)
+        {
+            _parentDirection.SetActive(true);
+
+            Vector2Int endPosition = parent.GetData().GetVertexData();
+
+            Vector2Int direction = endPosition - coord;
+
+            float angle = Util.GetAngleFromVectorFloat(direction);
+            _parentDirection.transform.localEulerAngles = new Vector3(0, 0, angle);
+        }
+        else
+        {
+            _parentDirection.SetActive(false);
+        }
+        
+    }
+
+    private void OnColorChanged(Color color)
+    {
+        SetVertexNodeColor(color);
+    }
+
+    private void OnGCostChanged(float gCost)
+    {
+        _gCostText.text = gCost.ToString("0.00");
+        UpdateFCost();
+    }
+
+    private void OnHCostChanged(float hCost)
+    {
+        _hCostText.text = hCost.ToString("0.00");
+        UpdateFCost();
+    }
+
+    private void UpdateFCost()
+    {
+        _fCostText.text = aStarData?.GetData().GetFCost().ToString("0.00");
     }
 
     public void SetVertex(Vertex<Vector2Int> vertex)
@@ -104,7 +183,7 @@ public class WorldGraphVertexUI : MonoBehaviour
     {
         string result = $"{value}/{max}";
 
-        SetText(result);
+        SetCoordText(result);
     }
 
     private void SetVertexNodeColorBasedOnNodeColor(ENodeColor color)
@@ -134,13 +213,13 @@ public class WorldGraphVertexUI : MonoBehaviour
 
         this.transform.position = Level.CalculatePosition(coord);
 
-        SetText($"{coord.x} , {coord.y}");
+        SetCoordText($"{coord.x} , {coord.y}");
     }
 
-    private void SetText(string value)
+    private void SetCoordText(string value)
     {
         this.value = value;
-        text.text = value;
+        _coordText.text = value;
     }
 
     private void SetVertexNodeColor(Color color)

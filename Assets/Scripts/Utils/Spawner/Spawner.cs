@@ -29,20 +29,7 @@ public class Spawner : MonoBehaviour
 
             takenPositions.Add(position);
 
-
-            var go = Instantiate<GameObject>(prefab, position, Quaternion.identity);
+            Instantiate<GameObject>(prefab, position, Quaternion.identity);
         }
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 }

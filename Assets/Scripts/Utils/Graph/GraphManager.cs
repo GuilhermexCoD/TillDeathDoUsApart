@@ -9,13 +9,26 @@ public class GraphManager : MonoBehaviour
 
     public GameObject graphVertexPrefab;
 
+    public Transform sourceTransform;
+
+    public Transform targetTransform;
+
     public event Action<GraphManager, EGraphAlgorithm> OnAlgorithmChanged;
 
     public event Action<int> OnBFS_Executed;
 
     //public event Action<int> OnDFS_Executed;
 
+    public event Action<IVertexData<AStarVertexData<Vector2Int>>> OnAStarVertexDataChanged;
+
     private Graph<Vector2Int, Weight> _graph = new Graph<Vector2Int, Weight>();
+
+    [SerializeField]
+    private bool _bCreateEdgesVisual = false;
+
+    [SerializeField]
+    private bool _bShowVisuals = false;
+    private GameObject graphVisuals;
 
     private void Awake()
     {
@@ -32,11 +45,22 @@ public class GraphManager : MonoBehaviour
         }
     }
 
+    public void ToogleVisuals()
+    {
+        if (graphVisuals != null)
+        {
+            graphVisuals.SetActive(_bShowVisuals);
+            _bShowVisuals = !_bShowVisuals;
+        }
+    }
+
     private void OnLevelGenerated(object sender, EventArgs e)
     {
         _graph = GetGraphFromMap(Level.current.map);
 
         SpawnGraphVertex(_graph);
+
+        ToogleVisuals();
     }
 
     public void ExecuteBFS()
@@ -45,15 +69,21 @@ public class GraphManager : MonoBehaviour
         {
             OnAlgorithmChanged?.Invoke(this, EGraphAlgorithm.bfs);
 
-            var bfs = new BFS();
+            var bfs = new BFS<Vector2Int, Weight>();
 
-            //TODO make vertex Source more dinamic
-            var playerPosition = GameEventsHandler.current.playerGo.transform.position;
-            var source = _graph.GetVertex(new Vector2Int((int)playerPosition.x, (int)playerPosition.y));
+            var sourcePosition = Level.PositionToCoord(sourceTransform.transform.position);
+            var source = _graph.GetVertex(sourcePosition);
 
-            bfs.Execute(_graph, source);
+            if (source != null)
+            {
+                bfs.Execute(_graph, source);
 
-            OnBFS_Executed?.Invoke(bfs.dephLevel);
+                OnBFS_Executed?.Invoke(bfs.dephLevel);
+            }
+            else
+            {
+                Debug.LogWarning($"Source Coord not a Vertex : {sourcePosition}");
+            }
         }
     }
 
@@ -63,7 +93,7 @@ public class GraphManager : MonoBehaviour
         {
             OnAlgorithmChanged?.Invoke(this, EGraphAlgorithm.dfs);
 
-            var dfs = new BFS();
+            var dfs = new BFS<Vector2Int, Weight>();
 
             //TODO make vertex Source more dinamic
             var playerPosition = GameEventsHandler.current.playerGo.transform.position;
@@ -73,6 +103,40 @@ public class GraphManager : MonoBehaviour
 
             //OnBFS_Executed?.Invoke(dfs.dephLevel);
         }
+    }
+
+    public void ExecuteAStar()
+    {
+        if (_graph != null)
+        {
+            OnAlgorithmChanged?.Invoke(this, EGraphAlgorithm.aStar);
+
+            var aStar = new AStar<Vector2Int, Weight>();
+            aStar.onVertexDataChanged += AStarOnVertexDataChanged;
+
+            var sourcePosition = Level.PositionToCoord(sourceTransform.transform.position);
+            var source = _graph.GetVertex(sourcePosition);
+
+            var targetPosition = Level.PositionToCoord(targetTransform.transform.position);
+            var target = _graph.GetVertex(targetPosition);
+
+            if (source != null && target != null)
+            {
+                aStar.Execute(_graph, source, target);
+            }
+            else
+            {
+                if (source == null)
+                    Debug.LogWarning($"{nameof(source)} Coord not a Vertex : {sourcePosition}");
+                if (target == null)
+                    Debug.LogWarning($"{nameof(target)} Coord not a Vertex : {targetPosition}");
+            }
+        }
+    }
+
+    private void AStarOnVertexDataChanged(AStarVertexData<Vector2Int> data)
+    {
+        OnAStarVertexDataChanged?.Invoke(data);
     }
 
     private Graph<Vector2Int, Weight> GetGraphFromMap(HashSet<Vector2Int> map)
@@ -90,13 +154,15 @@ public class GraphManager : MonoBehaviour
             foreach (var direction in Direction2D.EightDirections)
             {
                 Vector2Int compareCoord = coord + direction.Value;
+                var orientation = direction.Key;
 
+                float weight = GetHypotenuseByOrientation(orientation, 1);
                 bool connection = map.Contains(compareCoord);
 
                 if (connection)
                 {
                     var connectedVertex = _graph.GetVertex(compareCoord);
-                    _graph.AddEdge(vertex, connectedVertex, false, new Weight(1));
+                    _graph.AddEdge(vertex, connectedVertex, false, new Weight(weight));
                 }
             }
         }
@@ -104,16 +170,37 @@ public class GraphManager : MonoBehaviour
         return _graph;
     }
 
+    private float GetHypotenuseByOrientation(EOrientation orientation, float weight)
+    {
+        float leg1 = weight;
+        float leg2 = weight;
+        switch (orientation)
+        {
+            case EOrientation.Up:
+                return weight;
+            case EOrientation.Right:
+                return weight;
+            case EOrientation.Down:
+                return weight;
+            case EOrientation.Left:
+                return weight;
+            default:
+                break;
+        }
+
+        return Util.GetHypotenuse(leg1, leg2);
+    }
+
     private void SpawnGraphVertex(Graph<Vector2Int, Weight> graph)
     {
-        var parent = new GameObject($"Graphs");
+        graphVisuals = new GameObject($"Graphs");
 
         foreach (var edgeList in graph.GetEdgeList())
         {
             int vertexIndex = edgeList.Key;
             var vertex = graph.GetVertex(vertexIndex);
 
-            var graphVertex = Instantiate(graphVertexPrefab, Vector3.zero, Quaternion.identity, parent.transform);
+            var graphVertex = Instantiate(graphVertexPrefab, Vector3.zero, Quaternion.identity, graphVisuals.transform);
             var vertexUI = graphVertex.GetComponent<WorldGraphVertexUI>();
 
             vertexUI.OnInitialize(this, vertex);
@@ -126,7 +213,8 @@ public class GraphManager : MonoBehaviour
                 var targetWorldPosition = Level.CalculatePosition(targetVertex.GetData());
                 vertexUI.AddNeightbour(targetWorldPosition);
             }
-            vertexUI.CreateEdges();
+            if (_bCreateEdgesVisual)
+                vertexUI.CreateEdges();
         }
     }
 }
