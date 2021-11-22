@@ -1,0 +1,47 @@
+{
+    "AgentTarget": {
+        "checkpoints": [
+            {
+                "steps": 499974,
+                "file_path": "results\\AgentTarget_Simple_02\\AgentTarget\\AgentTarget-499974.onnx",
+                "reward": 0.9307692307692308,
+                "creation_time": 1637541157.4613824,
+                "auxillary_file_paths": [
+                    "results\\AgentTarget_Simple_02\\AgentTarget\\AgentTarget-499974.pt"
+                ]
+            },
+            {
+                "steps": 999996,
+                "file_path": "results\\AgentTarget_Simple_02\\AgentTarget\\AgentTarget-999996.onnx",
+                "reward": 0.9398359161349134,
+                "creation_time": 1637542759.9085035,
+                "auxillary_file_paths": [
+                    "results\\AgentTarget_Simple_02\\AgentTarget\\AgentTarget-999996.pt"
+                ]
+            },
+            {
+                "steps": 1000009,
+                "file_path": "results\\AgentTarget_Simple_02\\AgentTarget\\AgentTarget-1000009.onnx",
+                "reward": 0.9398907103825137,
+                "creation_time": 1637542759.9874568,
+                "auxillary_file_paths": [
+                    "results\\AgentTarget_Simple_02\\AgentTarget\\AgentTarget-1000009.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1000009,
+            "file_path": "results\\AgentTarget_Simple_02\\AgentTarget.onnx",
+            "reward": 0.9398907103825137,
+            "creation_time": 1637542759.9874568,
+            "auxillary_file_paths": [
+                "results\\AgentTarget_Simple_02\\AgentTarget\\AgentTarget-1000009.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.27.0",
+        "torch_version": "1.7.0+cu110"
+    }
+}

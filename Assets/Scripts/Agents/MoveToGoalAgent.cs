@@ -16,26 +16,18 @@ public class MoveToGoalAgent : Agent
     private Actor _actor;
 
     [SerializeField]
+    private float _reachedDistance = 0.3f;
+
+    [SerializeField]
     private bool _bUseVectorObs;
-
-    [SerializeField]
-    private float _attackRadius;
-
-    [SerializeField]
-    private float _listenRadius;
-
-    [SerializeField]
-    private float _attackDamage = 10f;
-    [SerializeField]
-    private float _attackCooldown;
-    private float _lastAttackTime;
-    [SerializeField]
-    private LayerMask hitLayer;
 
     public event EventHandler<EventArgs> onEndEpisode;
 
-    private Actor _damagedActor;
-    private Vector2 _targetPosition;
+    [SerializeField]
+    private GameObject _target;
+
+    private Vector3 _lastPosition;
+    private float _lastPositionTime;
 
     public override void Initialize()
     {
@@ -48,92 +40,6 @@ public class MoveToGoalAgent : Agent
 
         //m_ResetParams = Academy.Instance.EnvironmentParameters;
         SetResetParameters();
-    }
-
-    private void Attack()
-    {
-        var circleColliders = Physics2D.OverlapCircleAll(this.transform.position, _attackRadius, hitLayer);
-        bool attackHit = false;
-        foreach (var collider in circleColliders)
-        {
-            if (collider != null && collider.gameObject != this.gameObject)
-            {
-                if (collider.GetComponent<Actor>() != null)
-                {
-                    if (_damagedActor != collider.GetComponent<Actor>())
-                    {
-                        if (_damagedActor != null)
-                        {
-                            _damagedActor.GetComponent<HealthSystem>().OnHealthEqualsZero -= OnActorDamagedDead;
-                        }
-                        else
-                        {
-                            _damagedActor = collider.GetComponent<Actor>();
-
-                            var actorHealthSystem = _damagedActor.GetComponent<HealthSystem>();
-
-                            if (actorHealthSystem != null)
-                            {
-                                actorHealthSystem.OnHealthEqualsZero += OnActorDamagedDead;
-                            }
-                        }
-                    }
-
-                    //var actor = collider.GetComponent<Actor>();
-                    //var healthSystem = actor.GetComponent<HealthSystem>();
-                    //bool isGoingToDie = healthSystem.GetHealth() - _attackDamage <= 0;
-                    //if (true)
-                    //{
-
-                    //}
-
-                    //targetPosition to save on Observation
-                    _targetPosition = _damagedActor.transform.localPosition;
-
-                    //Apply Damage
-                    float healthRegen = Gameplay.ApplyDamage(_damagedActor, _attackDamage, _actor, new DamageType(0, false));
-                    _healthSystem.IncreaseHealth(healthRegen, _damagedActor);
-
-                    SetReward(0.2f);
-
-                    attackHit = true;
-                }
-            }
-
-        }
-
-        if (!attackHit)
-        {
-            Listen();
-            SetReward(-0.1f);
-        }
-
-        _lastAttackTime = Time.time;
-
-    }
-
-    private void Listen()
-    {
-        var circleColliders = Physics2D.OverlapCircleAll(this.transform.position, _listenRadius, hitLayer);
-
-        foreach (var collider in circleColliders)
-        {
-            if (collider != null)
-            {
-                if (collider.GetComponent<Actor>() != null)
-                {
-                    _targetPosition = collider.transform.localPosition;
-                    return;
-                }
-            }
-        }
-    }
-
-    private void OnActorDamagedDead(object sender, EventArgs e)
-    {
-        //sender.GetComponent<HealthSystem>().OnHealthEqualsZero -= OnActorDamagedDead;
-        SetReward(1f);
-        CallEndEpisode();
     }
 
     public override void OnEpisodeBegin()
@@ -153,11 +59,8 @@ public class MoveToGoalAgent : Agent
 
     public void SetResetParameters()
     {
-        _damagedActor = null;
-
-        _targetPosition = Vector2.zero;
-
         _move.ResetVelocity();
+        _lastPosition = this.transform.position;
 
         if (!_healthSystem.GetCanDestroy())
         {
@@ -165,54 +68,81 @@ public class MoveToGoalAgent : Agent
         }
     }
 
+    public void SetTarget(GameObject target)
+    {
+        _target = target;
+    }
+
     public override void CollectObservations(VectorSensor sensor)
     {
         if (_bUseVectorObs)
         {
-            if (_damagedActor != null)
-            {
-                sensor.AddObservation((Vector2)_damagedActor.transform.localPosition);
-            }
-            else
-            {
-                sensor.AddObservation(Vector2.zero);
-            }
-
-
-            sensor.AddObservation(_targetPosition);
-
-
-            sensor.AddObservation((Vector2)this.transform.localPosition);
+            sensor.AddObservation(GetDirectionToTarget());
+            sensor.AddObservation(HasReachedTarget());
             sensor.AddObservation(_move.GetVelocity());
-            sensor.AddObservation(_healthSystem.GetHealthNormalized());
-            sensor.AddObservation(GetNormilizedTimeToNextAttack());
         }
     }
 
-    private float GetNormilizedTimeToNextAttack()
+    public Vector2 GetDirectionToTarget()
     {
-        return Mathf.Clamp01(Time.time / (_lastAttackTime + _attackCooldown));
+        if (_target == null)
+            return Vector2.zero;
+
+        return ((Vector2)_target.transform.position - (Vector2)this.transform.position).normalized;
+    }
+
+    public float GetDistanceToTarget()
+    {
+        if (_target == null)
+            return float.MaxValue;
+
+        return Vector3.Distance(this.transform.position, _target.transform.position);
+    }
+
+    private void IsStuck()
+    {
+        if (Vector3.Distance(this.transform.position, _lastPosition) <= _reachedDistance)
+        {
+            if (_lastPositionTime + 3f <= Time.time)
+            {
+                Debug.LogWarning("Agent Stuck Ending Episode");
+                SetReward(-1f);
+                CallEndEpisode();
+            }
+        }
+        else
+        {
+            _lastPosition = this.transform.position;
+            _lastPositionTime = Time.time;
+        }
     }
 
     public override void OnActionReceived(ActionBuffers actionBuffers)
     {
         MoveAgent(actionBuffers.ContinuousActions);
 
-        if (CanAttack(actionBuffers.ContinuousActions[2]))
+        if (HasReachedTarget())
         {
-            Attack();
+            SetReward(1f);
+            CallEndEpisode();
         }
+
+        IsStuck();
     }
+
+    private bool HasReachedTarget()
+    {
+        if (_target == null)
+            return false;
+
+        return GetDistanceToTarget() <= _reachedDistance;
+    }
+
 
     private void CallEndEpisode()
     {
         EndEpisode();
         onEndEpisode?.Invoke(this, new EventArgs());
-    }
-
-    private bool CanAttack(float action)
-    {
-        return _lastAttackTime + _attackCooldown <= Time.time && action > 0;
     }
 
     public void MoveAgent(ActionSegment<float> act)
@@ -227,16 +157,5 @@ public class MoveToGoalAgent : Agent
         var continuousActionsOut = actionsOut.ContinuousActions;
         continuousActionsOut[0] = Input.GetAxis("Horizontal");
         continuousActionsOut[1] = Input.GetAxis("Vertical");
-        continuousActionsOut[2] = Input.GetAxisRaw("Attack");
     }
-
-    private void OnDrawGizmosSelected()
-    {
-        if (Time.time > _lastAttackTime && Time.time <= _lastAttackTime + _attackCooldown)
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawSphere(this.transform.position, _attackRadius);
-        }
-    }
-
 }
