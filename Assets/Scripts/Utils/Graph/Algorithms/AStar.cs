@@ -70,7 +70,7 @@ public class AStar<V, E> : IGraphAlgorithms<V, E> where V : IEquatable<V> where 
 
     private void RetracePath(Vertex<AStarVertexData<V>> sourceVertex, Vertex<AStarVertexData<V>> targetVertex)
     {
-        var path = new List<Vertex<AStarVertexData<V>>>();
+        path = new List<Vertex<AStarVertexData<V>>>();
 
         var current = targetVertex;
 

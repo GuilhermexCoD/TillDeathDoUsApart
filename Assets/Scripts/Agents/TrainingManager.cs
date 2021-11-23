@@ -119,6 +119,7 @@ public class TrainingManager : MonoBehaviour
 
     public void Clean()
     {
+        _isLevelGenerated = false;
         map?.Clear();
         rooms?.Clear();
         corridors?.Clear();
@@ -272,7 +273,6 @@ public class TrainingManager : MonoBehaviour
     public Vector3 GetRandomPositionInsideRoom()
     {
         var coord = rooms[Random.Range(0, rooms.Count)].GetRandomCoord();
-        var pos = CalculatePosition(coord);
         return new Vector3(coord.x, coord.y) + (Vector3.one * 0.5f);
     }
 
