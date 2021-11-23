@@ -19,6 +19,8 @@ public class Level : MonoBehaviour
 
     #endregion
 
+    public const string PREFAB_DATA_PATH = "Prefabs";
+
     public static float offSet = 0.5f;
     public static Level current;
 
@@ -160,6 +162,25 @@ public class Level : MonoBehaviour
             auxList.Remove(room);
         }
 
+    }
+
+    public void GenerateExit(Vector3 reference) {
+        GameObject exitPrefab = Resources.LoadAll<PrefabData>(PREFAB_DATA_PATH).Where(p => p.name == "Exit").FirstOrDefault().prefab;
+        
+        double dist = 0;
+        Room<GeneratorRule> farthestRoom = rooms[0];
+        rooms.ForEach(room => {
+            var roomPos = CalculatePosition(room.GetCenterCoord());
+            double tmpDist = Math.Pow(Math.Abs(roomPos.x - reference.x), 2) + Math.Pow(Math.Abs(roomPos.y - reference.y), 2);
+            if (tmpDist > dist) {
+                dist = tmpDist;
+                farthestRoom = room;
+            }
+        });
+
+        var position = CalculatePosition(farthestRoom.GetRandomCoord());
+        GameObject exit = Instantiate<GameObject>(exitPrefab, position, Quaternion.identity);
+        
     }
 
     //private void RoomGraphToCorridors(Graph<Room<GeneratorRule>, Weight> graph)

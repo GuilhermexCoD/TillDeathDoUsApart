@@ -7,6 +7,7 @@ using Random = UnityEngine.Random;
 
 public class ScenaryManager : MonoBehaviour
 {
+    public const string SEED_CHAR_RANGE = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     public static ScenaryManager current;
 
     private int dungeonLevel = 1;
@@ -187,5 +188,18 @@ public class ScenaryManager : MonoBehaviour
             levelCount = dungeonLevel,
             data = levelData
         });
+    }
+
+    public void LoadNextLevel() {
+        var stringChars = new char[8];
+        var random = new System.Random(seed.GetHashCode());
+
+        for (int i = 0; i < stringChars.Length; i++)
+        {
+            stringChars[i] = SEED_CHAR_RANGE[random.Next(SEED_CHAR_RANGE.Length)];
+        }
+
+        SetSeed(new String(stringChars));
+        SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
     }
 }
