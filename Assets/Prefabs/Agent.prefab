@@ -109,12 +109,9 @@ MonoBehaviour:
   _move: {fileID: 8654319617491234921}
   _healthSystem: {fileID: 8654319617491234927}
   _actor: {fileID: 8654319617491234920}
+  _reachedDistance: 0.3
   _bUseVectorObs: 1
-  _attackRadius: 2
-  _attackCooldown: 1
-  hitLayer:
-    serializedVersion: 2
-    m_Bits: 64
+  _target: {fileID: 0}
 --- !u!114 &8654319617491234922
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -275,7 +272,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 2
   m_Sprite: {fileID: -359908854502224583, guid: c83ec9cbb525f764099c3780eaf0203f, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0, g: 1, b: 0.59284496, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
