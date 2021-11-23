@@ -38,7 +38,6 @@ public class MoveToGoalAgent : Agent
 
         _actor = this.GetComponent<Actor>();
 
-        //m_ResetParams = Academy.Instance.EnvironmentParameters;
         SetResetParameters();
     }
 
