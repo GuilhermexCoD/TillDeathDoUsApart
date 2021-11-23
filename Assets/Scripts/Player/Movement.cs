@@ -18,6 +18,9 @@ public class Movement : MonoBehaviour
     [SerializeField]
     private bool blockMovement;
 
+
+    [SerializeField]
+    private Joystick joystick;
     public event EventHandler<Vector2> onSpeedChanged;
 
     //Chamado uma unica vez e antes do Start
@@ -49,9 +52,13 @@ public class Movement : MonoBehaviour
 
     void ProcessInputs()
     {
-        float moveX = Input.GetAxisRaw("Horizontal");
-        float moveY = Input.GetAxisRaw("Vertical");
-
+        //TECLADO
+        //float moveX = Input.GetAxisRaw("Horizontal");
+        //float moveY = Input.GetAxisRaw("Vertical");
+        
+        //MOBILE
+        float moveX = joystick.Horizontal;
+        float moveY = joystick.Vertical;
         moveDirection = new Vector2(moveX, moveY).normalized;
 
         if (moveDirection.magnitude == 0)
