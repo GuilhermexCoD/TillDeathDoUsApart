@@ -24,6 +24,8 @@ public class MoveToGoalAgent : Agent
     public event EventHandler<EventArgs> onEndEpisode;
 
     [SerializeField]
+    private bool _bTargetIsPlayer = false;
+    [SerializeField]
     private GameObject _target;
 
     private Vector3 _lastPosition;
@@ -39,6 +41,9 @@ public class MoveToGoalAgent : Agent
         _actor = this.GetComponent<Actor>();
 
         SetResetParameters();
+
+        if (_bTargetIsPlayer)
+            _target = GameEventsHandler.current.playerGo;
     }
 
     public override void OnEpisodeBegin()
@@ -126,7 +131,8 @@ public class MoveToGoalAgent : Agent
             CallEndEpisode();
         }
 
-        IsStuck();
+        if (!_bTargetIsPlayer)
+            IsStuck();
     }
 
     private bool HasReachedTarget()

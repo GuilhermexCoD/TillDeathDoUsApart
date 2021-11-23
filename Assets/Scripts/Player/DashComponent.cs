@@ -6,6 +6,8 @@ using UnityEngine;
 [RequireComponent(typeof(Movement))]
 public class DashComponent : MonoBehaviour
 {
+    private PlayerControls _input;
+
     [SerializeField]
     private Movement MovementComponent;
 
@@ -41,8 +43,11 @@ public class DashComponent : MonoBehaviour
     {
         onDash -= func;
     }
+
     void Awake()
     {
+        _input = new PlayerControls();
+
         if (!MovementComponent)
         {
             MovementComponent = this.GetComponent<Movement>();
@@ -78,7 +83,9 @@ public class DashComponent : MonoBehaviour
 
     private void ProcessInputs()
     {
-        PressedDash = Input.GetButtonDown(ActionName);
+
+        //PressedDash = Input.GetButtonDown(ActionName);
+        PressedDash = _input.Player.Dash.triggered;
 
         if (CanDash() && PressedDash)
         {
@@ -105,5 +112,15 @@ public class DashComponent : MonoBehaviour
     private void CallOnDash(Vector2 direction)
     {
         onDash?.Invoke(this,new OnDashEventArgs { direction = direction});
+    }
+
+    private void OnEnable()
+    {
+        _input.Enable();
+    }
+
+    private void OnDisable()
+    {
+        _input.Disable();
     }
 }

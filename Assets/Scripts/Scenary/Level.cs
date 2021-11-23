@@ -123,6 +123,8 @@ public class Level : MonoBehaviour
         }
 
         GenerateCorridors();
+
+        //TODO Executar BFS e encontrar o room mais distante para colocar a saida
     }
 
     private void OnBinary(BoundsInt bound)

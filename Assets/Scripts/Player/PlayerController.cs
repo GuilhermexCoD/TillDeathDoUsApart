@@ -21,6 +21,7 @@ public class PlayerController : MonoBehaviour
 
 
     [Header("Actions")]
+    private PlayerControls _input;
     [SerializeField]
     private string pickUpActionName = "PickUp";
     [SerializeField]
@@ -61,6 +62,8 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+        _input = new PlayerControls();
+
         if (!dash)
         {
             dash = GetComponent<DashComponent>();
@@ -94,7 +97,9 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetButtonDown(pickUpActionName) && interactableObject != null)
+        //bool bIsPickingUp = Input.GetButtonDown(pickUpActionName);
+        bool bIsPickingUp = _input.Player.PickUp.triggered;
+        if (bIsPickingUp && interactableObject != null)
         {
             var pickedUp = (Interactable)interactableObject.PickUp(this);
 
@@ -116,38 +121,47 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (Input.GetButton(pickUpActionName) && Input.GetButtonDown("Horizontal"))
+        var xAxis = _input.Player.Move.ReadValue<Vector2>().x;
+        //if (bIsPickingUp && Input.GetButtonDown("Horizontal"))
+        if (bIsPickingUp && xAxis > 0)
         {
-            var x = Input.GetAxisRaw("Horizontal");
+            //var xAxis = Input.GetAxisRaw("Horizontal");
 
-            var desiredEquipIndex = Util.ModLoop(equipedItemIndex + (int)Mathf.Sign(x), inventoryManager.GetItemsCount());
+            var desiredEquipIndex = Util.ModLoop(equipedItemIndex + (int)Mathf.Sign(xAxis), inventoryManager.GetItemsCount());
             Util.CreateWorldTextPopup($"Equip id:{equipedItemIndex}", this.transform.position, 20, Vector3.one * 0.2f, 2, 1);
             EquipItem(desiredEquipIndex);
 
         }
 
-        if (Input.GetButtonDown(attackActionName) && IsWeaponEquiped())
+        //bool bIsAttackPressed = Input.GetButtonDown(attackActionName);
+        bool bIsAttackPressed = _input.Player.Attack.triggered;
+        if (bIsAttackPressed && IsWeaponEquiped())
         {
             GetWeapon()?.Attack();
         }
 
-        if (Input.GetButtonDown(reloadActionName) && IsWeaponEquiped())
+        //bool bIsReloadPressed = Input.GetButtonDown(reloadActionName);
+        bool bIsReloadPressed = _input.Player.Reload.triggered;
+        if (bIsReloadPressed && IsWeaponEquiped())
         {
             ((RangedWeapon)GetWeapon())?.Reload();
         }
 
         if (Camera.current != null && IsWeaponEquiped())
         {
-            Vector3 mousePosition = Util.GetMouseWorldPosition();
+            //Vector3 mousePosition = Util.GetMouseWorldPosition();
 
-            Vector3 aimDirection = (mousePosition - transform.position).normalized;
+            //Vector3 aimDirection = (mousePosition - transform.position).normalized;
+            Vector3 aimDirection = _input.Player.Aim.ReadValue<Vector2>().normalized;
 
             float angle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
 
             weaponTransform.eulerAngles = new Vector3(0, 0, angle);
         }
 
-        if (Input.GetKeyDown(KeyCode.Escape))
+        //bool bIsOpenMenuPressed = Input.GetKeyDown(KeyCode.Escape);
+        bool bIsOpenMenuPressed = _input.Player.OpenMenu.triggered;
+        if (bIsOpenMenuPressed)
         {
             SceneManager.LoadScene(0, LoadSceneMode.Single);
         }
@@ -241,5 +255,15 @@ public class PlayerController : MonoBehaviour
     private void OnTriggerExit2D(Collider2D collision)
     {
         interactableObject = null;
+    }
+
+    private void OnEnable()
+    {
+        _input.Enable();
+    }
+
+    private void OnDisable()
+    {
+        _input.Disable();
     }
 }
