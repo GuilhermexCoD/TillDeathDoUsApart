@@ -57,6 +57,9 @@ public class PlayerController : MonoBehaviour
     [Header("Animation")]
     [SerializeField]
     private Animator animator;
+    public Transform t;
+    public Joystick jAim;
+    private Vector3 jDirecao;
 
     // Start is called before the first frame update
     void Awake()
@@ -94,6 +97,23 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        jDirecao = jAim.Direction;
+        
+         if (Camera.current != null && IsWeaponEquiped())
+        {
+            
+            //Vector3 mousePosition = Util.GetMouseWorldPosition();
+            Vector3 mousePosition = t.position;
+            //Vector3 jDirecao = jAim.Direction;
+            jDirecao.x = jDirecao.x * mousePosition.x;
+            jDirecao.y = jDirecao.y * mousePosition.y;
+            //Vector3 mousePosition = Util.GetAimingJoystickPosition(jAim, t);
+            //Vector3 aimDirection = (mousePosition - transform.position).normalized;
+            //float angle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
+            float angle = Mathf.Atan2(jDirecao.y, jDirecao.x) * Mathf.Rad2Deg;
+
+            weaponTransform.eulerAngles = new Vector3(0, 0, angle);
+        }
         if (Input.GetButtonDown(pickUpActionName) && interactableObject != null)
         {
             var pickedUp = (Interactable)interactableObject.PickUp(this);
@@ -126,7 +146,7 @@ public class PlayerController : MonoBehaviour
 
         }
 
-        if (Input.GetButtonDown(attackActionName) && IsWeaponEquiped())
+        if ( /*Input.GetButtonDown(attackActionName)*/ ( jAim.Horizontal !=0 || jAim.Vertical !=0)  && IsWeaponEquiped())
         {
             GetWeapon()?.Attack();
         }
@@ -136,16 +156,7 @@ public class PlayerController : MonoBehaviour
             ((RangedWeapon)GetWeapon())?.Reload();
         }
 
-        if (Camera.current != null && IsWeaponEquiped())
-        {
-            Vector3 mousePosition = Util.GetMouseWorldPosition();
-
-            Vector3 aimDirection = (mousePosition - transform.position).normalized;
-
-            float angle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
-
-            weaponTransform.eulerAngles = new Vector3(0, 0, angle);
-        }
+       
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
