@@ -213,6 +213,7 @@ MonoBehaviour:
   _actor: {fileID: 101904034631812662}
   _reachedDistance: 0.4
   _bUseVectorObs: 1
+  _bTargetIsPlayer: 1
   _target: {fileID: 0}
 --- !u!114 &101904034631812660
 MonoBehaviour:
