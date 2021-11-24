@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Actions")]
     private PlayerControls _input;
+    private Vector2 _lastInputDelta;
     [SerializeField]
     private string pickUpActionName = "PickUp";
     [SerializeField]
@@ -77,6 +78,8 @@ public class PlayerController : MonoBehaviour
         }
 
         movement.onSpeedChanged += OnSpeedChanged;
+
+        DontDestroyOnLoad(this.gameObject);
     }
 
     private void OnSpeedChanged(object sender, Vector2 e)
@@ -134,7 +137,11 @@ public class PlayerController : MonoBehaviour
         }
 
         //bool bIsAttackPressed = Input.GetButtonDown(attackActionName);
-        bool bIsAttackPressed = _input.Player.Attack.triggered;
+        //bool bIsAttackPressed = _input.Player.Attack.triggered;
+        bool isUsingMouse = IsUsingMouse();
+        Vector2 aimDirection = GetAimDirection();
+
+        bool bIsAttackPressed = (aimDirection.magnitude == 1 && !isUsingMouse);
         if (bIsAttackPressed && IsWeaponEquiped())
         {
             GetWeapon()?.Attack();
@@ -149,10 +156,6 @@ public class PlayerController : MonoBehaviour
 
         if (Camera.current != null && IsWeaponEquiped())
         {
-            //Vector3 mousePosition = Util.GetMouseWorldPosition();
-
-            //Vector3 aimDirection = (mousePosition - transform.position).normalized;
-            Vector3 aimDirection = _input.Player.Aim.ReadValue<Vector2>().normalized;
 
             float angle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
 
@@ -165,6 +168,39 @@ public class PlayerController : MonoBehaviour
         {
             SceneManager.LoadScene(0, LoadSceneMode.Single);
         }
+    }
+
+    private Vector2 GetAimDirection()
+    {
+        Vector2 aimDirection = Vector2.zero;
+        try
+        {
+            aimDirection = _input.Player.Aim.ReadValue<Vector2>();
+
+            if (IsUsingMouse())
+            {
+                Vector3 mousePosition = Util.GetMouseWorldPosition(aimDirection);
+                aimDirection = (mousePosition - transform.position).normalized;
+            }
+            else
+            {
+                aimDirection = _input.Player.Aim.ReadValue<Vector2>();
+            }
+        }
+        catch (System.Exception ex)
+        {
+
+            throw ex;
+        }
+
+
+        return aimDirection;
+    }
+
+    private bool IsUsingMouse()
+    {
+        return false;
+        //return _input.Player.Aim.activeControl.device.GetType() == typeof(UnityEngine.InputSystem.Mouse);
     }
 
     private bool IsWeaponEquiped()

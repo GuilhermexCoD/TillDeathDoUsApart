@@ -26,8 +26,8 @@ MonoBehaviour:
   startSpeed: 10
   damage: 30
   range: 5
-  type:
-    DamageImpulse: 10
+  damageType:
+    DamageImpulse: 0
     CausedByWorld: 0
   lifeSpan: 10
   shotSound: {fileID: 8300000, guid: ae65be1a7df10f1478a1fcea0ac53f30, type: 3}

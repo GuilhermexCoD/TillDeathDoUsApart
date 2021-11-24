@@ -41,6 +41,9 @@ public class Level : MonoBehaviour
 
     private bool isLevelGenerated = false;
 
+    [SerializeField]
+    private GameObject _prefabExit;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -164,23 +167,33 @@ public class Level : MonoBehaviour
 
     }
 
-    public void GenerateExit(Vector3 reference) {
+    public void GenerateExit(Vector3 reference)
+    {
         GameObject exitPrefab = Resources.LoadAll<PrefabData>(PREFAB_DATA_PATH).Where(p => p.name == "Exit").FirstOrDefault().prefab;
-        
+
+        var graphRooms = new Graph<int, Weight>();
+
+        for (int i = 0; i < rooms.Count; i++)
+        {
+            graphRooms.AddVertex(i);
+        }
+
+        //TODO use BFS to find exit point
         double dist = 0;
         Room<GeneratorRule> farthestRoom = rooms[0];
-        rooms.ForEach(room => {
+        rooms.ForEach(room =>
+        {
             var roomPos = CalculatePosition(room.GetCenterCoord());
             double tmpDist = Math.Pow(Math.Abs(roomPos.x - reference.x), 2) + Math.Pow(Math.Abs(roomPos.y - reference.y), 2);
-            if (tmpDist > dist) {
+            if (tmpDist > dist)
+            {
                 dist = tmpDist;
                 farthestRoom = room;
             }
         });
-
         var position = CalculatePosition(farthestRoom.GetRandomCoord());
         GameObject exit = Instantiate<GameObject>(exitPrefab, position, Quaternion.identity);
-        
+
     }
 
     //private void RoomGraphToCorridors(Graph<Room<GeneratorRule>, Weight> graph)

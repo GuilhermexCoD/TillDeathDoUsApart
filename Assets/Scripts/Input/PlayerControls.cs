@@ -36,7 +36,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": ""Aim"",
-                    ""type"": ""Value"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""f54dec26-ffe6-43ce-8f79-4b4e0fa8bf37"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
@@ -156,7 +156,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""48cfb37e-c56a-4702-ba7a-b90f002c5890"",
-                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -168,6 +168,17 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""name"": """",
                     ""id"": ""050ca3af-0fd0-4bb6-acad-6b931e4037f4"",
                     ""path"": ""<Gamepad>/rightStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Aim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""91e428da-9435-4a8c-8c0c-0f54140c696d"",
+                    ""path"": ""<Pointer>/position"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

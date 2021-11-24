@@ -29,10 +29,16 @@ public static class Util
         return hypotenuse;
     }
 
-    public static Vector3 GetMouseWorldPosition()
+    public static Vector3 GetMouseWorldPosition(Vector2 pointerPosition)
     {
-        Vector3 vector = GetMouseWorldPositionWithZ(Input.mousePosition, Camera.current);
-        vector.z = 0;
+        Vector3 vector = Vector3.zero;
+        if (Camera.current != null)
+        {
+            //Vector3 vector = GetMouseWorldPositionWithZ(Input.mousePosition, Camera.current);
+            vector = GetMouseWorldPositionWithZ(pointerPosition, Camera.current);
+            vector.z = 0;
+        }
+        
         return vector;
     }
 

@@ -8,7 +8,7 @@ public class BaseUI : MonoBehaviour, I_BaseUI
 
     public virtual void UpdateVisual()
     {
-        SetGameObjectName(name);
+
     }
 
     public virtual void SetGameObjectName(string name)

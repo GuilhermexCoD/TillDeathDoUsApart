@@ -5,21 +5,38 @@ using UnityEngine;
 
 #if UNITY_EDITOR
 [CustomEditor(typeof(BaseUI), true)]
+[CanEditMultipleObjects]
 public class BaseUI_Editor : Editor
 {
-    BaseUI baseUI;
+    //BaseUI baseUI;
+    List<BaseUI> baseUIs = new List<BaseUI>();
 
     void OnEnable()
     {
-        baseUI = (BaseUI)target;
-
+        foreach (var tar in targets)
+        {
+            baseUIs.Add((BaseUI)tar);
+        }
     }
 
-    public override bool RequiresConstantRepaint()
+    public override void OnInspectorGUI()
     {
-        baseUI.UpdateVisual();
+        base.OnInspectorGUI();
 
-        return base.RequiresConstantRepaint();
+        if (GUILayout.Button("Update Visuals"))
+        {
+            foreach (var baseUI in baseUIs)
+            {
+                baseUI.UpdateVisual();
+            }
+        }
     }
+
+    //public override bool RequiresConstantRepaint()
+    //{
+
+
+    //    return base.RequiresConstantRepaint();
+    //}
 }
 #endif

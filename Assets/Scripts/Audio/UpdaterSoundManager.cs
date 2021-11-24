@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class UpdaterSoundManager : MonoBehaviour
 {
-    private float value;
+    private float _value;
 
-    [SerializeField]
-    private SliderWithLabel volume;
+    private SliderWithLabel _volume;
 
     private void Awake()
     {
-        value = volume.GetValue();
-        SoundManager.SetMasterVolume(value);
-        volume.onValueChanged += OnVolumeChanged;
+        _volume = this.GetComponent<SliderWithLabel>();
+        _value = _volume.GetValue();
+        SoundManager.SetMasterVolume(_value);
+        _volume.onValueChanged += OnVolumeChanged;
     }
 
     private void OnVolumeChanged(object sender, float value)
@@ -23,12 +23,12 @@ public class UpdaterSoundManager : MonoBehaviour
 
     public void SetValue(float value)
     {
-        this.value = value;
+        this._value = value;
         SoundManager.SetMasterVolume(value);
     }
 
     public float GetValue()
     {
-        return value;
+        return _value;
     }
 }

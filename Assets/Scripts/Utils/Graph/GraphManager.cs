@@ -9,9 +9,11 @@ public class GraphManager : MonoBehaviour
 
     public GameObject graphVertexPrefab;
 
-    public Transform sourceTransform;
+    [SerializeField]
+    public Transform _sourceTransform;
 
-    public Transform targetTransform;
+    [SerializeField]
+    public Transform _targetTransform;
 
     public event Action<GraphManager, EGraphAlgorithm> OnAlgorithmChanged;
 
@@ -65,6 +67,11 @@ public class GraphManager : MonoBehaviour
 
     public void ExecuteBFS()
     {
+        ExecuteBFS(_sourceTransform);
+    }
+
+    public void ExecuteBFS(Transform sourceTransform)
+    {
         if (_graph != null)
         {
             OnAlgorithmChanged?.Invoke(this, EGraphAlgorithm.bfs);
@@ -89,6 +96,11 @@ public class GraphManager : MonoBehaviour
 
     public void ExecuteDFS()
     {
+        ExecuteDFS(_sourceTransform);
+    }
+
+    public void ExecuteDFS(Transform sourceTransform)
+    {
         if (_graph != null)
         {
             OnAlgorithmChanged?.Invoke(this, EGraphAlgorithm.dfs);
@@ -106,6 +118,11 @@ public class GraphManager : MonoBehaviour
     }
 
     public void ExecuteAStar()
+    {
+        ExecuteAStar(_sourceTransform,_targetTransform);
+    }
+
+    public void ExecuteAStar(Transform sourceTransform, Transform targetTransform)
     {
         if (_graph != null)
         {

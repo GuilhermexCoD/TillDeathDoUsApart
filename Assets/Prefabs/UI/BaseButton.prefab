@@ -90,8 +90,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a66443a45cbf4774caf3e9f12f407003, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttonText: Button
-  text: {fileID: 5859016345736275989}
+  _buttonText: 
+  _tmpText: {fileID: 5859016345736275989}
 --- !u!114 &5859016345194321363
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -201,7 +201,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Button
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
