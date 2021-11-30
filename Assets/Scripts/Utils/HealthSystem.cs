@@ -31,7 +31,16 @@ public class HealthSystem : MonoBehaviour, IHealthSystem
         if (_actor != null)
         {
             _actor.OnAnyDamage += OnActorAnyDamage;
+            InstantiateUI();
         }
+    }
+
+    public void InstantiateUI()
+    {
+        _healthBar = Instantiate(GameManager.current.healthUiPrefab, Vector3.zero, Quaternion.identity, this.transform).GetComponent<HealthBar>();
+        _healthBar.transform.localPosition = new Vector3(0, 0.5f);
+        _healthBar.SetHealthSystem(this);
+        _healthBar.OnInitialize();
     }
 
     public bool GetCanDestroy()
@@ -71,17 +80,23 @@ public class HealthSystem : MonoBehaviour, IHealthSystem
 
         OnHealthChanged?.Invoke(this, new HealthArgs { health = health, causer = causer });
 
-        if (_healthBar == null)
-        {
-            var healthUI = PoolingManager.current.GetPooledObject(GameManager.current.healthUiPrefab, this.transform);
+        //if (_healthBar == null)
+        //{
+        //    var healthUI = PoolingManager.current.GetPooledObject(GameManager.current.healthUiPrefab, this.transform);
+        //    if (healthUI != null)
+        //    {
+        //        healthUI.transform.localPosition = new Vector3(0, 0.5f);
+        //        _healthBar = healthUI.GetComponentInChildren<HealthBar>();
+        //        _healthBar.SetHealthSystem(this);
+        //        _healthBar.OnInitialize();
+        //    }
+        //}
+    }
 
-            healthUI.transform.localPosition = new Vector3(0, 0.5f);
-            _healthBar = healthUI.GetComponentInChildren<HealthBar>();
-
-            _healthBar.SetHealthSystem(this);
-        }
-
-        _healthBar.OnInitialize();
+    public void SetHealthNormalized(float valueNormalized, Actor causer)
+    {
+        var value = Mathf.Clamp01(valueNormalized);
+        SetHealth(maxHealth * value, causer);
     }
 
     private float ClampHealth(float value)

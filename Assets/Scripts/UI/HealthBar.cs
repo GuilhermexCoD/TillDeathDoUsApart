@@ -14,21 +14,22 @@ public class HealthBar : MonoBehaviour
     [SerializeField]
     private Slider _sliderActualHealth;
 
-    [SerializeField]
-    private Animator _anim;
-
     private IHealthSystem _healthSystem;
 
     [Header("Timer")]
     [SerializeField]
+    private float _fadeIn;
+    [SerializeField]
+    private float _fadeOut;
+    [SerializeField]
     private float _delay;
-    private float _timeStampDelay;
+    //private float _timeStampDelay;
     [SerializeField]
     private float _timeToReach;
-    private float _timeStampReach;
+    //private float _timeStampReach;
     [SerializeField]
     private float _timeFade;
-    private float _timeStampFade;
+    //private float _timeStampFade;
 
     private bool _bIsFading;
     private float _actualValue;
@@ -49,6 +50,7 @@ public class HealthBar : MonoBehaviour
     private Color _actualHealthColor;
     [SerializeField]
     private Image _actualHealthImage;
+    private float _alpha;
 
     private void Awake()
     {
@@ -57,17 +59,17 @@ public class HealthBar : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (_timeStampDelay != 0 && Time.time >= _timeStampDelay && Time.time <= _timeStampReach)
-        {
-            float t = (Time.time - _timeStampDelay) / _timeToReach;
-            float lerp = Mathf.Lerp(_lostValue, _actualValue, t);
-            _sliderLostHealth.value = lerp;
-        }
-        else if (_timeStampFade != 0 && Time.time >= _timeStampFade && !_bIsFading)
-        {
-            _bIsFading = true;
-            _anim.SetTrigger("Play");
-        }
+        //if (_timeStampDelay != 0 && Time.time >= _timeStampDelay && Time.time <= _timeStampReach)
+        //{
+        //    float t = (Time.time - _timeStampDelay) / _timeToReach;
+        //    float lerp = Mathf.Lerp(_lostValue, _actualValue, t);
+        //    _sliderLostHealth.value = lerp;
+        //}
+        //else if (_timeStampFade != 0 && Time.time >= _timeStampFade && !_bIsFading)
+        //{
+        //    _bIsFading = true;
+        //    //_anim.SetTrigger("Play");
+        //}
     }
 
     private void OnEnable()
@@ -77,11 +79,12 @@ public class HealthBar : MonoBehaviour
 
     public void OnInitialize()
     {
-        _backgroundImage.color = _backgroundColor;
-        _lostHealthImage.color = _lostHealthColor;
-        _actualHealthImage.color = _actualHealthColor;
-        _anim.SetTrigger("Stop");
+        ResetColors();
+    }
 
+    private void ResetColors()
+    {
+        SetColorAlpha(0);
     }
 
     public void SetHealthSystem(IHealthSystem healthSystem)
@@ -100,7 +103,7 @@ public class HealthBar : MonoBehaviour
         _healthSystem.OnHealthChanged += OnHealthChanged;
         _healthSystem.OnHealthEqualsFull += OnHealthFull;
         _healthSystem.OnHealthEqualsZero += OnHealthZero;
-        _healthSystem.GetActor().OnDestroyed += OnActorDestroyed;
+        //_healthSystem.GetActor().OnDestroyed += OnActorDestroyed;
     }
 
     private void OnActorDestroyed(Actor obj)
@@ -134,11 +137,90 @@ public class HealthBar : MonoBehaviour
         _sliderActualHealth.value = _healthSystem.GetHealthNormalized();
 
         _bIsFading = false;
-        _timeStampDelay = Time.time + _delay;
-        _timeStampReach = _timeStampDelay + _timeToReach;
-        _timeStampFade = _timeStampReach + _timeFade;
+        //_timeStampDelay = Time.time + _delay;
+        //_timeStampReach = _timeStampDelay + _timeToReach;
+        //_timeStampFade = _timeStampReach + _timeFade;
 
         _lostValue = _sliderLostHealth.value;
         _actualValue = _sliderActualHealth.value;
+
+        if (_alpha == 0)
+        {
+            StartCoroutine(FadeIn());
+        }
+        else
+        {
+            StopAllCoroutines();
+            SetColorAlpha(1);
+            StartCoroutine(LerpHealth());
+        }
+    }
+
+    private void SetColorAlpha(float alpha)
+    {
+        _alpha = Mathf.Clamp01(alpha);
+        _backgroundColor.a = _alpha;
+        _lostHealthColor.a = _alpha;
+        _actualHealthColor.a = _alpha;
+
+        _backgroundImage.color = _backgroundColor;
+        _lostHealthImage.color = _lostHealthColor;
+        _actualHealthImage.color = _actualHealthColor;
+    }
+
+    private IEnumerator FadeIn()
+    {
+        float time = _alpha * _fadeIn;
+
+        while (_alpha < 1)
+        {
+            var ratio = time / _fadeIn;
+            SetColorAlpha(ratio);
+            time += Time.fixedDeltaTime;
+            yield return new WaitForSeconds(Time.fixedDeltaTime);
+            //yield return null;
+        }
+
+        SetColorAlpha(1);
+        StartCoroutine(LerpHealth());
+    }
+
+    private IEnumerator FadeOut()
+    {
+        float time = _alpha * _fadeOut;
+
+        while (_alpha > 0)
+        {
+            var ratio = time / _fadeOut;
+            SetColorAlpha(ratio);
+            time -= Time.fixedDeltaTime;
+            yield return new WaitForSeconds(Time.fixedDeltaTime);
+            //yield return null;
+        }
+
+        SetColorAlpha(0);
+    }
+
+    private IEnumerator LerpHealth()
+    {
+        yield return new WaitForSeconds(_delay);
+
+        float time = .0f;
+
+        while (time < _timeToReach)
+        {
+            var ratio = time / _timeToReach;
+
+            float lerp = Mathf.Lerp(_lostValue, _actualValue, ratio);
+            _sliderLostHealth.value = lerp;
+            time += Time.fixedDeltaTime;
+            yield return new WaitForSeconds(Time.fixedDeltaTime);
+        }
+
+        _sliderLostHealth.value = _actualValue;
+
+        yield return new WaitForSeconds(_timeFade);
+
+        StartCoroutine(FadeOut());
     }
 }

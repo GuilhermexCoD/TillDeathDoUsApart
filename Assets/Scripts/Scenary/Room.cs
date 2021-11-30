@@ -126,6 +126,11 @@ public class Room<TGenerator> where TGenerator : GeneratorRule
         return map.ToArray()[randomCoordIndex];
     }
 
+    public bool HasCoord(Vector2Int coord)
+    {
+        return map.Contains(coord);
+    }
+
     private void OnDestroy()
     {
         if (generator != null)

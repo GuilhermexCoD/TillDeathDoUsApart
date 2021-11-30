@@ -78,8 +78,6 @@ public class PlayerController : MonoBehaviour
         }
 
         movement.onSpeedChanged += OnSpeedChanged;
-
-        DontDestroyOnLoad(this.gameObject);
     }
 
     private void OnSpeedChanged(object sender, Vector2 e)
@@ -137,11 +135,11 @@ public class PlayerController : MonoBehaviour
         }
 
         //bool bIsAttackPressed = Input.GetButtonDown(attackActionName);
-        //bool bIsAttackPressed = _input.Player.Attack.triggered;
+        //bool bIsAttackPressed = ;
         bool isUsingMouse = IsUsingMouse();
         Vector2 aimDirection = GetAimDirection();
 
-        bool bIsAttackPressed = (aimDirection.magnitude == 1 && !isUsingMouse);
+        bool bIsAttackPressed = isUsingMouse? _input.Player.Attack.triggered : aimDirection.magnitude == 1;
         if (bIsAttackPressed && IsWeaponEquiped())
         {
             GetWeapon()?.Attack();
@@ -199,8 +197,8 @@ public class PlayerController : MonoBehaviour
 
     private bool IsUsingMouse()
     {
-        return false;
-        //return _input.Player.Aim.activeControl.device.GetType() == typeof(UnityEngine.InputSystem.Mouse);
+        //return false;
+        return _input.Player.Aim.activeControl.device.GetType() == typeof(UnityEngine.InputSystem.Mouse);
     }
 
     private bool IsWeaponEquiped()

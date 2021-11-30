@@ -10,7 +10,16 @@ public class WorldGraphVertexUI : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI _coordText;
 
+    [Header("BFS")]
+    [SerializeField]
+    private GameObject _bfsParent;
+    [SerializeField]
+    private TextMeshProUGUI _depthText;
+
     [Header("A Star")]
+    [SerializeField]
+    private GameObject _aStarParent;
+
     [SerializeField]
     private TextMeshProUGUI _gCostText;
 
@@ -58,7 +67,6 @@ public class WorldGraphVertexUI : MonoBehaviour
     public void OnInitialize(GraphManager graphManager, Vertex<Vector2Int> vertex)
     {
         graphManager.OnAlgorithmChanged += OnAlgorithmChanged;
-        graphManager.OnAStarVertexDataChanged += OnAStarVertexDataChanged;
         SetVertex(vertex);
     }
 
@@ -136,23 +144,35 @@ public class WorldGraphVertexUI : MonoBehaviour
     {
         UnSubscribeGraphManager(graphManager);
 
+        SetMethodVisualsFalse();
+
         switch (algorithm)
         {
             case EGraphAlgorithm.bfs:
                 graphManager.OnBFS_Executed += OnBFS_Executed;
+                _bfsParent.SetActive(true);
                 break;
             case EGraphAlgorithm.dfs:
                 break;
             case EGraphAlgorithm.aStar:
+                _aStarParent.SetActive(true);
+                graphManager.OnAStarVertexDataChanged += OnAStarVertexDataChanged;
                 break;
             default:
                 break;
         }
     }
 
+    private void SetMethodVisualsFalse()
+    {
+        _bfsParent.SetActive(false);
+        _aStarParent.SetActive(false);
+    }
+
     private void UnSubscribeGraphManager(GraphManager graphManager)
     {
         graphManager.OnBFS_Executed -= OnBFS_Executed;
+        graphManager.OnAStarVertexDataChanged -= OnAStarVertexDataChanged;
     }
 
     private void OnBFS_Executed(int distance)
@@ -182,8 +202,7 @@ public class WorldGraphVertexUI : MonoBehaviour
     public void UpdateLabel(int value, int max)
     {
         string result = $"{value}/{max}";
-
-        SetCoordText(result);
+        _depthText.text = result;
     }
 
     private void SetVertexNodeColorBasedOnNodeColor(ENodeColor color)

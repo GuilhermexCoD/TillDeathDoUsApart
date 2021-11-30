@@ -51,7 +51,7 @@ public class TrainingManager : MonoBehaviour
 
         if (agent != null)
         {
-            agent.GetComponent<MoveToGoalAgent>().onEndEpisode += TrainingManager_onEndEpisode;
+            agent.GetComponent<IAgent>().onEndEpisode += TrainingManager_onEndEpisode;
         }
 
         Setup();
@@ -95,7 +95,7 @@ public class TrainingManager : MonoBehaviour
         onGenerated?.Invoke(this, new EventArgs());
 
         agentStartPosition = GetRandomPositionInsideRoom();
-        agent.GetComponent<MoveToGoalAgent>().SetPositionVelocityZero(agentStartPosition);
+        agent.GetComponent<IAgent>().SetPositionVelocityZero(agentStartPosition);
 
         Vector2Int agentPos = new Vector2Int(Mathf.FloorToInt(agent.transform.position.x), Mathf.FloorToInt(agent.transform.position.y));
         Debug.LogWarning($"SPAWNED Agent On Position: {agentPos}");
@@ -105,11 +105,11 @@ public class TrainingManager : MonoBehaviour
             Debug.LogError("SPAWNED Agent On Invalid Position");
         }
 
-        var agentVelocity = agent.GetComponent<MoveToGoalAgent>()._move.GetVelocity();
-        if (agentVelocity.magnitude > 0.1f)
-        {
-            Debug.LogError("Agent Velocity Is Not Ideal");
-        }
+        //var agentVelocity = agent.GetComponent<MoveToGoalAgent>()._move.GetVelocity();
+        //if (agentVelocity.magnitude > 0.1f)
+        //{
+        //    Debug.LogError("Agent Velocity Is Not Ideal");
+        //}
         //foreach (var altar in altars)
         //{
         //    randomAgentPosition = GetRandomPositionInsideRoom();

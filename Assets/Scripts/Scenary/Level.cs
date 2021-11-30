@@ -167,33 +167,41 @@ public class Level : MonoBehaviour
 
     }
 
-    public void GenerateExit(Vector3 reference)
+    public void GenerateExit(Vector2Int startCoord)
     {
         GameObject exitPrefab = Resources.LoadAll<PrefabData>(PREFAB_DATA_PATH).Where(p => p.name == "Exit").FirstOrDefault().prefab;
 
-        var graphRooms = new Graph<int, Weight>();
+        GraphManager.current.SetGraphFromMap(map);
+
+        var coords = GraphManager.current.ExecuteBFS(startCoord, 0.1f);
+
+        var targetCoord = coords[Random.Range(0, coords.Count)];
+
+        GraphManager.current.ExecuteAStar(startCoord, targetCoord);
+        HashSet<int> roomsOnPath = new HashSet<int>();
+
+        foreach (var coord in GraphManager.current.aStarPath)
+        {
+            int roomIndex = GetRoomWithCoord(coord.GetData().GetVertexData());
+            if (roomIndex != -1)
+                roomsOnPath.Add(roomIndex);
+        }
+
+        Debug.Log(roomsOnPath.Count);
+    }
+
+    public int GetRoomWithCoord(Vector2Int coord)
+    {
+        if (corridors.Contains(coord))
+            return -1;
 
         for (int i = 0; i < rooms.Count; i++)
         {
-            graphRooms.AddVertex(i);
+            if (rooms[i].HasCoord(coord))
+                return i;
         }
 
-        //TODO use BFS to find exit point
-        double dist = 0;
-        Room<GeneratorRule> farthestRoom = rooms[0];
-        rooms.ForEach(room =>
-        {
-            var roomPos = CalculatePosition(room.GetCenterCoord());
-            double tmpDist = Math.Pow(Math.Abs(roomPos.x - reference.x), 2) + Math.Pow(Math.Abs(roomPos.y - reference.y), 2);
-            if (tmpDist > dist)
-            {
-                dist = tmpDist;
-                farthestRoom = room;
-            }
-        });
-        var position = CalculatePosition(farthestRoom.GetRandomCoord());
-        GameObject exit = Instantiate<GameObject>(exitPrefab, position, Quaternion.identity);
-
+        return -1;
     }
 
     //private void RoomGraphToCorridors(Graph<Room<GeneratorRule>, Weight> graph)

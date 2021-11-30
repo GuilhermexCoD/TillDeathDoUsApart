@@ -39,7 +39,7 @@ public class GameEventsHandler : MonoBehaviour
         var coord = Level.current.GetRandomPositionInsideRoom();
         var pos = new Vector3(coord.x, coord.y);
         
-        Level.current.GenerateExit(pos);
+        Level.current.GenerateExit(coord);
         playerGo.transform.position = pos;
 
         onLevelGenerated?.Invoke(this, null);

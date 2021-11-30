@@ -6,7 +6,7 @@ using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
 using UnityEngine;
 
-public class MoveToGoalAgent : Agent
+public class MoveToGoalAgent : Agent, IAgent
 {
     [SerializeField]
     public MoveAgent _move;
@@ -28,11 +28,26 @@ public class MoveToGoalAgent : Agent
     [SerializeField]
     private GameObject _target;
 
+    private PlayerControls _input;
+
     private Vector3 _lastPosition;
     private float _lastPositionTime;
 
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        _input.Enable();
+    }
+
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+        _input.Disable();
+    }
+
     public override void Initialize()
     {
+        _input = new PlayerControls();
         _move = this.GetComponent<MoveAgent>();
         _move.OnInitialize(this.GetComponent<Rigidbody2D>());
 
@@ -87,6 +102,20 @@ public class MoveToGoalAgent : Agent
         }
     }
 
+    public override void OnActionReceived(ActionBuffers actionBuffers)
+    {
+        MoveAgent(actionBuffers.ContinuousActions);
+
+        if (HasReachedTarget())
+        {
+            SetReward(1f);
+            CallEndEpisode();
+        }
+
+        if (!_bTargetIsPlayer)
+            IsStuck();
+    }
+
     public Vector2 GetDirectionToTarget()
     {
         if (_target == null)
@@ -121,20 +150,6 @@ public class MoveToGoalAgent : Agent
         }
     }
 
-    public override void OnActionReceived(ActionBuffers actionBuffers)
-    {
-        MoveAgent(actionBuffers.ContinuousActions);
-
-        if (HasReachedTarget())
-        {
-            SetReward(1f);
-            CallEndEpisode();
-        }
-
-        if (!_bTargetIsPlayer)
-            IsStuck();
-    }
-
     private bool HasReachedTarget()
     {
         if (_target == null)
@@ -160,7 +175,9 @@ public class MoveToGoalAgent : Agent
     public override void Heuristic(in ActionBuffers actionsOut)
     {
         var continuousActionsOut = actionsOut.ContinuousActions;
-        continuousActionsOut[0] = Input.GetAxis("Horizontal");
-        continuousActionsOut[1] = Input.GetAxis("Vertical");
+
+        var moveDirection = _input.Player.Move.ReadValue<Vector2>();
+        continuousActionsOut[0] = moveDirection.x;
+        continuousActionsOut[1] = moveDirection.y;
     }
 }

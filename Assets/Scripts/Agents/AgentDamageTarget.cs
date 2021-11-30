@@ -1,12 +1,12 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
+using Unity.MLAgents.Policies;
 using Unity.MLAgents.Sensors;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
-public class AgentDamageTarget : Agent
+public class AgentDamageTarget : Agent, IAgent
 {
     [SerializeField]
     public MoveAgent _move;
@@ -19,26 +19,70 @@ public class AgentDamageTarget : Agent
     private bool _bUseVectorObs;
 
     [SerializeField]
+    private float _reachedDistance = 0.3f;
+
+    [SerializeField]
+    private bool _bTargetIsPlayer = false;
+    [SerializeField]
+    private GameObject _target;
+
+    [Header("Attack")]
+    [SerializeField]
     private float _attackRadius;
 
     [SerializeField]
-    private float _listenRadius;
-
-    [SerializeField]
-    private float _attackDamage = 10f;
-    [SerializeField]
     private float _attackCooldown;
+    [SerializeField]
+    private float _attackDamage;
     private float _lastAttackTime;
     [SerializeField]
     private LayerMask hitLayer;
+    [SerializeField]
+    private GameObject _attackFxPrefab;
+    [SerializeField]
+    private float _attackFxRadiusMultiplier;
 
     public event EventHandler<EventArgs> onEndEpisode;
 
-    private Actor _damagedActor;
-    private Vector2 _targetPosition;
+    private Vector3 _lastPosition;
+    private float _lastPositionTime;
+
+    private PlayerControls _input;
+    private bool _bAttackPressed;
+    private bool _bAttackHitted;
+
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        if (IsInHeuristicMode())
+        {
+            _input.Enable();
+        }
+    }
+
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+        if (IsInHeuristicMode())
+        {
+            _input.Disable();
+        }
+    }
+
+    private bool IsInHeuristicMode()
+    {
+        return GetComponent<BehaviorParameters>().IsInHeuristicMode();
+    }
 
     public override void Initialize()
     {
+        if (IsInHeuristicMode())
+        {
+            _input = new PlayerControls();
+            _input.Player.Attack.performed += OnAttackPerformed;
+            _input.Player.Attack.canceled += OnAttackCanceled;
+        }
+
         _move = this.GetComponent<MoveAgent>();
         _move.OnInitialize(this.GetComponent<Rigidbody2D>());
 
@@ -46,94 +90,64 @@ public class AgentDamageTarget : Agent
 
         _actor = this.GetComponent<Actor>();
 
-        //m_ResetParams = Academy.Instance.EnvironmentParameters;
         SetResetParameters();
+
+        if (_bTargetIsPlayer)
+            _target = GameEventsHandler.current.playerGo;
+    }
+
+    private void OnAttackCanceled(InputAction.CallbackContext obj)
+    {
+        _bAttackPressed = false;
+    }
+
+    private void OnAttackPerformed(InputAction.CallbackContext obj)
+    {
+        _bAttackPressed = true;
+    }
+    private void SpawnAttackFX()
+    {
+        var fx = Instantiate<GameObject>(_attackFxPrefab, this.transform.position, Quaternion.identity);
+        fx.transform.localScale = Vector3.one * _attackRadius * _attackFxRadiusMultiplier;
     }
 
     private void Attack()
     {
         var circleColliders = Physics2D.OverlapCircleAll(this.transform.position, _attackRadius, hitLayer);
         bool attackHit = false;
+        SpawnAttackFX();
         foreach (var collider in circleColliders)
         {
             if (collider != null && collider.gameObject != this.gameObject)
             {
                 if (collider.GetComponent<Actor>() != null)
                 {
-                    if (_damagedActor != collider.GetComponent<Actor>())
+                    attackHit = true;
+
+                    var damagedActor = collider.GetComponent<Actor>();
+                    float healthRegen = Gameplay.ApplyDamage(damagedActor, _attackDamage, _actor, new DamageType(0, false));
+
+                    var healthSystem = damagedActor.GetComponent<HealthSystem>();
+
+                    if (healthSystem != null && healthSystem.GetHealthNormalized() <= 0)
                     {
-                        if (_damagedActor != null)
-                        {
-                            _damagedActor.GetComponent<HealthSystem>().OnHealthEqualsZero -= OnActorDamagedDead;
-                        }
-                        else
-                        {
-                            _damagedActor = collider.GetComponent<Actor>();
-
-                            var actorHealthSystem = _damagedActor.GetComponent<HealthSystem>();
-
-                            if (actorHealthSystem != null)
-                            {
-                                actorHealthSystem.OnHealthEqualsZero += OnActorDamagedDead;
-                            }
-                        }
+                        SetReward(1f);
+                        CallEndEpisode();
                     }
 
-                    //var actor = collider.GetComponent<Actor>();
-                    //var healthSystem = actor.GetComponent<HealthSystem>();
-                    //bool isGoingToDie = healthSystem.GetHealth() - _attackDamage <= 0;
-                    //if (true)
-                    //{
-
-                    //}
-
-                    //targetPosition to save on Observation
-                    _targetPosition = _damagedActor.transform.localPosition;
-
-                    //Apply Damage
-                    float healthRegen = Gameplay.ApplyDamage(_damagedActor, _attackDamage, _actor, new DamageType(0, false));
-                    _healthSystem.IncreaseHealth(healthRegen, _damagedActor);
-
-                    SetReward(0.2f);
-
-                    attackHit = true;
+                    SetReward(0.5f);
                 }
             }
-
         }
 
         if (!attackHit)
         {
-            Listen();
-            SetReward(-0.1f);
+            SetReward(-0.5f);
         }
 
+        _bAttackHitted = attackHit;
         _lastAttackTime = Time.time;
 
-    }
-
-    private void Listen()
-    {
-        var circleColliders = Physics2D.OverlapCircleAll(this.transform.position, _listenRadius, hitLayer);
-
-        foreach (var collider in circleColliders)
-        {
-            if (collider != null)
-            {
-                if (collider.GetComponent<Actor>() != null)
-                {
-                    _targetPosition = collider.transform.localPosition;
-                    return;
-                }
-            }
-        }
-    }
-
-    private void OnActorDamagedDead(object sender, EventArgs e)
-    {
-        //sender.GetComponent<HealthSystem>().OnHealthEqualsZero -= OnActorDamagedDead;
-        SetReward(1f);
-        CallEndEpisode();
     }
 
     public override void OnEpisodeBegin()
@@ -153,45 +167,35 @@ public class AgentDamageTarget : Agent
 
     public void SetResetParameters()
     {
-        _damagedActor = null;
-
-        _targetPosition = Vector2.zero;
-
         _move.ResetVelocity();
 
         if (!_healthSystem.GetCanDestroy())
         {
             _healthSystem.OnInitialize(false);
         }
+
+        if (_target != null && !_bTargetIsPlayer)
+        {
+            var targetHealthSystem = _target.GetComponent<HealthSystem>();
+            targetHealthSystem.SetHealthNormalized(1, _actor);
+        }
+    }
+
+    public void SetTarget(GameObject target)
+    {
+        _target = target;
     }
 
     public override void CollectObservations(VectorSensor sensor)
     {
         if (_bUseVectorObs)
         {
-            if (_damagedActor != null)
-            {
-                sensor.AddObservation((Vector2)_damagedActor.transform.localPosition);
-            }
-            else
-            {
-                sensor.AddObservation(Vector2.zero);
-            }
-
-
-            sensor.AddObservation(_targetPosition);
-
-
-            sensor.AddObservation((Vector2)this.transform.localPosition);
+            sensor.AddObservation(GetDirectionToTarget());
+            sensor.AddObservation(HasReachedTarget());
             sensor.AddObservation(_move.GetVelocity());
-            sensor.AddObservation(_healthSystem.GetHealthNormalized());
-            sensor.AddObservation(GetNormilizedTimeToNextAttack());
+            sensor.AddObservation(IsReadyToAttack());
+            sensor.AddObservation(_bAttackHitted);
         }
-    }
-
-    private float GetNormilizedTimeToNextAttack()
-    {
-        return Mathf.Clamp01(Time.time / (_lastAttackTime + _attackCooldown));
     }
 
     public override void OnActionReceived(ActionBuffers actionBuffers)
@@ -202,6 +206,51 @@ public class AgentDamageTarget : Agent
         {
             Attack();
         }
+
+        if (!_bTargetIsPlayer)
+            IsStuck();
+    }
+
+    public Vector2 GetDirectionToTarget()
+    {
+        if (_target == null)
+            return Vector2.zero;
+
+        return ((Vector2)_target.transform.position - (Vector2)this.transform.position).normalized;
+    }
+
+    public float GetDistanceToTarget()
+    {
+        if (_target == null)
+            return float.MaxValue;
+
+        return Vector3.Distance(this.transform.position, _target.transform.position);
+    }
+
+    private void IsStuck()
+    {
+        if (Vector3.Distance(this.transform.position, _lastPosition) <= _reachedDistance)
+        {
+            if (_lastPositionTime + 3f <= Time.time)
+            {
+                Debug.LogWarning("Agent Stuck Ending Episode");
+                SetReward(-1f);
+                CallEndEpisode();
+            }
+        }
+        else
+        {
+            _lastPosition = this.transform.position;
+            _lastPositionTime = Time.time;
+        }
+    }
+
+    private bool HasReachedTarget()
+    {
+        if (_target == null)
+            return false;
+
+        return GetDistanceToTarget() <= _reachedDistance;
     }
 
     private void CallEndEpisode()
@@ -210,9 +259,14 @@ public class AgentDamageTarget : Agent
         onEndEpisode?.Invoke(this, new EventArgs());
     }
 
+    private bool IsReadyToAttack()
+    {
+        return _lastAttackTime + _attackCooldown <= Time.time;
+    }
+
     private bool CanAttack(float action)
     {
-        return _lastAttackTime + _attackCooldown <= Time.time && action > 0;
+        return IsReadyToAttack() && action > 0;
     }
 
     public void MoveAgent(ActionSegment<float> act)
@@ -225,18 +279,11 @@ public class AgentDamageTarget : Agent
     public override void Heuristic(in ActionBuffers actionsOut)
     {
         var continuousActionsOut = actionsOut.ContinuousActions;
-        continuousActionsOut[0] = Input.GetAxis("Horizontal");
-        continuousActionsOut[1] = Input.GetAxis("Vertical");
-        continuousActionsOut[2] = Input.GetAxisRaw("Attack");
-    }
 
-    private void OnDrawGizmosSelected()
-    {
-        if (Time.time > _lastAttackTime && Time.time <= _lastAttackTime + _attackCooldown)
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawSphere(this.transform.position, _attackRadius);
-        }
-    }
+        var moveDirection = _input.Player.Move.ReadValue<Vector2>();
+        continuousActionsOut[0] = moveDirection.x;
+        continuousActionsOut[1] = moveDirection.y;
 
+        continuousActionsOut[2] = _bAttackPressed ? 1 : 0;
+    }
 }

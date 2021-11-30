@@ -18,10 +18,13 @@ public class GraphManager : MonoBehaviour
     public event Action<GraphManager, EGraphAlgorithm> OnAlgorithmChanged;
 
     public event Action<int> OnBFS_Executed;
+    private int _graphDepth;
+    public float _lastPercent;
 
     //public event Action<int> OnDFS_Executed;
 
     public event Action<IVertexData<AStarVertexData<Vector2Int>>> OnAStarVertexDataChanged;
+    //public event Action<IVertexData<Vector2Int>> OnBFSVertexDataChanged;
 
     private Graph<Vector2Int, Weight> _graph = new Graph<Vector2Int, Weight>();
 
@@ -31,6 +34,7 @@ public class GraphManager : MonoBehaviour
     [SerializeField]
     private bool _bShowVisuals = false;
     private GameObject graphVisuals;
+    public List<Vertex<AStarVertexData<Vector2Int>>> aStarPath;
 
     private void Awake()
     {
@@ -58,11 +62,16 @@ public class GraphManager : MonoBehaviour
 
     private void OnLevelGenerated(object sender, EventArgs e)
     {
-        _graph = GetGraphFromMap(Level.current.map);
+        SetGraphFromMap(Level.current.map);
 
         SpawnGraphVertex(_graph);
 
         ToogleVisuals();
+    }
+
+    public void SetGraphFromMap(HashSet<Vector2Int> map)
+    {
+        _graph = GetGraphFromMap(map);
     }
 
     public void ExecuteBFS()
@@ -70,7 +79,7 @@ public class GraphManager : MonoBehaviour
         ExecuteBFS(_sourceTransform);
     }
 
-    public void ExecuteBFS(Transform sourceTransform)
+    public void ExecuteBFS(Vector2Int sourceCoord)
     {
         if (_graph != null)
         {
@@ -78,20 +87,65 @@ public class GraphManager : MonoBehaviour
 
             var bfs = new BFS<Vector2Int, Weight>();
 
-            var sourcePosition = Level.PositionToCoord(sourceTransform.transform.position);
-            var source = _graph.GetVertex(sourcePosition);
+            var source = _graph.GetVertex(sourceCoord);
 
             if (source != null)
             {
                 bfs.Execute(_graph, source);
 
-                OnBFS_Executed?.Invoke(bfs.dephLevel);
+                _graphDepth = bfs.dephLevel;
+
+                OnBFS_Executed?.Invoke(_graphDepth);
             }
             else
             {
-                Debug.LogWarning($"Source Coord not a Vertex : {sourcePosition}");
+                Debug.LogWarning($"Source Coord not a Vertex : {sourceCoord}");
             }
         }
+    }
+
+    public void ExecuteBFS(Transform sourceTransform)
+    {
+        var sourceCoord = Level.PositionToCoord(sourceTransform.transform.position);
+        ExecuteBFS(sourceCoord);
+    }
+
+    public List<Vector2Int> ExecuteBFS(Transform sourceTransform, float lastPercent)
+    {
+        var vertices = new List<Vector2Int>();
+        float targetPercent = 1 - lastPercent;
+
+        ExecuteBFS(sourceTransform);
+
+        foreach (var vertex in _graph.GetVertices())
+        {
+            float depthRatio = (float)vertex.GetDistance() / (float)_graphDepth;
+            if (depthRatio >= targetPercent)
+            {
+                vertices.Add(vertex.GetData());
+            }
+        }
+        Debug.Log("finished");
+        return vertices;
+    }
+
+    public List<Vector2Int> ExecuteBFS(Vector2Int sourceCoord, float lastPercent)
+    {
+        var vertices = new List<Vector2Int>();
+        float targetPercent = 1 - lastPercent;
+
+        ExecuteBFS(sourceCoord);
+
+        foreach (var vertex in _graph.GetVertices())
+        {
+            float depthRatio = (float)vertex.GetDistance() / (float)_graphDepth;
+            if (depthRatio >= targetPercent)
+            {
+                vertices.Add(vertex.GetData());
+            }
+        }
+        Debug.Log("finished");
+        return vertices;
     }
 
     public void ExecuteDFS()
@@ -119,10 +173,10 @@ public class GraphManager : MonoBehaviour
 
     public void ExecuteAStar()
     {
-        ExecuteAStar(_sourceTransform,_targetTransform);
+        ExecuteAStar(_sourceTransform, _targetTransform);
     }
 
-    public void ExecuteAStar(Transform sourceTransform, Transform targetTransform)
+    public void ExecuteAStar(Vector2Int sourceCoord, Vector2Int targetCoord)
     {
         if (_graph != null)
         {
@@ -130,12 +184,11 @@ public class GraphManager : MonoBehaviour
 
             var aStar = new AStar<Vector2Int, Weight>();
             aStar.onVertexDataChanged += AStarOnVertexDataChanged;
+            aStar.onPathGenerated += AStarOnPathGenerated;
 
-            var sourcePosition = Level.PositionToCoord(sourceTransform.transform.position);
-            var source = _graph.GetVertex(sourcePosition);
+            var source = _graph.GetVertex(sourceCoord);
 
-            var targetPosition = Level.PositionToCoord(targetTransform.transform.position);
-            var target = _graph.GetVertex(targetPosition);
+            var target = _graph.GetVertex(targetCoord);
 
             if (source != null && target != null)
             {
@@ -144,11 +197,24 @@ public class GraphManager : MonoBehaviour
             else
             {
                 if (source == null)
-                    Debug.LogWarning($"{nameof(source)} Coord not a Vertex : {sourcePosition}");
+                    Debug.LogWarning($"{nameof(source)} Coord not a Vertex : {source}");
                 if (target == null)
-                    Debug.LogWarning($"{nameof(target)} Coord not a Vertex : {targetPosition}");
+                    Debug.LogWarning($"{nameof(target)} Coord not a Vertex : {target}");
             }
         }
+    }
+
+    private void AStarOnPathGenerated(List<Vertex<AStarVertexData<Vector2Int>>> path)
+    {
+        aStarPath = path;
+    }
+
+    public void ExecuteAStar(Transform sourceTransform, Transform targetTransform)
+    {
+        var sourceCoord = Level.PositionToCoord(sourceTransform.transform.position);
+        var targetCoord = Level.PositionToCoord(targetTransform.transform.position);
+
+        ExecuteAStar(sourceCoord, targetCoord);
     }
 
     private void AStarOnVertexDataChanged(AStarVertexData<Vector2Int> data)
@@ -156,7 +222,7 @@ public class GraphManager : MonoBehaviour
         OnAStarVertexDataChanged?.Invoke(data);
     }
 
-    private Graph<Vector2Int, Weight> GetGraphFromMap(HashSet<Vector2Int> map)
+    public Graph<Vector2Int, Weight> GetGraphFromMap(HashSet<Vector2Int> map)
     {
         _graph = new Graph<Vector2Int, Weight>();
 

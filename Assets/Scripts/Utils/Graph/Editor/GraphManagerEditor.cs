@@ -27,6 +27,17 @@ public class GraphManagerEditor : Editor
             graphManager.ExecuteBFS();
         }
 
+        if (GUILayout.Button("Execute BFS with Cut and A*"))
+        {
+            var coords = graphManager.ExecuteBFS(graphManager._sourceTransform, graphManager._lastPercent);
+
+            var targetCoord = coords[Random.Range(0, coords.Count)];
+
+            var sourceCoord = Level.PositionToCoord(graphManager._sourceTransform.transform.position);
+
+            graphManager.ExecuteAStar(sourceCoord, targetCoord);
+        }
+
         if (GUILayout.Button("Execute AStar"))
         {
             graphManager.ExecuteAStar();

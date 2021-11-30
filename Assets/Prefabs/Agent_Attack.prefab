@@ -11,14 +11,14 @@ GameObject:
   - component: {fileID: 8654319617491234935}
   - component: {fileID: 8654319617491234933}
   - component: {fileID: 8654319617491234923}
-  - component: {fileID: 8654319617491234932}
+  - component: {fileID: 7755283723423555350}
   - component: {fileID: 8654319617491234922}
   - component: {fileID: 8654319617491234921}
   - component: {fileID: 8654319617491234927}
   - component: {fileID: 8654319617491234920}
-  - component: {fileID: 8633909763502716403}
-  m_Layer: 0
-  m_Name: Agent
+  - component: {fileID: 8937782638024522571}
+  m_Layer: 6
+  m_Name: Agent_Attack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -52,13 +52,13 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 0
+  m_LinearDrag: 10
   m_AngularDrag: 0.05
   m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!114 &8654319617491234923
 MonoBehaviour:
@@ -73,7 +73,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 5
+    VectorObservationSize: 7
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 3
@@ -82,15 +82,15 @@ MonoBehaviour:
     VectorActionDescriptions: []
     VectorActionSpaceType: 1
     hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 5022602860645237092, guid: 74eb5b7a0a932464da73d7f4110db6c6, type: 3}
+  m_Model: {fileID: 5022602860645237092, guid: 65d3d6047fe24054cabc7509e6a69d3f, type: 3}
   m_InferenceDevice: 3
   m_BehaviorType: 0
-  m_BehaviorName: WonderAgentHealing
+  m_BehaviorName: AgentAttackTarget
   TeamId: 0
   m_UseChildSensors: 1
   m_UseChildActuators: 1
   m_ObservableAttributeHandling: 0
---- !u!114 &8654319617491234932
+--- !u!114 &7755283723423555350
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -99,7 +99,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8654319617491234928}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 87c3f0b051caa1b44bd681e32c9e5cca, type: 3}
+  m_Script: {fileID: 11500000, guid: 971ce550df835e8419d3b7c2b90b9335, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   agentParameters:
@@ -109,9 +109,18 @@ MonoBehaviour:
   _move: {fileID: 8654319617491234921}
   _healthSystem: {fileID: 8654319617491234927}
   _actor: {fileID: 8654319617491234920}
-  _reachedDistance: 0.3
   _bUseVectorObs: 1
+  _reachedDistance: 0.3
+  _bTargetIsPlayer: 1
   _target: {fileID: 0}
+  _attackRadius: 0.8
+  _attackCooldown: 1
+  _attackDamage: 10
+  hitLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  _attackFxPrefab: {fileID: 6584017980246197512, guid: ba299911eb1458e4ebdc0b1cd8dd597e, type: 3}
+  _attackFxRadiusMultiplier: 3.5
 --- !u!114 &8654319617491234922
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -138,7 +147,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 904b9709448db514790dc8498962d576, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
+  speed: 0.5
   moveDirection: {x: 0, y: 0}
   rigidbody2D: {fileID: 8654319617491234933}
   blockMovement: 0
@@ -156,7 +165,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 100
   maxHealth: 100
-  _bCanDestroy: 0
+  _bCanDestroy: 1
 --- !u!114 &8654319617491234920
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -169,35 +178,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 641a218d739e3084daaca56e44c868f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &8633909763502716403
-MonoBehaviour:
+--- !u!58 &8937782638024522571
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8654319617491234928}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f67c7e722ba14acd9153bb4488bff6e4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SensorName: RayPerceptionSensor
-  m_DetectableTags:
-  - wall
-  - enemy
-  - food
-  - ally
-  - damage
-  m_RaysPerDirection: 8
-  m_MaxRayDegrees: 180
-  m_SphereCastRadius: 0.3
-  m_RayLength: 5
-  m_RayLayerMask:
-    serializedVersion: 2
-    m_Bits: 4294967291
-  m_ObservationStacks: 1
-  rayHitColor: {r: 1, g: 0, b: 0, a: 1}
-  rayMissColor: {r: 1, g: 1, b: 1, a: 1}
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.28
 --- !u!1 &8654319617717867723
 GameObject:
   m_ObjectHideFlags: 0
@@ -209,8 +205,7 @@ GameObject:
   - component: {fileID: 8654319617717867720}
   - component: {fileID: 8654319617717867721}
   - component: {fileID: 8654319617717867722}
-  - component: {fileID: 4668824510630602025}
-  m_Layer: 2
+  m_Layer: 6
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -301,19 +296,3 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!58 &4668824510630602025
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8654319617717867723}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.28

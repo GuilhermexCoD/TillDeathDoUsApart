@@ -27,4 +27,16 @@ public static class Gameplay
 
         return damage;
     }
+
+    public static float ApplyRadialDamage(Actor damagedActor, float baseDamage, HitResult hitInfo, Actor damageCauser, DamageType damageType)
+    {
+        float damage = 0;
+
+        if (damagedActor != null)
+        {
+            damage = damagedActor.ApplyPointDamage(damagedActor, baseDamage, hitInfo, damageCauser, damageType);
+        }
+
+        return damage;
+    }
 }

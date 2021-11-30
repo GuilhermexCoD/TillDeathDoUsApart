@@ -115,7 +115,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _sliderLostHealth: {fileID: 3958553217423569933}
   _sliderActualHealth: {fileID: 3958553218693023415}
-  _anim: {fileID: 3175851924431173531}
+  _fadeIn: 0.25
+  _fadeOut: 0.25
   _delay: 0.4
   _timeToReach: 0.3
   _timeFade: 1
@@ -341,11 +342,6 @@ PrefabInstance:
 --- !u!224 &3958553218505306574 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7854277180798598706, guid: f073bb09584f9134098a192ab8724786, type: 3}
-  m_PrefabInstance: {fileID: 6489797386750660604}
-  m_PrefabAsset: {fileID: 0}
---- !u!95 &3175851924431173531 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 8503499960203737191, guid: f073bb09584f9134098a192ab8724786, type: 3}
   m_PrefabInstance: {fileID: 6489797386750660604}
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &3958553218097055683 stripped
