@@ -37,7 +37,7 @@ public class GameEventsHandler : MonoBehaviour
     {
         //TODO Instantiate player
         var coord = Level.current.GetRandomPositionInsideRoom();
-        var pos = new Vector3(coord.x, coord.y);
+        var pos = Level.CalculatePosition(coord);
         
         Level.current.GenerateExit(coord);
         playerGo.transform.position = pos;

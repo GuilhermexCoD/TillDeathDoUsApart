@@ -31,8 +31,6 @@ public class GraphManager : MonoBehaviour
     [SerializeField]
     private bool _bCreateEdgesVisual = false;
 
-    [SerializeField]
-    private bool _bShowVisuals = false;
     private GameObject graphVisuals;
     public List<Vertex<AStarVertexData<Vector2Int>>> aStarPath;
 
@@ -43,6 +41,7 @@ public class GraphManager : MonoBehaviour
         if (Level.current != null)
         {
             Level.current.onGenerated += OnLevelGenerated;
+            Level.current.onClear += OnLevelClean;
 
             if (Level.current.IsGenerated())
             {
@@ -51,12 +50,19 @@ public class GraphManager : MonoBehaviour
         }
     }
 
-    public void ToogleVisuals()
+    private void OnLevelClean()
     {
         if (graphVisuals != null)
         {
-            graphVisuals.SetActive(_bShowVisuals);
-            _bShowVisuals = !_bShowVisuals;
+            Destroy(graphVisuals);
+        }
+    }
+
+    public void ToogleVisuals(bool on)
+    {
+        if (graphVisuals != null)
+        {
+            graphVisuals.SetActive(on);
         }
     }
 
@@ -66,7 +72,7 @@ public class GraphManager : MonoBehaviour
 
         SpawnGraphVertex(_graph);
 
-        ToogleVisuals();
+        ToogleVisuals(false);
     }
 
     public void SetGraphFromMap(HashSet<Vector2Int> map)

@@ -194,7 +194,7 @@ public class HealthBar : MonoBehaviour
             var ratio = time / _fadeOut;
             SetColorAlpha(ratio);
             time -= Time.fixedDeltaTime;
-            yield return new WaitForSeconds(Time.fixedDeltaTime);
+            yield return new WaitForFixedUpdate();
             //yield return null;
         }
 
@@ -214,7 +214,7 @@ public class HealthBar : MonoBehaviour
             float lerp = Mathf.Lerp(_lostValue, _actualValue, ratio);
             _sliderLostHealth.value = lerp;
             time += Time.fixedDeltaTime;
-            yield return new WaitForSeconds(Time.fixedDeltaTime);
+            yield return new WaitForFixedUpdate();
         }
 
         _sliderLostHealth.value = _actualValue;

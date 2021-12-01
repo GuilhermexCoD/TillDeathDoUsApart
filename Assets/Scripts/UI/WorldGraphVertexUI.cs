@@ -64,9 +64,11 @@ public class WorldGraphVertexUI : MonoBehaviour
     private List<Vector2> neightbours = new List<Vector2>();
     private List<GameObject> edges = new List<GameObject>();
 
+    private GraphManager _graphManager;
     public void OnInitialize(GraphManager graphManager, Vertex<Vector2Int> vertex)
     {
-        graphManager.OnAlgorithmChanged += OnAlgorithmChanged;
+        _graphManager = graphManager;
+        _graphManager.OnAlgorithmChanged += OnAlgorithmChanged;
         SetVertex(vertex);
     }
 
@@ -276,5 +278,11 @@ public class WorldGraphVertexUI : MonoBehaviour
         }
 
         edges.Clear();
+    }
+
+    private void OnDestroy()
+    {
+        UnSubscribeGraphManager(_graphManager);
+        _graphManager.OnAlgorithmChanged -= OnAlgorithmChanged;
     }
 }

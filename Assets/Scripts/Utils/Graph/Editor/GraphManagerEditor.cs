@@ -17,10 +17,19 @@ public class GraphManagerEditor : Editor
     {
         base.OnInspectorGUI();
 
-        if (GUILayout.Button("Toogle Visuals"))
+        GUILayout.BeginHorizontal();
+
+        if (GUILayout.Button("Toogle Visuals Off"))
         {
-            graphManager.ToogleVisuals();
+            graphManager.ToogleVisuals(false);
         }
+
+        if (GUILayout.Button("Toogle Visuals On"))
+        {
+            graphManager.ToogleVisuals(true);
+        }
+
+        GUILayout.EndHorizontal();
 
         if (GUILayout.Button("Execute BFS"))
         {

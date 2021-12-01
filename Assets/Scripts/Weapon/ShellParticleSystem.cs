@@ -17,6 +17,13 @@ public class ShellParticleSystem : MonoBehaviour
         {
             meshParticle = GetComponent<MeshParticleSystem>();
         }
+
+        Level.current.onClear += OnLevelClean;
+    }
+
+    private void OnLevelClean()
+    {
+        meshParticle.Clear();
     }
 
     public void SpawnShell(Vector3 position, Vector3 direction, float rotation, float speed, float slowDownFactor, Vector3 size, int uvIndex)

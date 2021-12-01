@@ -38,12 +38,19 @@ public class Level : MonoBehaviour
     private TilemapVisualizer tilemapVisualizer;
 
     public event EventHandler<EventArgs> onGenerated;
+    public event Action onClear;
 
     private bool isLevelGenerated = false;
 
     [SerializeField]
     private GameObject _prefabExit;
+    [SerializeField]
+    private GameObject _prefabNodeManager;
+    [SerializeField]
+    private GameObject _prefabRoomOrder;
 
+    private NodeManager _nodeManager;
+    private GameObject _roomOrderVisuals;
     // Start is called before the first frame update
     void Awake()
     {
@@ -87,7 +94,16 @@ public class Level : MonoBehaviour
             roomColors = new List<Color>();
             corridors = new HashSet<Vector2Int>();
             tilemapVisualizer?.Clear();
+            onClear?.Invoke();
         }
+
+        if (_nodeManager != null)
+            Destroy(_nodeManager.gameObject);
+
+        if (_roomOrderVisuals != null)
+            Destroy(_roomOrderVisuals.gameObject);
+
+        WorldCounter.ResetCounter();
     }
 
     public void Subscribe()
@@ -180,20 +196,41 @@ public class Level : MonoBehaviour
         GraphManager.current.ExecuteAStar(startCoord, targetCoord);
         HashSet<int> roomsOnPath = new HashSet<int>();
 
-        foreach (var coord in GraphManager.current.aStarPath)
+        _nodeManager = Instantiate<GameObject>(_prefabNodeManager, null).GetComponent<NodeManager>();
+
+        var aStarPathReverse = GraphManager.current.aStarPath;
+
+        aStarPathReverse.Reverse();
+        var exitPos = CalculatePosition(aStarPathReverse[0].GetData().GetVertexData());
+        Instantiate(_prefabExit, exitPos, Quaternion.identity);
+        List<Vector2> path = new List<Vector2>();
+
+        foreach (var coord in aStarPathReverse)
         {
-            int roomIndex = GetRoomWithCoord(coord.GetData().GetVertexData());
+            var coordVector = coord.GetData().GetVertexData();
+            path.Add(CalculatePosition(coordVector));
+
+            int roomIndex = GetRoomWithCoord(coordVector);
             if (roomIndex != -1)
                 roomsOnPath.Add(roomIndex);
         }
 
-        Debug.Log(roomsOnPath.Count);
+        _nodeManager.CreatePath(path, GameEventsHandler.current.playerGo.transform);
+        var roomPathArray = roomsOnPath.ToArray().Reverse();
+        _roomOrderVisuals = new GameObject("RoomOrder");
+        foreach (var roomIndex in roomPathArray)
+        {
+            var counter = Instantiate<GameObject>(_prefabRoomOrder, _roomOrderVisuals.transform);
+            var room = rooms[roomIndex];
+            var coord = room.GetCenterCoord();
+            var pos = CalculatePosition(coord);
+
+            counter.transform.position = pos;
+        }
     }
 
     public int GetRoomWithCoord(Vector2Int coord)
     {
-        if (corridors.Contains(coord))
-            return -1;
 
         for (int i = 0; i < rooms.Count; i++)
         {
