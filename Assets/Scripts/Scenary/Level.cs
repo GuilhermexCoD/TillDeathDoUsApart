@@ -183,6 +183,15 @@ public class Level : MonoBehaviour
 
     }
 
+    public void EnableDebug(bool value)
+    {
+        if (_nodeManager != null)
+            _nodeManager.gameObject.SetActive(value);
+
+        if (_roomOrderVisuals != null)
+            _roomOrderVisuals.SetActive(value);
+    }
+
     public void GenerateExit(Vector2Int startCoord)
     {
         GameObject exitPrefab = Resources.LoadAll<PrefabData>(PREFAB_DATA_PATH).Where(p => p.name == "Exit").FirstOrDefault().prefab;
@@ -227,6 +236,8 @@ public class Level : MonoBehaviour
 
             counter.transform.position = pos;
         }
+
+        EnableDebug(false);
     }
 
     public int GetRoomWithCoord(Vector2Int coord)

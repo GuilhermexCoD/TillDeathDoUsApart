@@ -7,6 +7,8 @@ public class GameManager : MonoBehaviour
     public static GameManager current;
     [Header("Health Parameters")]
     public GameObject healthUiPrefab;
+    public GameObject[] coinPrefabs;
+    public AudioClip[] coinSounds;
 
     private void Awake()
     {
@@ -17,5 +19,12 @@ public class GameManager : MonoBehaviour
         }
 
         current = Singleton<GameManager>.Instance;
+    }
+
+    public static AudioClip GetRandomCoinAudioClip()
+    {
+        int totalClips = current.coinSounds.Length;
+
+        return current.coinSounds[Random.Range(0, totalClips)];
     }
 }
