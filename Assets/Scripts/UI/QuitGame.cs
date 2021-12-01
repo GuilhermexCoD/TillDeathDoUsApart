@@ -3,15 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor;
+using UnityEngine.SceneManagement;
 
 public class QuitGame : MonoBehaviour
 {
-    public void Quit()
+    public void Quit(bool menu)
     {
-        #if UNITY_EDITOR
+        if (!menu)
+        {
+#if UNITY_EDITOR
             EditorApplication.isPlaying = false;
-        #endif
+#endif
 
-        Application.Quit();
+            Application.Quit();
+        }
+        else
+        {
+            SceneManager.LoadSceneAsync("Menu", LoadSceneMode.Single);
+        }
+
     }
 }

@@ -161,11 +161,7 @@ public class PlayerController : MonoBehaviour
         }
 
         //bool bIsOpenMenuPressed = Input.GetKeyDown(KeyCode.Escape);
-        bool bIsOpenMenuPressed = _input.Player.OpenMenu.triggered;
-        if (bIsOpenMenuPressed)
-        {
-            SceneManager.LoadScene(0, LoadSceneMode.Single);
-        }
+
     }
 
     private Vector2 GetAimDirection()
