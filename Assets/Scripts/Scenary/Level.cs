@@ -38,9 +38,19 @@ public class Level : MonoBehaviour
     private TilemapVisualizer tilemapVisualizer;
 
     public event EventHandler<EventArgs> onGenerated;
+    public event Action onClear;
 
     private bool isLevelGenerated = false;
 
+    [SerializeField]
+    private GameObject _prefabExit;
+    [SerializeField]
+    private GameObject _prefabNodeManager;
+    [SerializeField]
+    private GameObject _prefabRoomOrder;
+
+    private NodeManager _nodeManager;
+    private GameObject _roomOrderVisuals;
     // Start is called before the first frame update
     void Awake()
     {
@@ -84,7 +94,16 @@ public class Level : MonoBehaviour
             roomColors = new List<Color>();
             corridors = new HashSet<Vector2Int>();
             tilemapVisualizer?.Clear();
+            onClear?.Invoke();
         }
+
+        if (_nodeManager != null)
+            Destroy(_nodeManager.gameObject);
+
+        if (_roomOrderVisuals != null)
+            Destroy(_roomOrderVisuals.gameObject);
+
+        WorldCounter.ResetCounter();
     }
 
     public void Subscribe()
@@ -123,6 +142,8 @@ public class Level : MonoBehaviour
         }
 
         GenerateCorridors();
+
+        //TODO Executar BFS e encontrar o room mais distante para colocar a saida
     }
 
     private void OnBinary(BoundsInt bound)
@@ -162,23 +183,73 @@ public class Level : MonoBehaviour
 
     }
 
-    public void GenerateExit(Vector3 reference) {
-        GameObject exitPrefab = Resources.LoadAll<PrefabData>(PREFAB_DATA_PATH).Where(p => p.name == "Exit").FirstOrDefault().prefab;
-        
-        double dist = 0;
-        Room<GeneratorRule> farthestRoom = rooms[0];
-        rooms.ForEach(room => {
-            var roomPos = CalculatePosition(room.GetCenterCoord());
-            double tmpDist = Math.Pow(Math.Abs(roomPos.x - reference.x), 2) + Math.Pow(Math.Abs(roomPos.y - reference.y), 2);
-            if (tmpDist > dist) {
-                dist = tmpDist;
-                farthestRoom = room;
-            }
-        });
+    public void EnableDebug(bool value)
+    {
+        if (_nodeManager != null)
+            _nodeManager.gameObject.SetActive(value);
 
-        var position = CalculatePosition(farthestRoom.GetRandomCoord());
-        GameObject exit = Instantiate<GameObject>(exitPrefab, position, Quaternion.identity);
-        
+        if (_roomOrderVisuals != null)
+            _roomOrderVisuals.SetActive(value);
+    }
+
+    public void GenerateExit(Vector2Int startCoord)
+    {
+        GameObject exitPrefab = Resources.LoadAll<PrefabData>(PREFAB_DATA_PATH).Where(p => p.name == "Exit").FirstOrDefault().prefab;
+
+        GraphManager.current.SetGraphFromMap(map);
+
+        var coords = GraphManager.current.ExecuteBFS(startCoord, 0.1f);
+
+        var targetCoord = coords[Random.Range(0, coords.Count)];
+
+        GraphManager.current.ExecuteAStar(startCoord, targetCoord);
+        HashSet<int> roomsOnPath = new HashSet<int>();
+
+        _nodeManager = Instantiate<GameObject>(_prefabNodeManager, null).GetComponent<NodeManager>();
+
+        var aStarPathReverse = GraphManager.current.aStarPath;
+
+        aStarPathReverse.Reverse();
+        var exitPos = CalculatePosition(aStarPathReverse[0].GetData().GetVertexData());
+        Instantiate(_prefabExit, exitPos, Quaternion.identity);
+        List<Vector2> path = new List<Vector2>();
+
+        foreach (var coord in aStarPathReverse)
+        {
+            var coordVector = coord.GetData().GetVertexData();
+            path.Add(CalculatePosition(coordVector));
+
+            int roomIndex = GetRoomWithCoord(coordVector);
+            if (roomIndex != -1)
+                roomsOnPath.Add(roomIndex);
+        }
+
+        _nodeManager.CreatePath(path, GameEventsHandler.current.playerGo.transform);
+        var roomPathArray = roomsOnPath.ToArray().Reverse();
+        _roomOrderVisuals = new GameObject("RoomOrder");
+        foreach (var roomIndex in roomPathArray)
+        {
+            var counter = Instantiate<GameObject>(_prefabRoomOrder, _roomOrderVisuals.transform);
+            var room = rooms[roomIndex];
+            var coord = room.GetCenterCoord();
+            var pos = CalculatePosition(coord);
+
+            counter.transform.position = pos;
+        }
+
+        EnableDebug(false);
+    }
+
+    public int GetRoomWithCoord(Vector2Int coord)
+    {
+
+        for (int i = 0; i < rooms.Count; i++)
+        {
+            if (rooms[i].HasCoord(coord))
+                return i;
+        }
+
+        return -1;
     }
 
     //private void RoomGraphToCorridors(Graph<Room<GeneratorRule>, Weight> graph)

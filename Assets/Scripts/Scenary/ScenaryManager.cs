@@ -200,6 +200,6 @@ public class ScenaryManager : MonoBehaviour
         }
 
         SetSeed(new String(stringChars));
-        SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
+        Level.current.Setup();
     }
 }

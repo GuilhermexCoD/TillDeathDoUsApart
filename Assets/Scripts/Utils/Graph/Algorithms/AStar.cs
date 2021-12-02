@@ -8,6 +8,7 @@ public class AStar<V, E> : IGraphAlgorithms<V, E> where V : IEquatable<V> where 
     List<Vertex<AStarVertexData<V>>> path = new List<Vertex<AStarVertexData<V>>>();
 
     public event Action<AStarVertexData<V>> onVertexDataChanged;
+    public event Action<List<Vertex<AStarVertexData<V>>>> onPathGenerated;
 
     public void Execute(Graph<V, E> graph, Vertex<V> source)
     {
@@ -70,7 +71,7 @@ public class AStar<V, E> : IGraphAlgorithms<V, E> where V : IEquatable<V> where 
 
     private void RetracePath(Vertex<AStarVertexData<V>> sourceVertex, Vertex<AStarVertexData<V>> targetVertex)
     {
-        var path = new List<Vertex<AStarVertexData<V>>>();
+        path = new List<Vertex<AStarVertexData<V>>>();
 
         var current = targetVertex;
 
@@ -82,6 +83,8 @@ public class AStar<V, E> : IGraphAlgorithms<V, E> where V : IEquatable<V> where 
         }
 
         path.Reverse();
+
+        onPathGenerated?.Invoke(path);
     }
 
     private float GetDistanceBetweenTwoVertex(Vertex<AStarVertexData<V>> vertexA, Vertex<AStarVertexData<V>> vertexB)

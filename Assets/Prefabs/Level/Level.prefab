@@ -47,10 +47,14 @@ MonoBehaviour:
   bspVisualizer: {fileID: 0}
   debugTile: {fileID: 11400000, guid: 7353c0340e4280d49ac547423ff33f81, type: 2}
   iteration: 0
+  GraphVertexPrefab: {fileID: 4136278983560396443, guid: 02a605177266cd14eb14c1e960edc47e, type: 3}
   data: {fileID: 11400000, guid: b5486def5a3682c46a6b360558d7a123, type: 2}
   bounds: []
   roomColors: []
   tilemapVisualizer: {fileID: 2523527314523318088}
+  _prefabExit: {fileID: 4688828159632026194, guid: 35b0b7e51fe9f7343b73dfa4280db441, type: 3}
+  _prefabNodeManager: {fileID: 631155467380760920, guid: 53474369da0b1bf41ae94e5a56442c0f, type: 3}
+  _prefabRoomOrder: {fileID: 131806211927135313, guid: 7f6c2eaffa54b2c488291256ffac3c5c, type: 3}
 --- !u!114 &2523527314523318088
 MonoBehaviour:
   m_ObjectHideFlags: 0

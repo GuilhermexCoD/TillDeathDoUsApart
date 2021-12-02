@@ -15,18 +15,24 @@ public class RangedWeapon : Weapon
 
     private float reloadTimer;
 
+    private float _lastTimeShot;
+
     public override void Attack()
     {
         base.Attack();
 
         if (currentAmmo > 0 && !isReloading)
         {
-            shootComponent.Shoot();
-            currentAmmo--;
+            if (Time.time >= _lastTimeShot + GetData<RangedWeaponData>().fireRate)
+            {
+                shootComponent.Shoot();
+                currentAmmo--;
+                _lastTimeShot = Time.time;
+            }
         }
-        else if(!isReloading)
+        else if (!isReloading)
         {
-            Util.CreateWorldTextPopup("Click!...", this.transform.position, 20, Vector3.one * 0.2f,2, 1);
+            Util.CreateWorldTextPopup("Click!...", this.transform.position, 20, Vector3.one * 0.2f, 2, 1);
         }
     }
 

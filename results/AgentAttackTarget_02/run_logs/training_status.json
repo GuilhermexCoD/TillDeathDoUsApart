@@ -1,0 +1,47 @@
+{
+    "AgentAttackTarget": {
+        "checkpoints": [
+            {
+                "steps": 499938,
+                "file_path": "results\\AgentAttackTarget_02\\AgentAttackTarget\\AgentAttackTarget-499938.onnx",
+                "reward": 3.9702970297029703,
+                "creation_time": 1638227878.3402221,
+                "auxillary_file_paths": [
+                    "results\\AgentAttackTarget_02\\AgentAttackTarget\\AgentAttackTarget-499938.pt"
+                ]
+            },
+            {
+                "steps": 999976,
+                "file_path": "results\\AgentAttackTarget_02\\AgentAttackTarget\\AgentAttackTarget-999976.onnx",
+                "reward": 3.7901785714285716,
+                "creation_time": 1638229493.7294812,
+                "auxillary_file_paths": [
+                    "results\\AgentAttackTarget_02\\AgentAttackTarget\\AgentAttackTarget-999976.pt"
+                ]
+            },
+            {
+                "steps": 1000040,
+                "file_path": "results\\AgentAttackTarget_02\\AgentAttackTarget\\AgentAttackTarget-1000040.onnx",
+                "reward": 3.7901785714285716,
+                "creation_time": 1638229493.8024921,
+                "auxillary_file_paths": [
+                    "results\\AgentAttackTarget_02\\AgentAttackTarget\\AgentAttackTarget-1000040.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1000040,
+            "file_path": "results\\AgentAttackTarget_02\\AgentAttackTarget.onnx",
+            "reward": 3.7901785714285716,
+            "creation_time": 1638229493.8024921,
+            "auxillary_file_paths": [
+                "results\\AgentAttackTarget_02\\AgentAttackTarget\\AgentAttackTarget-1000040.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.27.0",
+        "torch_version": "1.7.0+cu110"
+    }
+}

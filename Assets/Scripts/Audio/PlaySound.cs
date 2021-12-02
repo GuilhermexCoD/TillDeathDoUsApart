@@ -9,6 +9,15 @@ public class PlaySound : MonoBehaviour
 
     private void Awake()
     {
-        SoundManager.PlaySound(clip, true);
+        Debug.Log("Awake PlaySound");
+        if (clip != null)
+        {
+            Debug.Log("PlaySound CLIP");
+            SoundManager.PlaySound(clip, true);
+        }
+        else
+        {
+            Debug.LogError("NO SOUND CLIP");
+        }
     }
 }

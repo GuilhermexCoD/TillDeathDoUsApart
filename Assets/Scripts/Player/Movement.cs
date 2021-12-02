@@ -6,6 +6,8 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class Movement : MonoBehaviour
 {
+    private PlayerControls _input;
+
     [SerializeField]
     private float speed = 5;
 
@@ -23,16 +25,12 @@ public class Movement : MonoBehaviour
     //Chamado uma unica vez e antes do Start
     private void Awake()
     {
+        _input = new PlayerControls();
+
         if (!goRigidbody)
         {
             goRigidbody = this.GetComponent<Rigidbody2D>();
         }
-    }
-
-    //Chamado uma unica vez e antes do Start
-    private void Start()
-    {
-
     }
 
     // Update is called once per frame
@@ -49,10 +47,11 @@ public class Movement : MonoBehaviour
 
     void ProcessInputs()
     {
-        float moveX = Input.GetAxisRaw("Horizontal");
-        float moveY = Input.GetAxisRaw("Vertical");
 
-        moveDirection = new Vector2(moveX, moveY).normalized;
+        //float moveX = Input.GetAxisRaw("Horizontal");
+        //float moveY = Input.GetAxisRaw("Vertical");
+        var direction = _input.Player.Move.ReadValue<Vector2>();
+        moveDirection = direction.normalized;
 
         if (moveDirection.magnitude == 0)
         {
@@ -63,8 +62,6 @@ public class Movement : MonoBehaviour
             goRigidbody.drag = 1;
         }
     }
-
-
 
     public void AddForce(Vector2 force, ForceMode2D mode)
     {
@@ -101,5 +98,15 @@ public class Movement : MonoBehaviour
     public void SetBlockMovement(bool block)
     {
         blockMovement = block;
+    }
+
+    private void OnEnable()
+    {
+        _input?.Enable();
+    }
+
+    private void OnDisable()
+    {
+        _input?.Disable();
     }
 }

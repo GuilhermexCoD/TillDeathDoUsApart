@@ -7,24 +7,25 @@ using UnityEngine.UI;
 public class BaseButton : BaseUI
 {
     [SerializeField]
-    private string buttonText;
+    private string _buttonText;
 
     [SerializeField]
-    private TMP_Text text;
+    private TMP_Text _tmpText;
 
-    protected virtual void Awake()
+    void Awake()
     {
         UpdateVisual();
     }
 
     public override void UpdateVisual()
     {
-        name = buttonText;
-        base.UpdateVisual();
+        name = _buttonText;
 
-        if (text != null)
+        if (_tmpText != null)
         {
-            text.text = buttonText;
+            _tmpText.text = _buttonText;
         }
+
+        base.UpdateVisual();
     }
 }

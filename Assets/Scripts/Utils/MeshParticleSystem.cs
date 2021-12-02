@@ -54,6 +54,13 @@ public class MeshParticleSystem : MonoBehaviour
         GetComponent<MeshFilter>().mesh = mesh;
     }
 
+    public void Clear()
+    {
+        quadIndex = 0;
+        mesh.Clear();
+        mesh.bounds = new Bounds(Vector3.zero, Vector3.one * Level.current.GetLevelSize().x * 2);
+    }
+
     public void UpdateUV(Material material, ParticleUV_Pixels[] uvPixelArray)
     {
         GetComponent<MeshRenderer>().material = material;

@@ -41,7 +41,7 @@ public class Interactable : MonoBehaviour, IInteractable
         return data.stackable;
     }
 
-    public IInteractable PickUp(object instigator)
+    public virtual IInteractable PickUp(object instigator)
     {
         onPickedUp?.Invoke(this, new InteractableArgs { instigator = instigator});
         return this;

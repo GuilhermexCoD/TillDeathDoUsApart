@@ -11,8 +11,17 @@ public class SliderWithLabel : Label
 
     protected override void Awake()
     {
+        Debug.Log("Awake Slider");
         base.Awake();
-        slider?.onValueChanged.AddListener(OnSliderChangedValue);
+        if (slider != null)
+        {
+            Debug.Log("Slider valid");
+            slider?.onValueChanged.AddListener(OnSliderChangedValue);
+        }
+        else
+        {
+            Debug.LogError("Slider INVALID");
+        }
     }
 
     public void OnSliderChangedValue(float value)
