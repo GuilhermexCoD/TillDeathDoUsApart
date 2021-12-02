@@ -81,7 +81,6 @@ public class Altar : Actor
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("Colision!");
         isOn = true;
         Actor actor = collision.gameObject.GetComponentInParent<Actor>();
         actor.gameObject.AddComponent<ChangeHealthOverTime>().OnInitialize(this, GetChangeHealthAmount(), _rate, b_isHealing);

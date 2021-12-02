@@ -4,15 +4,19 @@ using UnityEngine;
 
 public class DropLoot : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
-        
+        this.GetComponent<Actor>().OnDestroyed += OnActorDestroyed;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnActorDestroyed(Actor obj)
     {
-        
+        if (obj.GetComponent<HealthSystem>().GetHealthNormalized() == 0)
+        {
+            var prefab = GameManager.GetRandomCoin();
+            Instantiate(prefab, obj.transform.position, Quaternion.identity);
+        }
+        this.GetComponent<Actor>().OnDestroyed -= OnActorDestroyed;
     }
+
 }

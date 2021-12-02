@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7827891432034276168}
   - component: {fileID: 1488158799653923996}
   - component: {fileID: -1973673998861967499}
+  - component: {fileID: 6971734877894065958}
   m_Layer: 0
   m_Name: DiamonCoin
   m_TagString: Untagged
@@ -119,3 +120,16 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.4
+--- !u!114 &6971734877894065958
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2892135979436200365}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa8278236fa0233469c5b8b2bf4cc76c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  data: {fileID: 11400000, guid: 8aacf00de1aa6bc49a0d17660c05ccda, type: 2}

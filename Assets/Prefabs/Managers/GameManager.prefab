@@ -44,3 +44,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthUiPrefab: {fileID: 477418668052637475, guid: 881941a135931c142aa5e7295e8dfc08, type: 3}
+  coinPrefabs:
+  - {fileID: 2892135979436200365, guid: d956eb9d84434a2468cd0b60ca487de3, type: 3}
+  - {fileID: 2422175581573829904, guid: c548cc024d51b8945b875b206a5d5c1a, type: 3}
+  - {fileID: 8802444786437130675, guid: 27502df74686f37479bcabd5a61ea35c, type: 3}
+  - {fileID: 9065941844747511768, guid: 8cf01d102d386e3438853a1b42a9a8ad, type: 3}
+  coinSounds:
+  - {fileID: 8300000, guid: 3ae9e631e6c597c488a3f1b90e8e6e79, type: 3}
+  - {fileID: 8300000, guid: 2c9a8fb1721ebd34eae1ff9cb34340b7, type: 3}
+  - {fileID: 8300000, guid: 3a8a082cc9996df4f9c4fbd355a8828e, type: 3}
+  - {fileID: 8300000, guid: 7f49f8fce60ab414588264a1040c58bd, type: 3}
+  - {fileID: 8300000, guid: cc163594f3aaa154ca7c61dcdf1ad36a, type: 3}
+  - {fileID: 8300000, guid: 0c1c05c3a1a1bc248890faec8d0dab23, type: 3}
+  - {fileID: 8300000, guid: 579b8af8669d8614097f039dd12fbc81, type: 3}
+  - {fileID: 8300000, guid: b153a22ee2e058a4e97c43b3736d7519, type: 3}
+  totalCoin: 0

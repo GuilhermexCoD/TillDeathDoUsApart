@@ -8,6 +8,8 @@ public class PauseInput : MonoBehaviour
 
     [SerializeField]
     private GameObject pauseMenu;
+    [SerializeField]
+    private GameObject panelBlockInput;
 
     public bool bIsPaused;
 
@@ -34,9 +36,10 @@ public class PauseInput : MonoBehaviour
         Time.timeScale = bIsPaused ? 0 : 1;
 
         if (pauseMenu != null)
-        {
             pauseMenu.SetActive(bIsPaused);
-        }
+
+        if (panelBlockInput != null)
+            panelBlockInput.SetActive(bIsPaused);
     }
 
     private void OpenMenu_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)

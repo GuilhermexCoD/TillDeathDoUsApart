@@ -119,6 +119,7 @@ GameObject:
   - component: {fileID: 101904034631812657}
   - component: {fileID: 101904034631812662}
   - component: {fileID: 8417635957616923940}
+  - component: {fileID: -4070161369247443790}
   m_Layer: 6
   m_Name: Agent_MoveTarget
   m_TagString: Untagged
@@ -288,3 +289,15 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.28
+--- !u!114 &-4070161369247443790
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 101904034631812654}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c54038e00ff7a3f49aab4a4da0cbf677, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
