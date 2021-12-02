@@ -78,6 +78,8 @@ public class PlayerController : MonoBehaviour
         }
 
         movement.onSpeedChanged += OnSpeedChanged;
+
+        GetComponent<HealthSystem>().OnHealthEqualsZero += OnGameOver;
     }
 
     private void OnSpeedChanged(object sender, Vector2 e)
@@ -319,5 +321,11 @@ public class PlayerController : MonoBehaviour
     private void OnDisable()
     {
         _input?.Disable();
+    }
+
+    private void OnGameOver(object sender, System.EventArgs e)
+    {
+        SceneManager.LoadSceneAsync("GameOver", LoadSceneMode.Single);
+        GetComponent<HealthSystem>().OnHealthEqualsZero -= OnGameOver;
     }
 }
