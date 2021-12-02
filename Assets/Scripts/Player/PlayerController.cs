@@ -102,24 +102,7 @@ public class PlayerController : MonoBehaviour
         bool bIsPickingUp = _input.Player.PickUp.triggered;
         if (bIsPickingUp && interactableObject != null)
         {
-            var pickedUp = (Interactable)interactableObject.PickUp(this);
-
-            var itemIndex = inventoryManager.AddItem(pickedUp);
-
-            pickedUp.SetActive(false);
-            pickedUp.transform.SetParent(offSetTransform);
-            pickedUp.transform.localPosition = Vector3.zero;
-            pickedUp.transform.localRotation = Quaternion.Euler(0, 0, 0);
-
-            if (!IsWeaponEquiped())
-            {
-                bool pickedUpIsWeapon = IsWeapon(itemIndex);
-
-                if (pickedUpIsWeapon)
-                {
-                    EquipItem(itemIndex);
-                }
-            }
+            PickUpItem();
         }
 
         var xAxis = _input.Player.Move.ReadValue<Vector2>().x;
@@ -139,7 +122,7 @@ public class PlayerController : MonoBehaviour
         bool isUsingMouse = IsUsingMouse();
         Vector2 aimDirection = GetAimDirection();
 
-        bool bIsAttackPressed = isUsingMouse? _input.Player.Attack.triggered : aimDirection.magnitude == 1;
+        bool bIsAttackPressed = isUsingMouse ? _input.Player.Attack.triggered : aimDirection.magnitude == 1;
         if (bIsAttackPressed && IsWeaponEquiped())
         {
             GetWeapon()?.Attack();
@@ -162,6 +145,35 @@ public class PlayerController : MonoBehaviour
 
         //bool bIsOpenMenuPressed = Input.GetKeyDown(KeyCode.Escape);
 
+    }
+
+    public void PickUpItem(IInteractable item)
+    {
+        interactableObject = item;
+
+        PickUpItem();
+    }
+
+    private void PickUpItem()
+    {
+        var pickedUp = (Interactable)interactableObject.PickUp(this);
+
+        var itemIndex = inventoryManager.AddItem(pickedUp);
+
+        pickedUp.SetActive(false);
+        pickedUp.transform.SetParent(offSetTransform);
+        pickedUp.transform.localPosition = Vector3.zero;
+        pickedUp.transform.localRotation = Quaternion.Euler(0, 0, 0);
+
+        if (!IsWeaponEquiped())
+        {
+            bool pickedUpIsWeapon = IsWeapon(itemIndex);
+
+            if (pickedUpIsWeapon)
+            {
+                EquipItem(itemIndex);
+            }
+        }
     }
 
     private Vector2 GetAimDirection()
@@ -278,7 +290,19 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject != null)
         {
-            interactableObject = collision.gameObject.GetComponent<IInteractable>();
+            var coin = collision.gameObject.GetComponent<Coin>();
+            if (coin != null)
+            {
+                coin.PickUp(this);
+                Destroy(coin.gameObject);
+            }
+            else
+            {
+                var col = collision.gameObject.GetComponent<IInteractable>();
+                //if (col != null)
+                interactableObject = col;
+
+            }
         }
     }
 

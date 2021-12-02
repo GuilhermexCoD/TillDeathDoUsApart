@@ -56,7 +56,6 @@ public class PathNode : MonoBehaviour
     {
         if (HasReachedNode(obj))
         {
-
             Destroy(this.gameObject);
         }
     }

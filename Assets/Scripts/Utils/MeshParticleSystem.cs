@@ -41,6 +41,11 @@ public class MeshParticleSystem : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+        Setup();
+    }
+
+    private void Setup()
+    {
         mesh = new Mesh();
 
         vertices = new Vector3[4 * MAX_QUAD_AMOUNT];
@@ -58,7 +63,7 @@ public class MeshParticleSystem : MonoBehaviour
     {
         quadIndex = 0;
         mesh.Clear();
-        mesh.bounds = new Bounds(Vector3.zero, Vector3.one * Level.current.GetLevelSize().x * 2);
+        Setup();
     }
 
     public void UpdateUV(Material material, ParticleUV_Pixels[] uvPixelArray)

@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 8654319617491234927}
   - component: {fileID: 8654319617491234920}
   - component: {fileID: 8937782638024522571}
+  - component: {fileID: 2534289086635631571}
   m_Layer: 6
   m_Name: Agent_Attack
   m_TagString: Untagged
@@ -194,6 +195,18 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.28
+--- !u!114 &2534289086635631571
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8654319617491234928}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c54038e00ff7a3f49aab4a4da0cbf677, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8654319617717867723
 GameObject:
   m_ObjectHideFlags: 0

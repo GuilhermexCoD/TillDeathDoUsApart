@@ -1,3 +1,4 @@
+[System.Serializable]
 public enum EBodyPartType 
 {
     Head,

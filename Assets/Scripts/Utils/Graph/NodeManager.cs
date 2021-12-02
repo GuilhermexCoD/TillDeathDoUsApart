@@ -32,6 +32,16 @@ public class NodeManager : MonoBehaviour
         StartCoroutine(UpdateTargetPosition());
     }
 
+    private void OnEnable()
+    {
+        StartCoroutine(UpdateTargetPosition());
+    }
+
+    private void OnDisable()
+    {
+        StopAllCoroutines();
+    }
+
     private IEnumerator UpdateTargetPosition()
     {
         while (nodes.Count > 0)
