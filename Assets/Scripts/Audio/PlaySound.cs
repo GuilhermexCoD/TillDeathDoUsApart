@@ -6,6 +6,9 @@ public class PlaySound : MonoBehaviour
 {
     [SerializeField]
     private AudioClip clip;
+    
+    [SerializeField]
+    private bool doNotRepeat;
 
     private void Awake()
     {
@@ -13,7 +16,7 @@ public class PlaySound : MonoBehaviour
         if (clip != null)
         {
             Debug.Log("PlaySound CLIP");
-            SoundManager.PlaySound(clip, true);
+            SoundManager.PlaySound(clip, !doNotRepeat);
         }
         else
         {
