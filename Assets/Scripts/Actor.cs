@@ -45,7 +45,7 @@ public class Actor : MonoBehaviour, IDamage
         return proccessedDamage;
     }
 
-    private void OnDestroy()
+    protected void OnDestroy()
     {
         OnDestroyed?.Invoke(this);
     }
