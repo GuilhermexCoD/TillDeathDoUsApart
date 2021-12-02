@@ -35652,6 +35652,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1280860674}
     - target: {fileID: 2523527314523318089, guid: 19441d377fa89284da01ed8bf09ae6ea, type: 3}
+      propertyPath: enemyParent
+      value: 
+      objectReference: {fileID: 19770912}
+    - target: {fileID: 2523527314523318089, guid: 19441d377fa89284da01ed8bf09ae6ea, type: 3}
       propertyPath: bspVisualizer
       value: 
       objectReference: {fileID: 648907354}

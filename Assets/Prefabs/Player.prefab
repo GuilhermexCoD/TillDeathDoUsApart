@@ -374,6 +374,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1dcb6d073cd6644fb2ce8aaf76f0b3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  customizationData: {fileID: 11400000, guid: d44777a388d342a45a44e9ee6fc5fd28, type: 2}
   head: {fileID: 11400000, guid: 1c13642f5387ea64b97492f385e32e83, type: 2}
   headSprite: {fileID: 9170169854417848721}
   torso: {fileID: 11400000, guid: 90320fd82bbe395419e2959f99ffa13e, type: 2}
@@ -477,6 +478,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pauseMenu: {fileID: 0}
+  panelBlockInput: {fileID: 0}
   bIsPaused: 0
 --- !u!114 &3801098952216921927
 MonoBehaviour:

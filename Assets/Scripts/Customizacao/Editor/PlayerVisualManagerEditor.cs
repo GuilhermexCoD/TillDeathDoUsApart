@@ -18,7 +18,7 @@ public class PlayerVisualManagerEditor : Editor
 
         if (GUILayout.Button("Update Visual"))
         {
-            playerVisual.UpdateVisuals();
+            playerVisual.UpdateVisualCustomizationData();
         }
     }
 }

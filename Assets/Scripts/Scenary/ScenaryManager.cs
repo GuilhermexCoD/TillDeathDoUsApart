@@ -16,6 +16,9 @@ public class ScenaryManager : MonoBehaviour
     private LevelData levelData;
 
     [SerializeField]
+    private CustomizationData customizationData;
+
+    [SerializeField]
     private string seed;
 
     public event EventHandler<LevelArgs> onLevelLoaded;
@@ -168,11 +171,22 @@ public class ScenaryManager : MonoBehaviour
             Destroy(this.gameObject);
             return;
         }
-
+        SetupCustomizationData();
         SceneManager.sceneLoaded += OnSceneLoaded;
         current = Singleton<ScenaryManager>.Instance;
         LoadAssets();
         DontDestroyOnLoad(this.gameObject);
+    }
+
+    private void SetupCustomizationData()
+    {
+        //var resourceManager = new ResourceManager<EBodyPartType, BodyData>("Customization");
+
+        //customizationData = ScriptableObject.CreateInstance<CustomizationData>();
+        //customizationData.headData = resourceManager.GetAssets((int)EBodyPartType.Head)[0];
+        //customizationData.torsoData = resourceManager.GetAssets((int)EBodyPartType.Torso)[0];
+        //customizationData.handData = resourceManager.GetAssets((int)EBodyPartType.Hand)[0];
+        //customizationData.footData = resourceManager.GetAssets((int)EBodyPartType.Foot)[0];
     }
 
     private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
@@ -201,5 +215,10 @@ public class ScenaryManager : MonoBehaviour
 
         SetSeed(new String(stringChars));
         Level.current.Setup();
+    }
+
+    public CustomizationData GetCustomizationData()
+    {
+        return customizationData;
     }
 }

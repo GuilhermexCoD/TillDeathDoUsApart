@@ -120,7 +120,9 @@ public class AgentDamageTarget : Agent, IAgent
         {
             if (collider != null && collider.gameObject != this.gameObject)
             {
-                if (collider.GetComponent<Actor>() != null)
+                var actor = collider.GetComponent<Actor>();
+                bool isSameType = collider.GetComponent<AgentDamageTarget>() != null;
+                if (actor != null && !isSameType)
                 {
                     attackHit = true;
 

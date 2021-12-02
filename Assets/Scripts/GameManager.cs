@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     public GameObject healthUiPrefab;
     public GameObject[] coinPrefabs;
     public AudioClip[] coinSounds;
+    public GameObject enemyPrefab;
 
     public int totalCoin = 0;
 

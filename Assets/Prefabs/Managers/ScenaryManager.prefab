@@ -43,6 +43,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e8a1bebd1e600743ba09f195235a1a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  levelData: {fileID: 0}
+  customizationData: {fileID: 11400000, guid: d44777a388d342a45a44e9ee6fc5fd28, type: 2}
   seed: 
-  paths:
-  - Floors

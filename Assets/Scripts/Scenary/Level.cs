@@ -51,6 +51,8 @@ public class Level : MonoBehaviour
 
     private NodeManager _nodeManager;
     private GameObject _roomOrderVisuals;
+
+    public Transform enemyParent;
     // Start is called before the first frame update
     void Awake()
     {
@@ -227,11 +229,25 @@ public class Level : MonoBehaviour
         _nodeManager.CreatePath(path, GameEventsHandler.current.playerGo.transform);
         var roomPathArray = roomsOnPath.ToArray().Reverse();
         _roomOrderVisuals = new GameObject("RoomOrder");
+
+        int enemyCount = 2;
+        int roomCount = 0;
         foreach (var roomIndex in roomPathArray)
         {
             var counter = Instantiate<GameObject>(_prefabRoomOrder, _roomOrderVisuals.transform);
             var room = rooms[roomIndex];
+
             var coord = room.GetCenterCoord();
+
+            int totalEnemy = Mathf.Min(enemyCount * roomCount,data.maxQuantityOfEnemies);
+            for (int i = 0; i < totalEnemy; i++)
+            {
+                var enemy = Instantiate<GameObject>(GameManager.current.enemyPrefab, enemyParent);
+                enemy.transform.position = CalculatePosition(room.GetRandomCoord());
+            }
+
+            roomCount++;
+
             var pos = CalculatePosition(coord);
 
             counter.transform.position = pos;

@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class PlayerVisualManager : MonoBehaviour
 {
+    public CustomizationData customizationData;
     public BodyData head;
     [SerializeField]
     public SpriteRenderer headSprite;
@@ -26,6 +27,23 @@ public class PlayerVisualManager : MonoBehaviour
     public BodyData footL;
     [SerializeField]
     public SpriteRenderer footL_Sprite;
+
+    private void Awake()
+    {
+        UpdateVisualCustomizationData();
+    }
+
+    public void UpdateVisualCustomizationData()
+    {
+        head = customizationData.headData;
+        torso = customizationData.torsoData;
+        handL = customizationData.handData;
+        handR = customizationData.handData;
+        footL = customizationData.footData;
+        footR = customizationData.footData;
+
+        UpdateVisuals();
+    }
 
     public void UpdateVisuals()
     {

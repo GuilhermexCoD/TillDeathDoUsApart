@@ -41,6 +41,28 @@ public class CustomizationItemUI : MonoBehaviour
     public void UpdateVisual()
     {
         var part = parts[currentPart];
-        visualManager.SetPart(bodyPartType, part);
+        //visualManager.SetPart(bodyPartType, part);
+        //visualManager.UpdatePart(bodyPartType);
+        var customization = ScenaryManager.current.GetCustomizationData();
+
+        switch (bodyPartType)
+        {
+            case EBodyPartType.Head:
+                customization.headData = part;
+                break;
+            case EBodyPartType.Torso:
+                customization.torsoData = part;
+                break;
+            case EBodyPartType.Hand:
+                customization.handData = part;
+                break;
+            case EBodyPartType.Foot:
+                customization.footData = part;
+                break;
+            default:
+                break;
+        }
+
+        visualManager.UpdateVisualCustomizationData();
     }
 }
